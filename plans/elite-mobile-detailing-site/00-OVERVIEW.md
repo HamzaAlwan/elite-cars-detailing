@@ -41,8 +41,8 @@ Global rules for the whole build — follow them in every task:
 
 | # | Phase | File | Status |
 |---|-------|------|--------|
-| 0 | Dependencies & configuration (gate) | `phase-00-dependencies.md` | ⬜ |
-| 1 | Project scaffolding & structure | `phase-01-setup.md` | ⬜ |
+| 0 | Dependencies & configuration (gate) | `phase-00-dependencies.md` | ✅ |
+| 1 | Project scaffolding & structure | `phase-01-setup.md` | ✅ |
 | 2 | Design system & layout | `phase-02-design-system.md` | ⬜ |
 | 2.5 | Design showcase & approval gate | `phase-02b-design-showcase.md` | ⬜ |
 | 3 | Static sections | `phase-03-static-sections.md` | ⬜ |
@@ -63,22 +63,22 @@ for completeness.
 ## All tasks (low detail)
 
 ### Phase 0 — Dependencies & configuration (gate)
-- [ ] P0-T1 Initialize Astro (latest, TS strict, Node LTS)
-- [ ] P0-T2 Install all runtime/integration deps (@latest, single pass)
-- [ ] P0-T3 Configure astro.config (vue, sitemap, site, @tailwindcss/vite, static)
-- [ ] P0-T4 Configure Tailwind v4 (global.css @import + @theme tokens scaffold)
-- [ ] P0-T5 Configure shadcn-vue (init, `@/*` alias, `cn` util, components.json)
-- [ ] P0-T6 Configure fonts & icons (Outfit variable, @lucide/vue)
-- [ ] P0-T7 Pre-wire later-phase libs import-ready (gallery, Cal embed)
-- [ ] P0-T8 Dev tooling (Prettier, editorconfig, gitignore, scripts, `astro check`)
-- [ ] P0-T9 Cloudflare Pages config (build/publish; host 301 via Bulk Redirect) + Web3Forms key
-- [ ] P0-T10 ncu refresh + verify clean install + build green (no feature code yet)
+- [x] P0-T1 Initialize Astro (latest, TS strict, Node LTS)
+- [x] P0-T2 Install all runtime/integration deps (@latest, single pass)
+- [x] P0-T3 Configure astro.config (vue, sitemap, site, @tailwindcss/vite, static)
+- [x] P0-T4 Configure Tailwind v4 (global.css @import + @theme tokens scaffold)
+- [x] P0-T5 Configure shadcn-vue (init, `@/*` alias, `cn` util, components.json)
+- [x] P0-T6 Configure fonts & icons (Outfit variable, @lucide/vue)
+- [x] P0-T7 Pre-wire later-phase libs import-ready (gallery, Cal embed)
+- [x] P0-T8 Dev tooling (Prettier, ESLint, editorconfig, gitignore, scripts, `astro check`)
+- [x] P0-T9 Cloudflare Pages config — *codebase config done; CF repo-connect + Web3Forms key = owner deploy step (Phase 9)*
+- [x] P0-T10 ncu refresh + verify clean install + build green (no feature code yet)
 
 ### Phase 1 — Project scaffolding & structure
-- [ ] P1-T1 Folder structure (components/{ui,sections,islands}, layouts, styles, lib, data, public)
-- [ ] P1-T2 Site constants file (`src/data/site.ts`)
-- [ ] P1-T3 Base files (Layout.astro + `<ClientRouter />`, index.astro, 404.astro)
-- [ ] P1-T4 Smoke test (renders with tokens+font, island hydrates, deploy preview)
+- [x] P1-T1 Folder structure (components/{ui,sections,islands}, layouts, styles, lib, data, public)
+- [x] P1-T2 Site constants file (`src/data/site.ts`)
+- [x] P1-T3 Base files (Layout.astro + `<ClientRouter />`, index.astro, 404.astro)
+- [x] P1-T4 Smoke test (check + lint + build green; *CF preview deploy pending repo-connect*)
 
 ### Phase 2 — Design system & layout
 - [ ] P2-T1 Color tokens → Tailwind theme (near-black, single accent)
