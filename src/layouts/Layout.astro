@@ -1,0 +1,47 @@
+---
+import '@/styles/global.css';
+import '@fontsource-variable/outfit';
+import { ClientRouter } from 'astro:transitions';
+import { SITE } from '@/data/site';
+
+interface Props {
+  /** Page <title>; falls back to "Name — Tagline". Full <title>/meta tuning is Phase 7 (Seo.astro). */
+  title?: string;
+  description?: string;
+}
+
+const { title, description = SITE.description } = Astro.props;
+const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
+
+// Phase notes: the body palette swaps to bg-bg/text-text tokens in Phase 2 (P2-T1);
+// apple-touch-icon + android-chrome PNGs are added with real branding in Phase 9 (P9-T2).
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <ClientRouter />
+    <slot name="head" />
+  </head>
+  <body class="min-h-svh bg-black font-sans text-white antialiased">
+    <a
+      href="#main"
+      class="sr-only rounded-md bg-white px-4 py-2 font-medium text-black focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50"
+    >
+      Skip to content
+    </a>
+    <slot name="header" />
+    <main id="main">
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>

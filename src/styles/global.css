@@ -4,7 +4,10 @@
 @import "tailwindcss";
 
 @theme {
-  /* P2-T1: --color-bg #06080F, sapphire ramp, etc. (INITIAL_IDEA.md §2.1)
-     P2-T5: --ease-* / --dur-* motion tokens (INITIAL_IDEA.md §2.4)
-     Kept empty for Phase 0 so the build stays config-only. */
+  /* Typography (minimal — full scale lands in P2-T2): map `font-sans` to Outfit variable.
+     The @font-face is injected by importing '@fontsource-variable/outfit' in Layout.astro. */
+  --font-sans: "Outfit Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* P2-T1: --color-bg #06080F + sapphire ramp (INITIAL_IDEA.md §2.1)
+     P2-T5: --ease-* / --dur-* motion tokens (INITIAL_IDEA.md §2.4) */
 }
