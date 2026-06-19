@@ -10,7 +10,11 @@ export default defineConfig({
   // `site` is required by @astrojs/sitemap to emit absolute URLs.
   site: 'https://www.example.com',
   output: 'static',
-  integrations: [vue(), sitemap()],
+  integrations: [
+    vue(),
+    // Exclude the internal /preview design showcase from the sitemap (P2B-T1).
+    sitemap({ filter: (page) => !page.includes('/preview') }),
+  ],
   vite: {
     // Tailwind v4 is wired via the Vite plugin (NOT @astrojs/tailwind, which is v3).
     plugins: [tailwindcss()],

@@ -11,9 +11,11 @@ interface Props {
   description?: string;
   /** OG image path (relative to root). */
   ogImage?: string;
+  /** Keep the page out of search indexes (e.g. the internal /preview showcase). */
+  noindex?: boolean;
 }
 
-const { title, description, ogImage } = Astro.props;
+const { title, description, ogImage, noindex = false } = Astro.props;
 const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
 
 // Phase notes: apple-touch-icon + android-chrome PNGs land with real branding in Phase 9 (P9-T2);
@@ -29,6 +31,7 @@ const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — ${SITE.t
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#06080F" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta name="generator" content={Astro.generator} />
     <Seo title={pageTitle} description={description} ogImage={ogImage}>
       <slot name="jsonld" />

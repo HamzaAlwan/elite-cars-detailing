@@ -5,7 +5,8 @@
 approve the look (and pick variants) BEFORE the full section build**. Components built here are
 **reused** by Phase 3 (not throwaway).
 **Depends on:** Phase 0 (deps), Phase 1 (scaffold), Phase 2 (tokens + primitives)
-**Status:** ⬜ Not started
+**Status:** 🟦 In progress — `/preview` built & green (P2B-T1–T6). **GATE pending owner review**
+(P2B-T7 real-iPhone check + P2B-T8 record variant picks) before Phase 3.
 **Spec refs:** `INITIAL_IDEA.md` §2 (design system), §4 (sections); build skills.
 
 > **GATE:** do not start Phase 3 until the owner reviews `/preview`, selects variants, and

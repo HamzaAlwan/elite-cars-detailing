@@ -44,7 +44,7 @@ Global rules for the whole build — follow them in every task:
 | 0 | Dependencies & configuration (gate) | `phase-00-dependencies.md` | ✅ |
 | 1 | Project scaffolding & structure | `phase-01-setup.md` | ✅ |
 | 2 | Design system & layout | `phase-02-design-system.md` | ✅ |
-| 2.5 | Design showcase & approval gate | `phase-02b-design-showcase.md` | ⬜ |
+| 2.5 | Design showcase & approval gate | `phase-02b-design-showcase.md` | 🟦 |
 | 3 | Static sections | `phase-03-static-sections.md` | ⬜ |
 | 4 | Interactive islands | `phase-04-interactive-islands.md` | ⬜ |
 | 5 | Our Work gallery | `phase-05-our-work-gallery.md` | ⬜ |
@@ -90,14 +90,14 @@ for completeness.
 - [x] P2-T7 Encode design principles (spacing, container, one-accent, shine budget, iOS)
 
 ### Phase 2.5 — Design showcase & approval gate (GATE)
-- [ ] P2B-T1 Preview route `/preview` (noindex, sitemap-excluded) + sticky TOC, grouped layout
-- [ ] P2B-T2 Foundations group (tokens, type, spacing, elevation, icons)
-- [ ] P2B-T3 Components group by category (Actions/Containers/Forms/Disclosure/Feedback)
-- [ ] P2B-T4 Sections group (assembled mockups, placeholder data, real order)
-- [ ] P2B-T5 Variations group (A/B/C per piece: hero, button/card, accent)
-- [ ] P2B-T6 States & motion group (hover/focus/disabled, scroll-reveal, reduced-motion)
-- [ ] P2B-T7 Responsive proof (mobile + desktop)
-- [ ] P2B-T8 Deploy preview + record chosen variants (gate to approve)
+- [x] P2B-T1 Preview route `/preview` (noindex, sitemap-excluded) + sticky TOC, grouped layout
+- [x] P2B-T2 Foundations group (tokens, type, spacing, elevation, icons)
+- [x] P2B-T3 Components group by category (Actions/Containers/Forms/Disclosure/Feedback)
+- [x] P2B-T4 Sections group (assembled mockups, placeholder data, real order)
+- [x] P2B-T5 Variations group (A/B/C per piece: hero, button/card, accent)
+- [x] P2B-T6 States & motion group (hover/focus/disabled, scroll-reveal, reduced-motion)
+- [ ] P2B-T7 Responsive proof (mobile + desktop) — ⏳ **owner: review `/preview` on a real iPhone**
+- [ ] P2B-T8 Deploy preview + record chosen variants — ⏳ **owner: pick variants (DESIGN_DECISIONS.md)**
 
 ### Phase 3 — Static sections
 - [ ] P3-T1 Header/nav shell (sticky blur, links, Book CTA)
