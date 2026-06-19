@@ -179,14 +179,15 @@ Theme: premium, sleek, modern, dark, high-performance. Explicitly avoid the
     decorative borders. `.surface-raised` = inset top highlight + inset bottom shade + ONE modest
     outer shadow (e.g. `inset 0 1px 0 rgba(255,255,255,.08), inset 0 -1px 0 rgba(0,0,0,.6),
     0 8px 24px rgba(0,0,0,.45)`). Avoid large negative spreads; don't stack 3–4 shadows per card.
-- "Shine budget" — metallic/gloss appears ONLY on: (1) the primary CTA, (2) the "Most Popular"
-    badge + active size-selector segment, (3) a STATIC radial sapphire glow behind the hero image,
-    (4) the glass nav (§2.5), (5) one chrome-like hairline divider. Everything else stays matte.
-- Primary CTA = `.btn-metal`: vertical sapphire gradient (--color-brand → --color-brand-strong →
-    --color-brand-deep) + inset top highlight + a SPECULAR SWEEP (a `::after` highlight that glides
-    across — transform/opacity only, GPU-composited, CLS-safe; replaces the old "blue glow"). See
-    §2.4 for how the sweep fires (hover on desktop, scroll-into-view on touch). White label sits on
-    --color-brand-strong or darker. Secondary = ghost/outline. All ≥44×44px. [KEEP sizing]
+- "Shine budget" [CHANGED 2026-06-19 — owner prefers a MATTE UI] — gloss is RARE: a STATIC radial
+    sapphire glow behind the hero image, the glass nav (§2.5), and one chrome-like hairline divider.
+    The CTA and the "Most Popular" badge are MATTE. The real "shine" is the glossy CAR PHOTOGRAPHY
+    itself — the UI stays matte so the cars pop.
+- Primary CTA = `.btn-metal` [CHANGED — matte]: MATTE solid sapphire (`--color-brand-strong`) + a
+    faint top sheen + a subtle bevel (inset top highlight + bottom shade) for depth + a restrained
+    drop shadow; `rounded-2xl`. NO gloss / specular sweep. Hover (pointer only) = a subtle lift;
+    `:active` = scale .98. White label on --color-brand-strong or darker. Secondary = ghost/outline.
+    All ≥44×44px. [KEEP sizing]
 - Metallic gradients tint toward the brand blue (anodized), NEVER white→gray chrome — chrome-
     everything is the "cheap car wash" tell. Gradient BORDERS use the padding-box/border-box
     double-background trick (no extra DOM). Avoid gradient TEXT (`background-clip:text`) — it needs
@@ -205,20 +206,19 @@ Theme: premium, sleek, modern, dark, high-performance. Explicitly avoid the
   these everywhere so motion reads consistent ("premium"), not ad-hoc:
     Easing: `--ease-standard cubic-bezier(.2,0,0,1)` (default in-view UI), `--ease-out
       cubic-bezier(0,0,0,1)` (entrances), `--ease-in cubic-bezier(.3,0,1,1)` (exits),
-      `--ease-emphasized cubic-bezier(.05,.7,.1,1)` (signature settle: hero, CTA sweep),
+      `--ease-emphasized cubic-bezier(.05,.7,.1,1)` (signature settle: hero glow / large reveals),
       `--ease-snappy cubic-bezier(.3,0,.2,1)` (tap/press). Entrances DECELERATE; no bounce/overshoot.
     Duration: `--dur-instant 100ms`, `--dur-fast 150ms` (hover/focus/underline), `--dur-base 250ms`
       (card lift/accordion), `--dur-slow 350ms` (section reveal/drawer/zoom), `--dur-slower 500ms`
-      (MAX — hero, sweep). Entrances slightly longer than exits.
+      (MAX — hero, large reveals). Entrances slightly longer than exits.
 
 - Baseline (zero/near-zero JS): CSS transitions + keyframes on `transform` and
     `opacity` only (GPU-composited); `IntersectionObserver` to trigger scroll-reveal
     fades/slides; smooth anchor scroll (gate behind `prefers-reduced-motion: no-preference`, with
-    `scroll-padding-top` for the sticky header); button hover lift; the specular sweep on the CTA.
-- Specular-sweep firing (most users are iPhone, which has NO hover): gate hover lift/sweep behind
-    `@media (hover:hover) and (pointer:fine)` so it never "sticks" on touch; on touch the sweep
-    plays ONCE on scroll-into-view (IntersectionObserver / Motion One), and `:active` gives a quick
-    press (scale .98) for tap feedback. Wrap auto-play in `prefers-reduced-motion: no-preference`.
+    `scroll-padding-top` for the sticky header); subtle button hover-lift (matte — no gloss sweep).
+- CTA feedback (most users are iPhone, which has NO hover): gate the hover-lift behind
+    `@media (hover:hover) and (pointer:fine)` so it never "sticks" on touch; `:active` gives a quick
+    press (scale .98) for tap feedback. The CTA is matte — no specular sweep.
 - Section/page transitions: Astro `<ClientRouter />` (free, no library; on Astro 6 the
     old `<ViewTransitions />` is removed — `<ClientRouter />` is the only option). Native on iOS 18;
     older iOS degrades gracefully (`fallback="animate"`); `transition:persist` the sticky bar/nav.
@@ -235,9 +235,10 @@ Theme: premium, sleek, modern, dark, high-performance. Explicitly avoid the
 - Where motion applies (restrained — NOT everything moves): scroll/section reveal (fade + rise
     ≤16px, stagger 60–80ms, cap ~8–12 items), sticky header show/hide, mobile drawer in/out, button
     hover-lift + `:active` press, link underline, card lift (≤ scale 1.05), gallery image hover zoom,
-    accordion, form-field focus, zip-success checkmark, sticky action-bar entrance, the CTA specular
-    sweep (the ONE signature move), and ClientRouter page transitions.
-- Premium principles: one signature move; consistency via the tokens above; subtle distances;
+    accordion, form-field focus, zip-success checkmark, sticky action-bar entrance, the CTA
+    hover-lift + press, and ClientRouter page transitions.
+- Premium principles: one restrained signature (the hero glow + staggered reveals — UI stays
+    matte); consistency via the tokens above; subtle distances;
     disable hover effects on touch (`@media (hover:hover) and (pointer:fine)`) while keeping
     tap/press feedback; motion serves meaning. CSS scroll-driven animations
     (`animation-timeline: view()`) are Safari-26-only → IntersectionObserver stays the baseline;

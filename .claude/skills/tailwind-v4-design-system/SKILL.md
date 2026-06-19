@@ -39,15 +39,13 @@ Palette (from `INITIAL_IDEA.md` §2.1 — premium blue/black, contrast computed)
 
 ## Metallic / gloss depth (restrained — see `INITIAL_IDEA.md` §2.3/§2.4)
 
-- Anodized, NOT chrome: metallic gradients tint toward the brand blue. ~95% of surfaces stay
-  matte; "shine budget" = primary CTA, "Most Popular" badge + active selector segment, a STATIC
-  hero glow, the glass nav, one gradient-hairline divider. Everything else flat.
+- Anodized, NOT chrome. ~95% of surfaces stay matte. "Shine budget" (owner prefers a matte UI) =
+  a STATIC hero glow, the glass nav, one gradient-hairline divider. The CTA + "Most Popular" badge
+  are MATTE; the real shine is the car photography. Everything else flat.
 - `.surface-raised` = inset top highlight + inset bottom shade + ONE modest outer shadow (bevel).
-  `.btn-metal` = sapphire gradient (brand → strong → deep) + inset highlight + a specular sweep on
-  a `::after` (transform/opacity only, `overflow:hidden`). Gradient borders via padding-box/border-box.
-- Specular sweep is touch-first: gate hover behind `@media (hover:hover) and (pointer:fine)`; on
-  touch play it once on scroll-into-view; `:active` = press feedback. `prefers-reduced-motion`
-  REDUCES (keep final visible state), never deletes. Never animate box-shadow/gradients on scroll.
+  `.btn-metal` = MATTE solid `--color-brand-strong` + a faint top sheen + bevel (inset highlight +
+  shade) + a restrained shadow; `rounded-2xl`. NO gloss sweep. Hover (pointer-only) = subtle lift;
+  `:active` = press. Gradient borders via padding-box/border-box. Never animate shadow/gradients on scroll.
 
 ## Motion (premium system — see `INITIAL_IDEA.md` §2.4)
 
@@ -57,8 +55,8 @@ Palette (from `INITIAL_IDEA.md` §2.1 — premium blue/black, contrast computed)
 - Animated icons: **NO library** — animate inline Lucide SVGs with CSS (transform/opacity +
   `stroke-dashoffset`) + Motion One. Utilities `.menu-icon` (hamburger↔X), `.icon-draw` (checkmark),
   `.icon-hover` (gated `@media (hover:hover) and (pointer:fine)`). 0 KB new JS.
-- Restrained: scroll reveal (stagger 60–80ms, cap ~8–12), one signature move (the CTA sweep),
-  transform/opacity only, reduced-motion REDUCES (final state, `0.01ms` not `0`).
+- Restrained: scroll reveal (stagger 60–80ms, cap ~8–12), one signature (hero glow + reveals; UI
+  stays matte), transform/opacity only, reduced-motion REDUCES (final state, `0.01ms` not `0`).
 
 ## Mobile / iOS (audience is mostly iPhone — see `INITIAL_IDEA.md` §2.5)
 

@@ -11,7 +11,8 @@ internal (noindex, sitemap-excluded) and is removed before launch.
 
 ## Pending owner review
 
-- [ ] **Metallic intensity** — A (flat) · B (subtle, current default) · C (glossier) → _____
+- [x] **Metallic intensity** → **MATTE** (refined 2026-06-19): solid sapphire `--color-brand-strong`
+  with a subtle bevel for depth, lighter shadow, `rounded-2xl`, no gloss specular sweep. Applied to `.btn-metal`.
 - [ ] **Primary blue** — A `#2B6BFF` (current) · B `#1E5FFF` · C `#3B82F6` → _____
 - [ ] **Overall direction approved?** — yes / changes: _____
 

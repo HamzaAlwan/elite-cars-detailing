@@ -33,12 +33,12 @@ directive — these are the ONLY JavaScript on the page (besides Phase 5/6 islan
   - DEFAULT to native `<details>/<summary>` (zero-JS, accessible by default, Tailwind-styled) —
     use Reka UI **Accordion** (`client:visible`) only if the Phase 2.5 showcase prefers it. Seed
     questions (§4.10). Content also feeds FAQPage schema (Phase 7).
-- [ ] **P4-T5 — Scroll-reveal + specular-sweep wiring**
-  - Apply the Phase 2 IntersectionObserver util to sections; honor `prefers-reduced-motion`
-    (REDUCE — keep final state). Fire the CTA specular sweep on scroll-into-view for TOUCH (hover
-    sweep gated behind `@media (hover:hover) and (pointer:fine)` — §2.4). Use Motion One (`motion`)
+- [ ] **P4-T5 — Scroll-reveal wiring**
+  - Apply the Phase 2 IntersectionObserver util (`src/lib/reveal.ts`) to sections; honor
+    `prefers-reduced-motion` (REDUCE — keep final state). Reveals use the motion tokens
+    (`--ease-out` / `--dur-slow`) with a 60–80ms stagger (cap ~8–12 items). Use Motion One (`motion`)
     for richer `whileInView` reveals where warranted (transform/opacity only; ~5KB against the budget).
-    Reveals use the motion tokens (`--ease-out` / `--dur-slow`) with a 60–80ms stagger (cap ~8–12 items).
+    (CTA is matte — no specular sweep to wire; §2.3/§2.4.)
 
 ## Done when
 Each island hydrates with the correct directive, is fully keyboard-accessible, has no console
