@@ -21,10 +21,10 @@ const colorTokens = [
   { name: '--color-border-bright', hex: '#39445C', cls: 'bg-border-bright' },
   { name: '--color-text', hex: '#F4F7FF', cls: 'bg-text' },
   { name: '--color-text-muted', hex: '#A4AEC4', cls: 'bg-text-muted' },
-  { name: '--color-brand', hex: '#2B6BFF', cls: 'bg-brand' },
-  { name: '--color-brand-strong', hex: '#1E55E6', cls: 'bg-brand-strong' },
-  { name: '--color-brand-deep', hex: '#13328F', cls: 'bg-brand-deep' },
-  { name: '--color-brand-bright', hex: '#5E97FF', cls: 'bg-brand-bright' },
+  { name: '--color-brand', hex: '#1E5FFF', cls: 'bg-brand' },
+  { name: '--color-brand-strong', hex: '#1E5FFF', cls: 'bg-brand-strong' },
+  { name: '--color-brand-deep', hex: '#1340A8', cls: 'bg-brand-deep' },
+  { name: '--color-brand-bright', hex: '#5B8CFF', cls: 'bg-brand-bright' },
   { name: '--color-success', hex: '#22C55E', cls: 'bg-success' },
   { name: '--color-warning', hex: '#F59E0B', cls: 'bg-warning' },
 ];
@@ -49,8 +49,8 @@ const motionTokens = [
 ];
 
 const blueCandidates = [
-  { label: 'A — Sapphire (current)', hex: '#2B6BFF' },
-  { label: 'B — Deep electric', hex: '#1E5FFF' },
+  { label: 'A — Sapphire', hex: '#2B6BFF' },
+  { label: 'B — Deep electric ✓ (chosen)', hex: '#1E5FFF' },
   { label: 'C — Brighter azure', hex: '#3B82F6' },
 ];
 
@@ -201,7 +201,7 @@ const toc = [
 
       <!-- Hero mock -->
       <div class="relative mt-8 overflow-hidden rounded-2xl border border-border bg-bg-elevated p-8 md:p-12">
-        <div class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full" style="background: radial-gradient(closest-side, rgba(43,107,255,.28), transparent);"></div>
+        <div class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full" style="background: radial-gradient(closest-side, rgba(30,95,255,.28), transparent);"></div>
         <div class="relative max-w-xl">
           <h2>Showroom Shine. Delivered to Your Driveway.</h2>
           <p class="mt-4 text-text-muted">{SITE.description}</p>
@@ -361,7 +361,7 @@ const toc = [
     width: 100%;
     align-items: center;
     justify-content: center;
-    border-radius: 0.75rem;
+    border-radius: 9999px;
     padding-inline: 1.5rem;
     font-weight: 500;
     color: #fff;

@@ -22,17 +22,17 @@ Palette (from `INITIAL_IDEA.md` §2.1 — premium blue/black, contrast computed)
   `--color-bg-elevated: #0D1019`, `--color-bg-elevated-2: #151926`,
   `--color-border: #222838`, `--color-border-bright: #39445C` (decorative bevel highlight).
 - Text: `--color-text: #F4F7FF` (18.7:1), `--color-text-muted: #A4AEC4` (9.0:1).
-- Sapphire ramp: `--color-brand: #2B6BFF` (display/accent, ≥24px only), `--color-brand-strong: #1E55E6`
-  (CTA fill where white text sits — 6.0:1), `--color-brand-deep: #13328F` (gradient floor/pressed),
-  `--color-brand-bright: #5E97FF` (sheen/edges ONLY, never behind text), `--color-brand-hover: #1A4ED1`,
-  `--color-brand-tint: rgba(43,107,255,0.12)`. Status: `--color-success: #22C55E`, `--color-warning: #F59E0B`.
+- Brand ramp ("Deep electric" #1E5FFF): `--color-brand: #1E5FFF` (accent ≥24px + CTA fill; white 5.08:1),
+  `--color-brand-strong: #1E5FFF` (= brand), `--color-brand-deep: #1340A8` (floor/pressed),
+  `--color-brand-bright: #5B8CFF` (sheen/edges ONLY, never behind text), `--color-brand-hover: #1A52E6`,
+  `--color-brand-tint: rgba(30,95,255,0.12)`. Status: `--color-success: #22C55E`, `--color-warning: #F59E0B`.
 - Font: Outfit variable (Fontsource) → `--font-sans: "Outfit Variable", system-ui, …`.
 
 ## Modern & simple (enforce)
 
-- ONE accent (sapphire blue); everything else neutral blue-grays. **No blue body text** — blue
-  only on ≥24px elements / CTAs. White CTA text sits on `--color-brand-strong` (6.0:1) or darker,
-  NEVER on `--color-brand` (4.52:1, too thin) or `--color-brand-bright`.
+- ONE accent (electric blue #1E5FFF); everything else neutral blue-grays. **No blue body text** —
+  blue only on ≥24px elements / CTAs. White CTA text sits on `--color-brand`/`--color-brand-strong`
+  (#1E5FFF, 5.08:1) or darker, NEVER on `--color-brand-bright` (too light).
 - Whitespace + large type carry the layout; avoid decorative borders (use spacing + LAYERED
   elevation + the metallic-depth treatment below). Rounded-2xl, soft shadows.
 - Real photography as the visual; no gradient-on-gradient, no neon, no clip-art.

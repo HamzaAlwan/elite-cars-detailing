@@ -12,9 +12,11 @@ internal (noindex, sitemap-excluded) and is removed before launch.
 ## Pending owner review
 
 - [x] **Metallic intensity** → **MATTE** (refined 2026-06-19): solid sapphire `--color-brand-strong`
-  with a subtle bevel for depth, lighter shadow, `rounded-2xl`, no gloss specular sweep. Applied to `.btn-metal`.
-- [ ] **Primary blue** — A `#2B6BFF` (current) · B `#1E5FFF` · C `#3B82F6` → _____
-- [ ] **Overall direction approved?** — yes / changes: _____
+  with a subtle bevel for depth, lighter shadow, no gloss specular sweep. Applied to `.btn-metal`.
+- [x] **Primary blue** → **B "Deep electric" `#1E5FFF`** (2026-06-19). Ramp rebuilt in global.css;
+  white-on-CTA 5.08:1 ✓ AA, 3.94:1 on bg for ≥24px.
+- [x] **Button corners** → **pill (`rounded-full`)** — 100% rounded (owner pref).
+- [ ] **Overall direction approved?** — yes / changes: _____ (pending re-review of the updated `/preview`)
 
 ## After the pick (apply, then start Phase 3)
 

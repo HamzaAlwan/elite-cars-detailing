@@ -141,18 +141,18 @@ Theme: premium, sleek, modern, dark, high-performance. Explicitly avoid the
     --color-border-bright #39445C   (decorative top-bevel highlight on metallic elements)
     --color-text          #F4F7FF   (primary body text — 18.7:1 on --color-bg)
     --color-text-muted    #A4AEC4   (secondary text — 9.0:1 on --color-bg)
-    --color-brand         #2B6BFF   (premium sapphire — display accent: icons, borders, focus,
-                                      headings ≥24px, CTA surfaces; 4.4:1 on bg → OK for ≥24px)
-    --color-brand-strong  #1E55E6   (CTA FILL where white text sits — white 6.0:1 ✓ AA normal)
-    --color-brand-deep    #13328F   (gradient floor / pressed state — white 11.2:1)
-    --color-brand-bright  #5E97FF   (specular highlight stop — edges/sheen ONLY, never behind text)
-    --color-brand-hover   #1A4ED1
-    --color-brand-tint    rgba(43,107,255,0.12)  (subtle fills, badges, focus rings)
+    --color-brand         #1E5FFF   ("Deep electric" — owner pick; accent: icons, borders, focus,
+                                      headings ≥24px + CTA fill; white 5.08:1 ✓, 3.94:1 on bg)
+    --color-brand-strong  #1E5FFF   (CTA FILL = brand; the picked blue is vivid yet white-text-safe)
+    --color-brand-deep    #1340A8   (deep floor / pressed state — white 9:1)
+    --color-brand-bright  #5B8CFF   (highlight / bevel sheen — edges ONLY, never behind text)
+    --color-brand-hover   #1A52E6
+    --color-brand-tint    rgba(30,95,255,0.12)  (subtle fills, badges, focus rings)
     --color-success       #22C55E   (in-area validation)
     --color-warning       #F59E0B
   RULES (WCAG AA — verified by computation):
-  • White button/label text sits on --color-brand-strong (6.0:1) or darker — NEVER on
-    --color-brand (4.52:1, too thin) or --color-brand-bright.
+  • White button/label text sits on --color-brand / --color-brand-strong (#1E5FFF, 5.08:1) or
+    darker — NEVER on --color-brand-bright (too light).
   • Brand blue is for LARGE elements only — icons, borders, CTA surfaces, headings ≥24px
     (≥3:1 bar). Never brand blue for body text. Body copy = --color-text / --color-text-muted.
   • --color-border* are DECORATIVE. A border that is the sole boundary of an interactive control

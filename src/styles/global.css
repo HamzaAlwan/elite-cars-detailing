@@ -33,13 +33,13 @@
   --color-text: #f4f7ff;       /* 18.7:1 on bg */
   --color-text-muted: #a4aec4; /* 9.0:1 on bg */
 
-  /* Premium sapphire ramp */
-  --color-brand: #2b6bff;        /* display accent: icons, borders, focus, ≥24px, CTA surfaces */
-  --color-brand-strong: #1e55e6; /* CTA fill where white text sits (white 6.0:1) */
-  --color-brand-deep: #13328f;   /* gradient floor / pressed */
-  --color-brand-bright: #5e97ff; /* specular highlight — edges/sheen only, never behind text */
-  --color-brand-hover: #1a4ed1;
-  --color-brand-tint: rgb(43 107 255 / 0.12);
+  /* Premium ramp — "Deep electric" #1E5FFF (owner pick, 2026-06-19) */
+  --color-brand: #1e5fff;        /* electric blue: accent (icons/borders/focus/≥24px) + CTA fill; white 5.08:1 */
+  --color-brand-strong: #1e5fff; /* CTA fill = brand (picked blue is vivid yet white-text-safe) */
+  --color-brand-deep: #1340a8;   /* deep floor / pressed (white 9:1) */
+  --color-brand-bright: #5b8cff; /* highlight / bevel sheen — edges only, never behind text */
+  --color-brand-hover: #1a52e6;  /* hover (links / ghost border) */
+  --color-brand-tint: rgb(30 95 255 / 0.12);
 
   /* Status */
   --color-success: #22c55e;
