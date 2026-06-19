@@ -1,0 +1,10 @@
+/* Global styles — Tailwind v4 (CSS-first, no JS config).
+   Phase 0 = pipeline wiring only. The premium blue/black palette, typography, and
+   motion tokens are filled in Phase 2 (P2-T1/P2-T2/P2-T5; see INITIAL_IDEA.md §2.1–§2.5). */
+@import "tailwindcss";
+
+@theme {
+  /* P2-T1: --color-bg #06080F, sapphire ramp, etc. (INITIAL_IDEA.md §2.1)
+     P2-T5: --ease-* / --dur-* motion tokens (INITIAL_IDEA.md §2.4)
+     Kept empty for Phase 0 so the build stays config-only. */
+}

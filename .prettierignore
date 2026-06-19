@@ -1,0 +1,8 @@
+# build output / generated
+dist/
+.astro/
+node_modules/
+
+# hand-formatted long-form docs (preserve manual alignment in the spec + plan)
+*.md
+plans/
