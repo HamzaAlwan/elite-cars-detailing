@@ -1,13 +1,23 @@
 ---
-// Placeholder homepage — the real single-page sections are built in Phase 3 (P3-T1…).
+// Placeholder homepage demonstrating the design system (tokens + type + primitives).
+// The real single-page sections are built in Phase 3 (P3-T1…).
 import Layout from '@/layouts/Layout.astro';
-import { SITE } from '@/data/site';
+import Section from '@/components/ui/Section.astro';
+import Container from '@/components/ui/Container.astro';
+import Button from '@/components/ui/Button.astro';
+import { SITE, CTA } from '@/data/site';
 ---
 
 <Layout>
-  <section class="mx-auto max-w-prose px-6 py-24">
-    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{SITE.name}</h1>
-    <p class="mt-3 text-lg text-white/80">{SITE.tagline}</p>
-    <p class="mt-6 text-sm text-white/50">Site coming soon — build in progress.</p>
-  </section>
+  <Section>
+    <Container>
+      <h1>{SITE.name}</h1>
+      <p class="mt-3 text-h3 text-text-muted">{SITE.tagline}</p>
+      <p class="mt-6 max-w-prose text-text-muted">{SITE.description}</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <Button href="#book">{CTA.book}</Button>
+        <Button href="#quote" variant="ghost">{CTA.quote}</Button>
+      </div>
+    </Container>
+  </Section>
 </Layout>

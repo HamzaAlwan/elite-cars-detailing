@@ -3,18 +3,21 @@ import '@/styles/global.css';
 import '@fontsource-variable/outfit';
 import { ClientRouter } from 'astro:transitions';
 import { SITE } from '@/data/site';
+import Seo from '@/components/Seo.astro';
 
 interface Props {
-  /** Page <title>; falls back to "Name — Tagline". Full <title>/meta tuning is Phase 7 (Seo.astro). */
+  /** Page <title>; falls back to "Name — Tagline". */
   title?: string;
   description?: string;
+  /** OG image path (relative to root). */
+  ogImage?: string;
 }
 
-const { title, description = SITE.description } = Astro.props;
+const { title, description, ogImage } = Astro.props;
 const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
 
-// Phase notes: the body palette swaps to bg-bg/text-text tokens in Phase 2 (P2-T1);
-// apple-touch-icon + android-chrome PNGs are added with real branding in Phase 9 (P9-T2).
+// Phase notes: apple-touch-icon + android-chrome PNGs land with real branding in Phase 9 (P9-T2);
+// font preload (crossorigin, §2.5) is optimized in Phase 8 (P8-T4).
 ---
 
 <!doctype html>
@@ -25,16 +28,18 @@ const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — ${SITE.t
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#06080F" />
     <meta name="generator" content={Astro.generator} />
-    <title>{pageTitle}</title>
-    <meta name="description" content={description} />
+    <Seo title={pageTitle} description={description} ogImage={ogImage}>
+      <slot name="jsonld" />
+    </Seo>
     <ClientRouter />
     <slot name="head" />
   </head>
-  <body class="min-h-svh bg-black font-sans text-white antialiased">
+  <body class="min-h-svh">
     <a
       href="#main"
-      class="sr-only rounded-md bg-white px-4 py-2 font-medium text-black focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50"
+      class="sr-only rounded-md bg-text px-4 py-2 font-medium text-bg focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50"
     >
       Skip to content
     </a>

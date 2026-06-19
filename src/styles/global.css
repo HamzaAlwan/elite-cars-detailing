@@ -1,13 +1,249 @@
-/* Global styles — Tailwind v4 (CSS-first, no JS config).
-   Phase 0 = pipeline wiring only. The premium blue/black palette, typography, and
-   motion tokens are filled in Phase 2 (P2-T1/P2-T2/P2-T5; see INITIAL_IDEA.md §2.1–§2.5). */
+/* =============================================================================
+   Elite Mobile Car Detailing — design system (Tailwind v4, CSS-first).
+   Source of truth: INITIAL_IDEA.md §2.0–§2.5.
+
+   PRINCIPLES (keep later sections consistent):
+   - ONE accent (sapphire blue). Everything else neutral blue-grays. No blue body text;
+     brand blue only on ≥24px elements / CTAs. White CTA text on --color-brand-strong or darker.
+   - Whitespace + large type carry the layout. Containers max-w-6xl; section rhythm py-16/24.
+     Rounded-2xl, soft shadows, layered elevation (bg → bg-elevated → bg-elevated-2).
+   - "Shine budget": metallic/gloss ONLY on the primary CTA, the Most-Popular badge,
+     a static hero glow, the glass nav, and one chrome hairline divider. Everything else matte.
+   - Motion: transform/opacity only; tokens below; reduced-motion REDUCES (keeps final state).
+   - Mobile/iOS-first (§2.5): glass nav ships a solid fallback + -webkit- prefix, never nested;
+     animated SVGs use transform-box:fill-box; svh for full-height; 16px inputs (no iOS zoom).
+   ============================================================================= */
 @import "tailwindcss";
 
 @theme {
-  /* Typography (minimal — full scale lands in P2-T2): map `font-sans` to Outfit variable.
-     The @font-face is injected by importing '@fontsource-variable/outfit' in Layout.astro. */
+  /* Typography */
   --font-sans: "Outfit Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --text-h1: clamp(2rem, 1.1rem + 4vw, 3.5rem);      /* 32 → 56 */
+  --text-h2: clamp(1.625rem, 1.05rem + 2.6vw, 2.5rem); /* 26 → 40 */
+  --text-h3: clamp(1.25rem, 1.1rem + 0.7vw, 1.5rem);   /* 20 → 24 */
 
-  /* P2-T1: --color-bg #06080F + sapphire ramp (INITIAL_IDEA.md §2.1)
-     P2-T5: --ease-* / --dur-* motion tokens (INITIAL_IDEA.md §2.4) */
+  /* Surfaces — deep cool blue-black, layered (never pure #000) */
+  --color-bg: #06080f;
+  --color-bg-elevated: #0d1019;
+  --color-bg-elevated-2: #151926;
+  --color-border: #222838;
+  --color-border-bright: #39445c;
+
+  /* Text */
+  --color-text: #f4f7ff;       /* 18.7:1 on bg */
+  --color-text-muted: #a4aec4; /* 9.0:1 on bg */
+
+  /* Premium sapphire ramp */
+  --color-brand: #2b6bff;        /* display accent: icons, borders, focus, ≥24px, CTA surfaces */
+  --color-brand-strong: #1e55e6; /* CTA fill where white text sits (white 6.0:1) */
+  --color-brand-deep: #13328f;   /* gradient floor / pressed */
+  --color-brand-bright: #5e97ff; /* specular highlight — edges/sheen only, never behind text */
+  --color-brand-hover: #1a4ed1;
+  --color-brand-tint: rgb(43 107 255 / 0.12);
+
+  /* Status */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+
+  /* Motion — easing (generates ease-* utilities) */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0, 0, 0, 1);
+  --ease-in: cubic-bezier(0.3, 0, 1, 1);
+  --ease-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --ease-snappy: cubic-bezier(0.3, 0, 0.2, 1);
+
+  /* Motion — duration (referenced via var()) */
+  --dur-instant: 100ms;
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-slow: 350ms;
+  --dur-slower: 500ms;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem; /* sticky-header offset; tuned in Phase 3 */
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  h1 { font-size: var(--text-h1); }
+  h2 { font-size: var(--text-h2); }
+  h3 { font-size: var(--text-h3); line-height: 1.2; }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  ::selection {
+    background: var(--color-brand-tint);
+  }
+
+  /* Inputs at 16px to prevent iOS focus auto-zoom (§2.5). */
+  input, select, textarea {
+    font-size: 16px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Raised panel — depth via inset bevel + one soft outer shadow (matte). */
+  .surface-raised {
+    background-image: linear-gradient(180deg, var(--color-bg-elevated-2), var(--color-bg-elevated));
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.06),
+      inset 0 -1px 0 rgb(0 0 0 / 0.5),
+      0 8px 24px rgb(0 0 0 / 0.45);
+  }
+
+  /* Primary CTA — anodized sapphire gradient + specular sweep (the ONE signature move). */
+  .btn-metal {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    color: #fff;
+    background-image: linear-gradient(
+      180deg,
+      var(--color-brand),
+      var(--color-brand-strong) 55%,
+      var(--color-brand-deep)
+    );
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.25),
+      0 6px 18px rgb(19 50 143 / 0.45);
+    transition:
+      transform var(--dur-fast) var(--ease-standard),
+      box-shadow var(--dur-fast) var(--ease-standard);
+  }
+  .btn-metal::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+      115deg,
+      transparent 30%,
+      rgb(255 255 255 / 0.28) 50%,
+      transparent 70%
+    );
+    transform: translateX(-130%);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      transform var(--dur-slower) var(--ease-emphasized),
+      opacity var(--dur-fast) linear;
+  }
+  .btn-metal:active { transform: scale(0.98); }
+  /* Hover sweep + lift — pointer devices only, so it never sticks on touch (§2.4). */
+  @media (hover: hover) and (pointer: fine) {
+    .btn-metal:hover {
+      transform: translateY(-1px);
+      box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), 0 10px 28px rgb(19 50 143 / 0.55);
+    }
+    .btn-metal:hover::after { transform: translateX(130%); opacity: 1; }
+  }
+  /* Touch / scroll-into-view sweep — toggled by reveal.ts adding .is-swept (P4-T5). */
+  .btn-metal.is-swept::after {
+    animation: btn-sweep var(--dur-slower) var(--ease-emphasized) forwards;
+  }
+  @keyframes btn-sweep {
+    0%   { transform: translateX(-130%); opacity: 0; }
+    45%  { opacity: 1; }
+    100% { transform: translateX(130%); opacity: 0; }
+  }
+
+  /* Chrome-like hairline divider. */
+  .divider-chrome {
+    height: 1px;
+    border: 0;
+    background-image: linear-gradient(90deg, transparent, var(--color-border-bright), transparent);
+  }
+
+  /* Glass nav — solid fallback baseline; blur is a progressive enhancement, never nested (§2.5). */
+  .nav-glass {
+    background-color: rgb(13 16 25 / 0.85);
+  }
+  @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    .nav-glass {
+      background-color: rgb(13 16 25 / 0.55);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      transform: translate3d(0, 0, 0); /* stabilize stale-blur-on-scroll */
+    }
+  }
+
+  /* Animated icons (no library — inline Lucide SVGs; §2.3). iOS pivot fix via transform-box. */
+  .icon-hover {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform var(--dur-base) var(--ease-standard);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .icon-hover-trigger:hover .icon-hover { transform: scale(1.08) rotate(-3deg); }
+  }
+  /* Hamburger ↔ X morph; markup carries [data-bar] + [data-open] (wired in P4-T1). */
+  .menu-icon [data-bar] {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform var(--dur-base) var(--ease-standard), opacity var(--dur-fast);
+  }
+  .menu-icon[data-open="true"] [data-bar="top"] { transform: translateY(6px) rotate(45deg); }
+  .menu-icon[data-open="true"] [data-bar="middle"] { opacity: 0; }
+  .menu-icon[data-open="true"] [data-bar="bottom"] { transform: translateY(-6px) rotate(-45deg); }
+  /* Stroke "draw-on" (e.g. zip-success check); needs pathLength="1" on the path (§2.5). */
+  .icon-draw path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  .icon-draw.is-drawn path {
+    animation: icon-draw var(--dur-slow) var(--ease-out) forwards;
+  }
+  @keyframes icon-draw {
+    to { stroke-dashoffset: 0; }
+  }
+}
+
+/* Scroll-reveal (driven by src/lib/reveal.ts). Only applies when motion is allowed, so
+   reduced-motion users always see the final state. transform/opacity only → CLS-safe. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity var(--dur-slow) var(--ease-out),
+      transform var(--dur-slow) var(--ease-out);
+  }
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
 }

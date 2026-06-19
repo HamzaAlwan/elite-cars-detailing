@@ -1,0 +1,34 @@
+---
+/**
+ * Static CTA primitive (zero JS). Renders <a> when `href` is set, else <button>.
+ * variant="primary" → metallic sapphire CTA (the signature move); "ghost" → outline.
+ * Always ≥44px tall (touch target). Interactive logic lives in islands, not here.
+ */
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'ghost';
+  type?: 'button' | 'submit';
+  class?: string;
+}
+const { href, variant = 'primary', type = 'button', class: className = '' } = Astro.props;
+
+const base =
+  'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-6 font-medium tracking-tight';
+const variants = {
+  primary: 'btn-metal',
+  ghost: 'border border-border text-text hover:border-border-bright',
+} as const;
+const classes = [base, variants[variant], className];
+---
+
+{
+  href ? (
+    <a href={href} class:list={classes}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class:list={classes}>
+      <slot />
+    </button>
+  )
+}

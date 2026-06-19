@@ -1,0 +1,37 @@
+---
+/**
+ * Props-driven SEO head: title, meta description, canonical, Open Graph + Twitter.
+ * The default `<slot>` is for JSON-LD <script type="application/ld+json"> (authored in Phase 7).
+ */
+import { SITE } from '@/data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** OG image path (relative to site root). Real branded image lands in Phase 9 (P9-T2). */
+  ogImage?: string;
+}
+
+const { title, description = SITE.description, ogImage = '/og/default.jpg' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const ogImageUrl = new URL(ogImage, SITE.url).href;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:locale" content="en_US" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+<slot />

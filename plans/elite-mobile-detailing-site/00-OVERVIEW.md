@@ -43,7 +43,7 @@ Global rules for the whole build — follow them in every task:
 |---|-------|------|--------|
 | 0 | Dependencies & configuration (gate) | `phase-00-dependencies.md` | ✅ |
 | 1 | Project scaffolding & structure | `phase-01-setup.md` | ✅ |
-| 2 | Design system & layout | `phase-02-design-system.md` | ⬜ |
+| 2 | Design system & layout | `phase-02-design-system.md` | ✅ |
 | 2.5 | Design showcase & approval gate | `phase-02b-design-showcase.md` | ⬜ |
 | 3 | Static sections | `phase-03-static-sections.md` | ⬜ |
 | 4 | Interactive islands | `phase-04-interactive-islands.md` | ⬜ |
@@ -81,13 +81,13 @@ for completeness.
 - [x] P1-T4 Smoke test (check + lint + build green; *CF preview deploy pending repo-connect*)
 
 ### Phase 2 — Design system & layout
-- [ ] P2-T1 Color tokens → Tailwind theme (near-black, single accent)
-- [ ] P2-T2 Typography (Outfit variable, scale, fallback, preload)
-- [ ] P2-T3 Base `Layout.astro` (lang, landmarks, skip-link, `<ClientRouter />`)
-- [ ] P2-T4 `Seo.astro` head component (title/meta/OG + JSON-LD slot)
-- [ ] P2-T5 Motion utilities (IntersectionObserver reveal, reduced-motion)
-- [ ] P2-T6 UI primitives (Button, Card, Badge, Section, Container)
-- [ ] P2-T7 Encode design principles (spacing, container, one-accent rule)
+- [x] P2-T1 Color tokens → Tailwind theme (premium blue/black + sapphire ramp)
+- [x] P2-T2 Typography (Outfit variable, fluid scale, fallback; *preload optimized in P8-T4*)
+- [x] P2-T3 Base `Layout.astro` (lang, landmarks, skip-link, `<ClientRouter />`)
+- [x] P2-T4 `Seo.astro` head component (title/meta/canonical/OG + JSON-LD slot)
+- [x] P2-T5 Motion utilities + tokens (reveal.ts/motion.ts, --ease-*/--dur-*, reduced-motion)
+- [x] P2-T6 UI primitives (Button, Card, Badge, Section, Container) + metallic/icon utilities
+- [x] P2-T7 Encode design principles (spacing, container, one-accent, shine budget, iOS)
 
 ### Phase 2.5 — Design showcase & approval gate (GATE)
 - [ ] P2B-T1 Preview route `/preview` (noindex, sitemap-excluded) + sticky TOC, grouped layout
