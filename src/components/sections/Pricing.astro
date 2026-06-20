@@ -1,0 +1,125 @@
+---
+/**
+ * P3-T4 — Pricing matrix shell (3 tiers).
+ * Static shell — Phase 4 (P4-T2) adds the vehicle size-selector island at #pricing-selector-mount.
+ * "Most Popular" card uses .surface-featured + .badge-featured (NOT .btn-metal on a badge).
+ * Per-card CTA href links to #book with package param (picked up by Phase 6 Cal.com island).
+ * Ceramic tier → #quote (needs inspection; no instant-book).
+ * Guarantee line + add-ons note beneath grid.
+ */
+import Button from '@/components/ui/Button.astro';
+import Badge from '@/components/ui/Badge.astro';
+import Container from '@/components/ui/Container.astro';
+import Section from '@/components/ui/Section.astro';
+import { CTA } from '@/data/site';
+
+const tiers = [
+  {
+    id: 'standard-reset',
+    name: 'The Standard Reset',
+    price: '$125',
+    vehicle: 'Sedan',
+    description: 'Hand wash, gloss protection, tire dressing, interior deep vacuum, dashboard wipe-down.',
+    cta: CTA.book,
+    ctaHref: '#book?package=standard-reset',
+    ctaVariant: 'ghost' as const,
+    featured: false,
+  },
+  {
+    id: 'elite-signature',
+    name: 'The Elite Signature',
+    price: '$225',
+    vehicle: 'Sedan',
+    description: 'Full exterior wash, clay bar, iron decontamination, interior steam sanitization, leather clean & condition, protective wax.',
+    cta: CTA.book,
+    ctaHref: '#book?package=elite-signature',
+    ctaVariant: 'primary' as const,
+    featured: true,
+  },
+  {
+    id: 'ceramic-upgrade',
+    name: 'The Ceramic Showroom Upgrade',
+    price: 'From $650',
+    vehicle: '',
+    description: '3-year coating from $650 · 9-year coating from ~$1,500. Exact pricing after inspection — vehicle condition and size determine prep time.',
+    cta: CTA.quote,
+    ctaHref: '#quote',
+    ctaVariant: 'ghost' as const,
+    featured: false,
+  },
+];
+---
+
+<Section id="pricing">
+  <Container>
+    <h2 data-reveal data-reveal-index="0">Our Packages</h2>
+    <p data-reveal data-reveal-index="1" class="mt-3 max-w-2xl text-text-muted">
+      Transparent pricing — no hidden fees. Select your vehicle size to see the exact price.
+    </p>
+
+    <!-- Vehicle size selector mount point (Phase 4 island, P4-T2) -->
+    <div id="pricing-selector-mount" class="mt-6" data-reveal data-reveal-index="2">
+      <!-- Static fallback: size label shown until island hydrates -->
+      <p class="text-sm text-text-muted">
+        Prices shown for <strong class="text-text">Sedan</strong> · Medium SUV and Large Truck pricing available — select above.
+      </p>
+    </div>
+
+    <div class="mt-8 grid gap-5 md:grid-cols-3">
+      {tiers.map((tier, i) => (
+        <div
+          data-reveal
+          data-reveal-index={i + 3}
+          class:list={[
+            'relative flex flex-col p-6',
+            tier.featured ? 'surface-featured' : 'surface-raised',
+          ]}
+        >
+          {tier.featured && (
+            <span class="absolute -top-3.5 left-6">
+              <Badge class="badge-featured gap-1.5 text-xs">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 3l1.88 5.76a2 2 0 0 0 1.26 1.26L21 12l-5.76 1.88a2 2 0 0 0-1.26 1.26L12 21l-1.88-5.76a2 2 0 0 0-1.26-1.26L3 12l5.76-1.88a2 2 0 0 0 1.26-1.26L12 3z"/>
+                </svg>
+                Most Popular
+              </Badge>
+            </span>
+          )}
+
+          <h3 class="font-semibold text-text">{tier.name}</h3>
+
+          <p class="mt-2 flex items-baseline gap-1">
+            <span class="text-2xl font-bold text-text">{tier.price}</span>
+            {tier.vehicle && (
+              <span class="text-sm text-text-muted">· {tier.vehicle}</span>
+            )}
+          </p>
+
+          <p class="mt-3 grow text-sm leading-relaxed text-text-muted">{tier.description}</p>
+
+          <Button
+            href={tier.ctaHref}
+            variant={tier.ctaVariant}
+            class="mt-6 w-full"
+          >
+            {tier.cta}
+          </Button>
+        </div>
+      ))}
+    </div>
+
+    <!-- Add-ons note -->
+    <p data-reveal data-reveal-index="6" class="mt-5 text-sm text-text-muted">
+      Add extras at checkout: <strong class="text-text">Pet Hair Removal ($50)</strong> · <strong class="text-text">Odor Elimination ($60)</strong>
+    </p>
+
+    <!-- Satisfaction guarantee -->
+    <p data-reveal data-reveal-index="7" class="mt-4 flex items-center gap-2 text-sm text-text-muted">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <polyline points="9 12 11 14 15 10"/>
+      </svg>
+      100% satisfaction guaranteed — not happy? We come back, no charge.
+    </p>
+  </Container>
+</Section>

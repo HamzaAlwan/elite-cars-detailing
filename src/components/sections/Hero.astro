@@ -1,0 +1,138 @@
+---
+/**
+ * P3-T2 — Hero section (above the fold).
+ * - Single h1 for the page (only one anywhere on index.astro)
+ * - min-h-[100svh] (not 100vh — §2.5 iOS URL bar)
+ * - Cold-start trust strip: icon pills, no fabricated star rating
+ * - Satisfaction guarantee badge replaces star row until real GBP reviews exist
+ * - 2-col on desktop: copy left, media right
+ * - Decorative: low-opacity logo car silhouette + radial sapphire glow (NOT backdrop-filter)
+ * - data-reveal stagger on headline / subheadline / CTA group
+ */
+import Button from '@/components/ui/Button.astro';
+import Container from '@/components/ui/Container.astro';
+import { SITE, CTA, CONTACT } from '@/data/site';
+---
+
+<section
+  id="hero"
+  class="relative flex min-h-[100svh] items-center overflow-hidden py-24"
+>
+  <!-- Decorative: sapphire radial glow (background gradient, NOT backdrop-filter — iOS safe §2.5) -->
+  <div
+    class="pointer-events-none absolute right-0 top-1/4 h-[500px] w-[500px] -translate-y-1/4 translate-x-1/4 rounded-full"
+    style="background: radial-gradient(closest-side, rgba(30,95,255,.22), transparent);"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Decorative: large low-opacity car silhouette (desktop only) -->
+  <div
+    class="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 items-center justify-end pr-4 lg:flex"
+    aria-hidden="true"
+  >
+    <img
+      src="/logo.svg"
+      alt=""
+      width="460"
+      height="158"
+      class="w-full max-w-lg opacity-[0.07]"
+      loading="eager"
+    />
+  </div>
+
+  <Container class="relative">
+    <div class="max-w-2xl">
+
+      <!-- Headline — the page's only h1 -->
+      <h1
+        data-reveal
+        data-reveal-index="0"
+        class="text-h1 font-bold tracking-tight text-text"
+      >
+        Showroom Shine.<br />
+        Delivered to Your Driveway.
+      </h1>
+
+      <!-- Subheadline -->
+      <p
+        data-reveal
+        data-reveal-index="1"
+        class="mt-5 max-w-xl text-lg leading-relaxed text-text-muted"
+      >
+        {SITE.description}
+      </p>
+
+      <!-- CTA group -->
+      <div
+        data-reveal
+        data-reveal-index="2"
+        class="mt-8 flex flex-wrap items-center gap-3"
+      >
+        <Button href="#book">{CTA.book}</Button>
+        <Button href="#quote" variant="ghost">{CTA.quote}</Button>
+        <!-- Tap-to-call (mobile-prominent) — hidden until real number is set in site.ts -->
+        {CONTACT.phoneE164 !== '{{PHONE_E164}}' && (
+          <a
+            href={`tel:${CONTACT.phoneE164}`}
+            class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full px-4 text-sm font-medium text-text-muted transition-colors hover:text-text sm:hidden"
+            aria-label={`Call us at ${CONTACT.phoneDisplay}`}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6 6l.87-.87a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            {CONTACT.phoneDisplay}
+          </a>
+        )}
+      </div>
+
+      <!-- Trust strip: icon + label pills -->
+      <ul
+        data-reveal
+        data-reveal-index="3"
+        class="mt-6 flex flex-wrap gap-3 text-sm text-text-muted"
+        aria-label="Trust highlights"
+      >
+        <li class="flex items-center gap-1.5">
+          <!-- Droplets icon -->
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/>
+            <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/>
+          </svg>
+          100% self-contained
+        </li>
+        <li class="flex items-center gap-1.5">
+          <!-- Calendar icon -->
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          Same-day slots
+        </li>
+        <li class="flex items-center gap-1.5">
+          <!-- Shield check icon -->
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <polyline points="9 12 11 14 15 10"/>
+          </svg>
+          Insured &amp; vetted
+        </li>
+      </ul>
+
+      <!-- Satisfaction guarantee badge (cold-start — replaces star rating until real reviews exist) -->
+      <p
+        data-reveal
+        data-reveal-index="4"
+        class="mt-4 flex items-center gap-1.5 text-sm text-text-muted"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        100% satisfaction guaranteed or we come back at no charge
+      </p>
+    </div>
+  </Container>
+</section>
+
+<!-- initReveal() is called once globally in index.astro — no per-section call needed. -->

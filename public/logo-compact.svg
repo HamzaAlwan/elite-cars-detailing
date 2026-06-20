@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 44" width="220" height="44" role="img" aria-label="Elite Mobile Car Detailing">
+  <title>Elite Mobile Car Detailing</title>
+  <!--
+    Compact nav wordmark — text only, no car illustration.
+    Designed to render crisply at 36px height in the sticky nav.
+    Colors: #F4F7FF = --color-text; #A4AEC4 = --color-text-muted; #1E5FFF = --color-brand
+  -->
+
+  <!-- "ELITE" in brand blue, large weight -->
+  <text x="0" y="30"
+    font-family="'Outfit Variable', system-ui, -apple-system, sans-serif"
+    font-size="30"
+    font-weight="800"
+    letter-spacing="-1"
+    fill="#1E5FFF"
+  >ELITE</text>
+
+  <!-- Separator dot -->
+  <circle cx="112" cy="22" r="2.5" fill="#1E5FFF" opacity="0.5" />
+
+  <!-- "MOBILE CAR DETAILING" muted, smaller, aligned to right of dot -->
+  <text x="120" y="26"
+    font-family="'Outfit Variable', system-ui, -apple-system, sans-serif"
+    font-size="9.5"
+    font-weight="500"
+    letter-spacing="1.5"
+    fill="#A4AEC4"
+  >MOBILE CAR</text>
+  <text x="120" y="38"
+    font-family="'Outfit Variable', system-ui, -apple-system, sans-serif"
+    font-size="9.5"
+    font-weight="500"
+    letter-spacing="1.5"
+    fill="#A4AEC4"
+  >DETAILING</text>
+</svg>

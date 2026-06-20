@@ -1,0 +1,67 @@
+---
+/**
+ * P3-T7 — Service area (static shell).
+ * City pill badges in a flex-wrap row (not a dot-separated string).
+ * Mount point for Phase 4 zip validator island (P4-T3).
+ */
+import Container from '@/components/ui/Container.astro';
+import Section from '@/components/ui/Section.astro';
+import { SERVICE_AREA_CITIES } from '@/data/site';
+---
+
+<Section id="service-area">
+  <Container>
+    <h2 data-reveal data-reveal-index="0">Serving Richardson &amp; the DFW Metro</h2>
+    <p data-reveal data-reveal-index="1" class="mt-3 max-w-2xl text-text-muted">
+      We cover a 50-mile radius from our Richardson, TX base — from Frisco down to Irving, and everywhere between.
+    </p>
+
+    <!-- City pill chips -->
+    <ul
+      data-reveal
+      data-reveal-index="2"
+      class="mt-8 flex flex-wrap gap-2"
+      aria-label="Cities we serve"
+    >
+      {SERVICE_AREA_CITIES.map((city) => (
+        <li>
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-border bg-bg-elevated px-4 py-1.5 text-sm text-text-muted">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            {city}
+          </span>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Zip validator (Phase 4 island mount point) -->
+    <div data-reveal data-reveal-index="3" class="mt-8 max-w-sm">
+      <p class="mb-3 text-sm font-medium text-text">Not sure if we cover your area?</p>
+      <div id="zip-validator-mount">
+        <!-- Static fallback until P4-T3 island hydrates -->
+        <div class="flex gap-2">
+          <label for="zip-static" class="sr-only">Enter your ZIP code</label>
+          <input
+            id="zip-static"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]{5}"
+            maxlength="5"
+            autocomplete="postal-code"
+            placeholder="Enter ZIP code"
+            class="min-h-11 flex-1 rounded-xl border border-border bg-bg-elevated px-4 py-3 text-text placeholder:text-text-muted"
+          />
+          <button
+            type="button"
+            class="btn-metal cursor-pointer rounded-xl px-5 font-medium"
+          >
+            Check
+          </button>
+        </div>
+        <p class="mt-2 text-xs text-text-muted">We'll tell you in seconds — no obligation.</p>
+      </div>
+    </div>
+  </Container>
+</Section>

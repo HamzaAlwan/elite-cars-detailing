@@ -45,7 +45,7 @@ Global rules for the whole build — follow them in every task:
 | 1 | Project scaffolding & structure | `phase-01-setup.md` | ✅ |
 | 2 | Design system & layout | `phase-02-design-system.md` | ✅ |
 | 2.5 | Design showcase & approval gate | `phase-02b-design-showcase.md` | 🟦 |
-| 3 | Static sections | `phase-03-static-sections.md` | ⬜ |
+| 3 | Static sections | `phase-03-static-sections.md` | ✅ |
 | 4 | Interactive islands | `phase-04-interactive-islands.md` | ⬜ |
 | 5 | Our Work gallery | `phase-05-our-work-gallery.md` | ⬜ |
 | 6 | Booking & lead capture | `phase-06-booking-and-lead-capture.md` | ⬜ |
@@ -100,15 +100,15 @@ for completeness.
 - [ ] P2B-T8 Deploy preview + record chosen variants — ⏳ **owner: pick variants (DESIGN_DECISIONS.md)**
 
 ### Phase 3 — Static sections
-- [ ] P3-T1 Header/nav shell (sticky blur, links, Book CTA)
-- [ ] P3-T2 Hero (rating row, 3 CTAs, trust strip, media slot)
-- [ ] P3-T3 Value props (4 badges)
-- [ ] P3-T4 Pricing matrix shell (3 tiers, badges, add-ons, guarantee)
-- [ ] P3-T5 How It Works (3 steps)
-- [ ] P3-T6 Social proof (reviews, guarantee, brand logos)
-- [ ] P3-T7 Service area static (coverage list + copy)
-- [ ] P3-T8 Footer (columns, NAP, click-to-call, legal)
-- [ ] P3-T9 Sticky mobile action bar ([Book][Call])
+- [x] P3-T1 Header/nav shell (sticky blur, links, Book CTA)
+- [x] P3-T2 Hero (rating row, 3 CTAs, trust strip, media slot)
+- [x] P3-T3 Value props (4 badges)
+- [x] P3-T4 Pricing matrix shell (3 tiers, badges, add-ons, guarantee)
+- [x] P3-T5 How It Works (3 steps)
+- [x] P3-T6 Social proof (reviews, guarantee, brand logos)
+- [x] P3-T7 Service area static (coverage list + copy)
+- [x] P3-T8 Footer (columns, NAP, click-to-call, legal)
+- [x] P3-T9 Sticky mobile action bar ([Book][Call])
 - [ ] ~~P3-T10 Membership/Fleet band~~ → DEFERRED to post-launch roadmap (not launch scope; not build Phase 2)
 
 ### Phase 4 — Interactive islands

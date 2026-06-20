@@ -1,0 +1,82 @@
+---
+/**
+ * P3-T6 — Social proof (cold-start).
+ * NO fabricated review cards. Uses genuine credibility:
+ * - 100% Satisfaction Guarantee callout
+ * - Certified / Insured / DFW-Based credentials
+ * - Brand product logos (real brands we use)
+ * - Placeholder comment marks where real Google review cards will slot in
+ */
+import Container from '@/components/ui/Container.astro';
+import Section from '@/components/ui/Section.astro';
+
+const credentials = [
+  { label: 'Certified Technicians' },
+  { label: 'Fully Insured' },
+  { label: 'DFW-Based & Owner-Operated' },
+  { label: '50-Mile Service Radius' },
+];
+
+const products = [
+  { name: "Meguiar's", note: 'Wash & clay' },
+  { name: 'CarPro', note: 'Iron decon' },
+  { name: 'Gyeon', note: 'Ceramic coatings' },
+  { name: 'Carpro CQUARTZ', note: 'Paint protection' },
+];
+---
+
+<Section id="social-proof">
+  <Container>
+    <h2 data-reveal data-reveal-index="0">Built on Real Results</h2>
+    <p data-reveal data-reveal-index="1" class="mt-3 max-w-2xl text-text-muted">
+      No shortcuts, no fabricated reviews — just certified work, premium products, and a guarantee that backs every job.
+    </p>
+
+    <!-- Guarantee callout -->
+    <div data-reveal data-reveal-index="2" class="surface-featured mt-10 flex flex-col gap-4 p-8 sm:flex-row sm:items-center sm:gap-8">
+      <div class="shrink-0 text-brand">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <polyline points="9 12 11 14 15 10"/>
+        </svg>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold text-text">100% Satisfaction Guaranteed</h3>
+        <p class="mt-1 text-text-muted">
+          Not completely satisfied with the result? We'll return and re-detail the affected areas at no extra charge. Your satisfaction is non-negotiable.
+        </p>
+      </div>
+    </div>
+
+    <!-- Credentials -->
+    <ul data-reveal data-reveal-index="3" class="mt-8 flex flex-wrap gap-3">
+      {credentials.map((c) => (
+        <li class="flex items-center gap-2 rounded-full border border-border bg-bg-elevated px-4 py-2 text-sm text-text-muted">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          {c.label}
+        </li>
+      ))}
+    </ul>
+
+    <!-- Product brands -->
+    <div data-reveal data-reveal-index="4" class="mt-10">
+      <p class="text-sm font-medium uppercase tracking-widest text-text-muted">Professional Products We Use</p>
+      <div class="mt-4 flex flex-wrap gap-4">
+        {products.map((p) => (
+          <div class="rounded-xl border border-border bg-bg-elevated px-5 py-3 text-center">
+            <p class="font-semibold text-text">{p.name}</p>
+            <p class="mt-0.5 text-xs text-text-muted">{p.note}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!--
+      REVIEW CARDS PLACEHOLDER
+      Add real Google review cards here once genuine GBP reviews exist (P7-T7, AggregateRating).
+      Pattern: <figure class="surface-raised p-6"><blockquote>…</blockquote><figcaption>Name · City · Vehicle</figcaption></figure>
+    -->
+  </Container>
+</Section>

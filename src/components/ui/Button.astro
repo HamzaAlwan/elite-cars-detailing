@@ -13,10 +13,10 @@ interface Props {
 const { href, variant = 'primary', type = 'button', class: className = '' } = Astro.props;
 
 const base =
-  'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 font-medium tracking-tight';
+  'inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full px-6 font-medium tracking-tight';
 const variants = {
   primary: 'btn-metal',
-  ghost: 'border border-border text-text hover:border-border-bright',
+  ghost: 'border border-border text-text transition-colors hover:border-border-bright',
 } as const;
 const classes = [base, variants[variant], className];
 ---
