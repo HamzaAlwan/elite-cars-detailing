@@ -10,7 +10,9 @@
  * from web3forms.com before launch (P9-T2).
  */
 import { ref, reactive } from 'vue';
-import { WEB3FORMS_ACCESS_KEY } from '@/data/site';
+import { WEB3FORMS_ACCESS_KEY, CONTACT } from '@/data/site';
+
+const hasPhone = CONTACT.phoneE164 !== '{{PHONE_E164}}';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
@@ -208,7 +210,8 @@ async function submit() {
     <!-- Error feedback -->
     <div v-if="status === 'error'" role="alert" class="rounded-xl border border-warning/30 bg-warning/10 p-3 text-sm text-warning">
       {{ errorMessage }} —
-      <a :href="`tel:${undefined}`" class="underline">call us instead</a>.
+      <a v-if="hasPhone" :href="`tel:${CONTACT.phoneE164}`" class="underline">call us instead</a>
+      <span v-else>please try again or refresh the page</span>.
     </div>
 
     <!-- Submit -->

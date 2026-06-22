@@ -16,7 +16,8 @@ interface Props {
 }
 
 const { title, description, ogImage, noindex = false } = Astro.props;
-const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
+// Callers pass the complete <title> string; fall back to brand + tagline when omitted.
+const pageTitle = title ?? `${SITE.name} — ${SITE.tagline}`;
 
 // Phase notes: apple-touch-icon + android-chrome PNGs land with real branding in Phase 9 (P9-T2);
 // font preload (crossorigin, §2.5) is optimized in Phase 8 (P8-T4).
