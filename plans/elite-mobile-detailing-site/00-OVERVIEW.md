@@ -47,8 +47,8 @@ Global rules for the whole build — follow them in every task:
 | 2.5 | Design showcase & approval gate | `phase-02b-design-showcase.md` | 🟦 |
 | 3 | Static sections | `phase-03-static-sections.md` | ✅ |
 | 4 | Interactive islands | `phase-04-interactive-islands.md` | ✅ |
-| 5 | Our Work gallery | `phase-05-our-work-gallery.md` | ✅ |
-| 6 | Booking & lead capture | `phase-06-booking-and-lead-capture.md` | ✅ |
+| 5 | Our Work gallery | `phase-05-our-work-gallery.md` | 🟦 |
+| 6 | Booking & lead capture | `phase-06-booking-and-lead-capture.md` | 🟦 |
 | 7 | SEO & structured data | `phase-07-seo-and-schema.md` | ✅ |
 | 8 | Performance & accessibility | `phase-08-performance-accessibility.md` | 🟦 |
 | 9 | QA, analytics & deploy | `phase-09-qa-and-deploy.md` | ⬜ |
@@ -128,19 +128,19 @@ for completeness.
 
 ### Phase 6 — Booking & lead capture
 - [ ] P6-T1 Cal.com setup (free tier): one event type + booking questions (no routing form)
-- [ ] P6-T2 Lazy Cal.com embed island + fallback
-- [ ] P6-T3 Quote form (Web3Forms) + success state
-- [ ] P6-T4 Tap-to-call wiring (hero/sticky/footer)
+- [x] P6-T2 Lazy Cal.com embed island + fallback
+- [ ] P6-T3 Quote form (Web3Forms) + success state — ⏳ needs WEB3FORMS_ACCESS_KEY
+- [x] P6-T4 Tap-to-call wiring (hero/sticky/footer)
 - [ ] P6-T5 (Optional, default off) Stripe deposit
 
 ### Phase 7 — SEO & structured data
-- [ ] P7-T1 Title/meta/OG per page
-- [ ] P7-T2 JSON-LD AutoWash LocalBusiness (SAB form)
-- [ ] P7-T3 JSON-LD Service + FAQPage + Organization/WebSite
-- [ ] P7-T4 Sitemap + robots.txt + canonical + locale
-- [ ] P7-T5 Custom 404
-- [ ] P7-T6 H1/headings/alt/NAP audit
-- [ ] P7-T7 AggregateRating (only if genuine; note caveat)
+- [x] P7-T1 Title/meta/OG per page
+- [x] P7-T2 JSON-LD AutoWash LocalBusiness (SAB form)
+- [x] P7-T3 JSON-LD Service + FAQPage + Organization/WebSite
+- [x] P7-T4 Sitemap + robots.txt + canonical + locale
+- [x] P7-T5 Custom 404
+- [x] P7-T6 H1/headings/alt/NAP audit
+- [x] P7-T7 AggregateRating (only if genuine; note caveat)
 
 ### Phase 8 — Performance & accessibility
 - [ ] P8-T1 Hydration-directive audit
