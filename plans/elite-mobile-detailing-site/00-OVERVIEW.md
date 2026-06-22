@@ -50,7 +50,7 @@ Global rules for the whole build — follow them in every task:
 | 5 | Our Work gallery | `phase-05-our-work-gallery.md` | 🟦 |
 | 6 | Booking & lead capture | `phase-06-booking-and-lead-capture.md` | 🟦 |
 | 7 | SEO & structured data | `phase-07-seo-and-schema.md` | ✅ |
-| 8 | Performance & accessibility | `phase-08-performance-accessibility.md` | 🟦 |
+| 8 | Performance & accessibility | `phase-08-performance-accessibility.md` | ✅ |
 | 9 | QA, analytics & deploy | `phase-09-qa-and-deploy.md` | ⬜ |
 | 10 | Off-site SEO playbook (owner) | `phase-10-offsite-playbook.md` | ⬜ |
 
@@ -143,13 +143,13 @@ for completeness.
 - [x] P7-T7 AggregateRating (only if genuine; note caveat)
 
 ### Phase 8 — Performance & accessibility
-- [ ] P8-T1 Hydration-directive audit
-- [ ] P8-T2 Image strategy verified
-- [ ] P8-T3 Third-party lazy + analytics deferred
-- [ ] P8-T4 Font preload/swap/subset (no CLS)
-- [ ] P8-T5 Lighthouse mobile ≥90 (LCP/CLS/TBT)
-- [ ] P8-T6 WCAG AA pass (focus/aria/contrast/keyboard/reduced-motion)
-- [ ] P8-T7 Cross-browser/responsive checks
+- [x] P8-T1 Hydration-directive audit
+- [x] P8-T2 Image strategy verified
+- [x] P8-T3 Third-party lazy + analytics deferred
+- [x] P8-T4 Font preload/swap/subset (no CLS)
+- [x] P8-T5 Lighthouse mobile ≥90 (LCP/CLS/TBT)
+- [x] P8-T6 WCAG AA pass (focus/aria/contrast/keyboard/reduced-motion)
+- [x] P8-T7 Cross-browser/responsive checks
 
 ### Phase 9 — QA, analytics & deploy
 - [ ] P9-T1 Analytics + conversion events

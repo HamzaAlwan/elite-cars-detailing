@@ -1,6 +1,5 @@
 ---
 import '@/styles/global.css';
-import '@fontsource-variable/outfit';
 import { ClientRouter } from 'astro:transitions';
 import { SITE } from '@/data/site';
 import Seo from '@/components/Seo.astro';
@@ -26,6 +25,12 @@ const pageTitle = title ?? `${SITE.name} — ${SITE.tagline}`;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!-- Font preload — must come before any render-blocking resources.
+         crossorigin is required even for same-origin fonts (browser fetch spec). -->
+    <link rel="preload" as="font" href="/fonts/outfit-variable.woff2" type="font/woff2" crossorigin />
+    <!-- Preconnect to third-party origins used on interaction (reduces latency on first use). -->
+    <link rel="preconnect" href="https://api.web3forms.com" />
+    <link rel="preconnect" href="https://cal.com" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
