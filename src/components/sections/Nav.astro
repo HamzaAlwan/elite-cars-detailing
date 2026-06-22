@@ -8,6 +8,7 @@
  */
 import Button from '@/components/ui/Button.astro';
 import Container from '@/components/ui/Container.astro';
+import MobileNav from '@/components/islands/MobileNav.vue';
 import { CTA } from '@/data/site';
 
 const links = [
@@ -53,9 +54,11 @@ const links = [
     <!-- Right side: Book CTA (always) + hamburger mount (mobile only) -->
     <div class="flex shrink-0 items-center gap-3">
       <Button href="#book" class="hidden sm:inline-flex">{CTA.book}</Button>
-      <!-- Mobile hamburger — wired by Phase 4 island (P4-T1). Mount point only. -->
-      <div id="mobile-nav-mount" class="lg:hidden"></div>
-      <!-- Static fallback hamburger (replaced by island on hydration) -->
+      <!-- Mobile nav island (client:idle) — takes over from static fallback on hydration -->
+      <div class="lg:hidden">
+        <MobileNav client:idle />
+      </div>
+      <!-- Static fallback hamburger (removed by MobileNav.vue on mount) -->
       <button
         id="nav-hamburger-static"
         aria-label="Navigation menu"

@@ -7,10 +7,10 @@
  * Ceramic tier → #quote (needs inspection; no instant-book).
  * Guarantee line + add-ons note beneath grid.
  */
-import Button from '@/components/ui/Button.astro';
 import Badge from '@/components/ui/Badge.astro';
 import Container from '@/components/ui/Container.astro';
 import Section from '@/components/ui/Section.astro';
+import PricingEstimator from '@/components/islands/PricingEstimator.vue';
 import { CTA } from '@/data/site';
 
 const tiers = [
@@ -57,12 +57,9 @@ const tiers = [
       Transparent pricing — no hidden fees. Select your vehicle size to see the exact price.
     </p>
 
-    <!-- Vehicle size selector mount point (Phase 4 island, P4-T2) -->
-    <div id="pricing-selector-mount" class="mt-6" data-reveal data-reveal-index="2">
-      <!-- Static fallback: size label shown until island hydrates -->
-      <p class="text-sm text-text-muted">
-        Prices shown for <strong class="text-text">Sedan</strong> · Medium SUV and Large Truck pricing available — select above.
-      </p>
+    <!-- Vehicle size selector — PricingEstimator.vue (P4-T2) -->
+    <div class="mt-6" data-reveal data-reveal-index="2">
+      <PricingEstimator client:visible />
     </div>
 
     <div class="mt-8 grid gap-5 md:grid-cols-3">
@@ -89,21 +86,24 @@ const tiers = [
           <h3 class="font-semibold text-text">{tier.name}</h3>
 
           <p class="mt-2 flex items-baseline gap-1">
-            <span class="text-2xl font-bold text-text">{tier.price}</span>
+            <span data-price={tier.id} class="text-2xl font-bold text-text">{tier.price}</span>
             {tier.vehicle && (
-              <span class="text-sm text-text-muted">· {tier.vehicle}</span>
+              <span data-vehicle={tier.id} class="text-sm text-text-muted">· {tier.vehicle}</span>
             )}
           </p>
 
           <p class="mt-3 grow text-sm leading-relaxed text-text-muted">{tier.description}</p>
 
-          <Button
+          <a
+            data-cta={tier.id}
             href={tier.ctaHref}
-            variant={tier.ctaVariant}
-            class="mt-6 w-full"
+            class:list={[
+              'mt-6 inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-full px-6 font-medium tracking-tight',
+              tier.ctaVariant === 'primary' ? 'btn-metal' : 'border border-border text-text transition-colors hover:border-border-bright',
+            ]}
           >
             {tier.cta}
-          </Button>
+          </a>
         </div>
       ))}
     </div>

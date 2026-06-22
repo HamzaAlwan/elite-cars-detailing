@@ -6,6 +6,7 @@
  */
 import Container from '@/components/ui/Container.astro';
 import Section from '@/components/ui/Section.astro';
+import ZipValidator from '@/components/islands/ZipValidator.vue';
 import { SERVICE_AREA_CITIES } from '@/data/site';
 ---
 
@@ -36,32 +37,10 @@ import { SERVICE_AREA_CITIES } from '@/data/site';
       ))}
     </ul>
 
-    <!-- Zip validator (Phase 4 island mount point) -->
+    <!-- Zip validator island (P4-T3, client:visible) -->
     <div data-reveal data-reveal-index="3" class="mt-8 max-w-sm">
       <p class="mb-3 text-sm font-medium text-text">Not sure if we cover your area?</p>
-      <div id="zip-validator-mount">
-        <!-- Static fallback until P4-T3 island hydrates -->
-        <div class="flex gap-2">
-          <label for="zip-static" class="sr-only">Enter your ZIP code</label>
-          <input
-            id="zip-static"
-            type="text"
-            inputmode="numeric"
-            pattern="[0-9]{5}"
-            maxlength="5"
-            autocomplete="postal-code"
-            placeholder="Enter ZIP code"
-            class="min-h-11 flex-1 rounded-xl border border-border bg-bg-elevated px-4 py-3 text-text placeholder:text-text-muted"
-          />
-          <button
-            type="button"
-            class="btn-metal cursor-pointer rounded-xl px-5 font-medium"
-          >
-            Check
-          </button>
-        </div>
-        <p class="mt-2 text-xs text-text-muted">We'll tell you in seconds — no obligation.</p>
-      </div>
+      <ZipValidator client:visible />
     </div>
   </Container>
 </Section>

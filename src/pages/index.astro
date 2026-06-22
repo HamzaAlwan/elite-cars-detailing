@@ -15,13 +15,39 @@ import Pricing from '@/components/sections/Pricing.astro';
 import HowItWorks from '@/components/sections/HowItWorks.astro';
 import SocialProof from '@/components/sections/SocialProof.astro';
 import ServiceArea from '@/components/sections/ServiceArea.astro';
+import OurWork from '@/components/sections/OurWork.astro';
 import Footer from '@/components/sections/Footer.astro';
 import StickyBar from '@/components/sections/StickyBar.astro';
 import Section from '@/components/ui/Section.astro';
 import Container from '@/components/ui/Container.astro';
+import BookingEmbed from '@/components/islands/BookingEmbed.vue';
+import QuoteForm from '@/components/islands/QuoteForm.vue';
+import { CONTACT } from '@/data/site';
+import {
+  buildLocalBusinessSchema,
+  buildFAQSchema,
+  buildOrganizationSchema,
+  buildWebSiteSchema,
+} from '@/data/schema';
+
+const title = 'Elite Mobile Car Detailing | Richardson & DFW Metro';
+const description =
+  'Premium mobile car detailing in Richardson, TX and the DFW metro. 100% self-contained — we bring our own water and power. Same-day slots. Book online or get a free quote.';
+
+const jsonLd = [
+  buildLocalBusinessSchema(),
+  buildFAQSchema(),
+  buildOrganizationSchema(),
+  buildWebSiteSchema(),
+];
 ---
 
-<Layout>
+<Layout title={title} description={description}>
+  <Fragment slot="jsonld">
+    {jsonLd.map((schema) => (
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+    ))}
+  </Fragment>
   <Nav slot="header" />
 
   <!-- Hero — single h1 for the page lives here -->
@@ -44,22 +70,8 @@ import Container from '@/components/ui/Container.astro';
 
   <hr class="divider-chrome" />
 
-  <!-- Our Work — Phase 5 placeholder (P5-T1 … P5-T6) -->
-  <Section id="work">
-    <Container>
-      <h2 data-reveal data-reveal-index="0">Our Work</h2>
-      <p data-reveal data-reveal-index="1" class="mt-3 max-w-2xl text-text-muted">
-        Before &amp; after results, real vehicles, real DFW customers. Gallery coming soon.
-      </p>
-      <div
-        data-reveal
-        data-reveal-index="2"
-        class="mt-8 rounded-2xl border border-dashed border-border bg-bg-elevated p-12 text-center text-sm text-text-muted"
-      >
-        Before/after slider + photo gallery · Phase 5
-      </div>
-    </Container>
-  </Section>
+  <!-- Our Work gallery (Phase 5) -->
+  <OurWork />
 
   <hr class="divider-chrome" />
 
@@ -73,36 +85,36 @@ import Container from '@/components/ui/Container.astro';
 
   <hr class="divider-chrome" />
 
-  <!-- Booking — Phase 6 placeholder (P6-T2 Cal.com embed island) -->
+  <!-- Booking — Cal.com embed (P6-T2) -->
   <Section id="book">
     <Container>
       <h2 data-reveal data-reveal-index="0">Book Your Detail</h2>
       <p data-reveal data-reveal-index="1" class="mt-3 max-w-2xl text-text-muted">
-        Pick a day and time that works for you — we come to your DFW home or office.
+        Pick a day and time that works for you — we come to your DFW home or office. No card required up front; pay only after you're satisfied.
       </p>
-      <div
-        data-reveal
-        data-reveal-index="2"
-        class="mt-8 rounded-2xl border border-dashed border-border bg-bg-elevated p-12 text-center text-sm text-text-muted"
-      >
-        Cal.com booking embed · Phase 6
+      <p data-reveal data-reveal-index="2" class="mt-2 text-sm text-text-muted">
+        Prefer to talk? Call us at
+        {CONTACT.phoneE164 !== '{{PHONE_E164}}' ? (
+          <a href={`tel:${CONTACT.phoneE164}`} class="text-brand hover:underline">{CONTACT.phoneDisplay}</a>
+        ) : (
+          <span class="text-text-muted">the number in the footer</span>
+        )}.
+      </p>
+      <div data-reveal data-reveal-index="3" class="mt-8 max-w-2xl">
+        <BookingEmbed client:visible />
       </div>
     </Container>
   </Section>
 
-  <!-- Quote form — Phase 6 placeholder (P6-T3 Web3Forms) -->
+  <!-- Quote form — Web3Forms (P6-T3) -->
   <Section id="quote">
     <Container>
       <h2 data-reveal data-reveal-index="0">Get a Free Quote</h2>
       <p data-reveal data-reveal-index="1" class="mt-3 max-w-xl text-text-muted">
-        Not ready to book just yet? Tell us about your vehicle and we'll be in touch within a few hours.
+        Not ready to book yet? Tell us about your vehicle and we'll call or text you back within a few hours.
       </p>
-      <div
-        data-reveal
-        data-reveal-index="2"
-        class="mt-8 max-w-md rounded-2xl border border-dashed border-border bg-bg-elevated p-12 text-center text-sm text-text-muted"
-      >
-        Web3Forms quote form · Phase 6
+      <div data-reveal data-reveal-index="2" class="mt-8 max-w-md">
+        <QuoteForm client:visible />
       </div>
     </Container>
   </Section>

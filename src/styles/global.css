@@ -78,6 +78,8 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* Remove iOS default tap flash; custom :active feedback handles it (§2.5). */
+    -webkit-tap-highlight-color: transparent;
   }
 
   h1, h2, h3 {

@@ -46,11 +46,11 @@ Global rules for the whole build — follow them in every task:
 | 2 | Design system & layout | `phase-02-design-system.md` | ✅ |
 | 2.5 | Design showcase & approval gate | `phase-02b-design-showcase.md` | 🟦 |
 | 3 | Static sections | `phase-03-static-sections.md` | ✅ |
-| 4 | Interactive islands | `phase-04-interactive-islands.md` | ⬜ |
-| 5 | Our Work gallery | `phase-05-our-work-gallery.md` | ⬜ |
-| 6 | Booking & lead capture | `phase-06-booking-and-lead-capture.md` | ⬜ |
-| 7 | SEO & structured data | `phase-07-seo-and-schema.md` | ⬜ |
-| 8 | Performance & accessibility | `phase-08-performance-accessibility.md` | ⬜ |
+| 4 | Interactive islands | `phase-04-interactive-islands.md` | ✅ |
+| 5 | Our Work gallery | `phase-05-our-work-gallery.md` | ✅ |
+| 6 | Booking & lead capture | `phase-06-booking-and-lead-capture.md` | ✅ |
+| 7 | SEO & structured data | `phase-07-seo-and-schema.md` | ✅ |
+| 8 | Performance & accessibility | `phase-08-performance-accessibility.md` | 🟦 |
 | 9 | QA, analytics & deploy | `phase-09-qa-and-deploy.md` | ⬜ |
 | 10 | Off-site SEO playbook (owner) | `phase-10-offsite-playbook.md` | ⬜ |
 
@@ -112,11 +112,11 @@ for completeness.
 - [ ] ~~P3-T10 Membership/Fleet band~~ → DEFERRED to post-launch roadmap (not launch scope; not build Phase 2)
 
 ### Phase 4 — Interactive islands
-- [ ] P4-T1 Mobile nav slide-over (client:idle, a11y)
-- [ ] P4-T2 Pricing size-selector → instant estimator (client:visible; size→exact price + "Book this")
-- [ ] P4-T3 Zip validator (client:visible, graceful out-of-area)
-- [ ] P4-T4 FAQ accordion (accessible disclosure)
-- [ ] P4-T5 Scroll-reveal wiring (reduced-motion)
+- [x] P4-T1 Mobile nav slide-over (client:idle, a11y)
+- [x] P4-T2 Pricing size-selector → instant estimator (client:visible; size→exact price + "Book this")
+- [x] P4-T3 Zip validator (client:visible, graceful out-of-area)
+- [x] P4-T4 FAQ accordion (accessible disclosure)
+- [x] P4-T5 Scroll-reveal wiring (reduced-motion)
 
 ### Phase 5 — Our Work gallery
 - [ ] P5-T1 Grid/masonry layout + hover (transform)
