@@ -12,6 +12,7 @@ import Card from '@/components/ui/Card.astro';
 import Badge from '@/components/ui/Badge.astro';
 import { SITE, CTA, SERVICE_AREA_CITIES } from '@/data/site';
 import { ShieldCheck, Droplets, Clock, Sparkles, MapPin, CheckCircle2 } from '@lucide/vue';
+import VehicleSelectorPreview from '@/components/islands/VehicleSelectorPreview.vue';
 
 const colorTokens = [
   { name: '--color-bg', hex: '#06080F', cls: 'bg-bg' },
@@ -67,6 +68,7 @@ const toc = [
   ['#sections', 'Sections'],
   ['#variations', 'Variations'],
   ['#states', 'States & motion'],
+  ['#car-selector', '🚗 Car Selector'],
 ];
 ---
 
@@ -348,6 +350,22 @@ const toc = [
         </div>
         <div class="rounded-xl border border-dashed border-border p-4 text-sm text-text-muted">Nothing here yet — empty state.</div>
         <div class="rounded-xl border border-warning/40 bg-warning/10 p-4 text-sm text-warning">Something went wrong — try again or call us.</div>
+      </div>
+    </Container>
+  </Section>
+
+  <hr class="divider-chrome" />
+
+  <!-- ============================ CAR SELECTOR VARIANTS ============================ -->
+  <Section id="car-selector" class="!py-12">
+    <Container>
+      <h2>Car Selector — Pick a Variant</h2>
+      <p class="mt-2 max-w-xl text-text-muted">
+        Three animation styles for the Sedan / SUV / Truck selector in the Pricing section.
+        Try each on mobile and desktop, then pick your favourite.
+      </p>
+      <div class="mt-10 max-w-sm">
+        <VehicleSelectorPreview client:visible />
       </div>
     </Container>
   </Section>

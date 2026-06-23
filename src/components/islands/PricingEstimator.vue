@@ -1,15 +1,4 @@
 <script setup lang="ts">
-/**
- * P4-T2 + Phase 2 — Pricing size-selector → instant estimator.
- * Reka UI ToggleGroup for Sedan / Med SUV / Large Truck.
- * On selection:
- *   - rewrites price text + vehicle label + CTA href on the static pricing cards
- *     (via data-price / data-vehicle / data-cta DOM attributes), AND
- *   - updates an inline "your estimate" block showing all tiers for the chosen size.
- * Optional ZIP gate (reuses shared coverage check) confirms service area and surfaces a
- * prefilled Book CTA. Pricing is always visible — the gate only gates the convenience CTA.
- * Persists size selection in sessionStorage so the booking modal can read it.
- */
 import { ref, computed, onMounted } from 'vue';
 import { ToggleGroupRoot, ToggleGroupItem } from 'reka-ui';
 import { SIZES, PRICING, TIERS, ADDONS, type Size } from '@/data/pricing';
@@ -20,7 +9,6 @@ const selected = ref<Size>('sedan');
 
 const sizeShort = computed(() => SIZES.find((s) => s.value === selected.value)?.short ?? '');
 
-/** One line per tier for the estimate block, resolved for the selected size. */
 const estimate = computed(() =>
   TIERS.map((t) => {
     const price = PRICING[t.id]?.[selected.value];
@@ -30,80 +18,60 @@ const estimate = computed(() =>
   }),
 );
 
-/* ---- ZIP gate ---- */
+/* ── ZIP gate ────────────────────────────────────────────── */
 type ZipState = 'idle' | 'in' | 'out' | 'invalid';
 const zip = ref('');
 const zipState = ref<ZipState>('idle');
 
 function checkZip() {
   const v = zip.value.trim();
-  if (!isZipFormat(v)) {
-    zipState.value = 'invalid';
-    return;
-  }
+  if (!isZipFormat(v)) { zipState.value = 'invalid'; return; }
   zipState.value = isCoveredZip(v) ? 'in' : 'out';
 }
-
 function onZipKeydown(e: KeyboardEvent) {
   if (e.key === 'Enter') checkZip();
 }
 
-/** Book CTA href carries the size; Phase 4's global interceptor upgrades it to open the modal. */
 const bookHref = computed(() => `#book?size=${selected.value}`);
 
 onMounted(() => {
   const saved = sessionStorage.getItem(SESSION_KEY) as Size | null;
-  if (saved && SIZES.some((s) => s.value === saved)) {
-    selected.value = saved;
-  }
+  if (saved && SIZES.some((s) => s.value === saved)) selected.value = saved;
   applyPrices(selected.value);
-  // Remove the static fallback text now that the island is live
   document.getElementById('pricing-selector-fallback')?.remove();
 });
 
 function onValueChange(val: string | string[]) {
   if (!val || typeof val !== 'string') return;
-  const size = val as Size;
-  selected.value = size;
-  sessionStorage.setItem(SESSION_KEY, size);
-  applyPrices(size);
+  selected.value = val as Size;
+  sessionStorage.setItem(SESSION_KEY, val);
+  applyPrices(val as Size);
 }
 
 function applyPrices(size: Size) {
   const sizeInfo = SIZES.find((s) => s.value === size);
   if (!sizeInfo) return;
-
   Object.entries(PRICING).forEach(([tierId, prices]) => {
     const price = prices[size];
-
-    // Price number
     const priceEl = document.querySelector<HTMLElement>(`[data-price="${tierId}"]`);
-    if (priceEl && price !== null) {
-      priceEl.textContent = `$${price}`;
-    }
-
-    // Vehicle label (e.g. "· Sedan")
+    if (priceEl && price !== null) priceEl.textContent = `$${price}`;
     const vehicleEl = document.querySelector<HTMLElement>(`[data-vehicle="${tierId}"]`);
-    if (vehicleEl) {
-      vehicleEl.textContent = `· ${sizeInfo.short}`;
-    }
-
-    // CTA href (only on bookable tiers)
+    if (vehicleEl) vehicleEl.textContent = `· ${sizeInfo.short}`;
     const ctaEl = document.querySelector<HTMLAnchorElement>(`[data-cta="${tierId}"]`);
-    if (ctaEl && price !== null) {
-      ctaEl.href = `#book?package=${tierId}&size=${size}`;
-    }
+    if (ctaEl && price !== null) ctaEl.href = `#book?package=${tierId}&size=${size}`;
   });
 }
 </script>
 
 <template>
   <div>
-    <p class="mb-3 text-sm font-medium text-text">Select your vehicle size for exact pricing:</p>
+    <p class="mb-3 text-sm font-medium text-text-muted">Select your vehicle size for exact pricing:</p>
+
+    <!-- Vehicle selector cards -->
     <ToggleGroupRoot
       type="single"
       :model-value="selected"
-      class="inline-flex gap-1 rounded-full border border-border bg-bg-elevated p-1"
+      class="flex gap-2 sm:gap-3"
       aria-label="Vehicle size"
       @update:model-value="onValueChange"
     >
@@ -112,33 +80,95 @@ function applyPrices(size: Size) {
         :key="size.value"
         :value="size.value"
         :aria-label="size.label"
-        class="min-h-11 cursor-pointer rounded-full px-4 py-2 text-sm font-medium text-text-muted transition-colors hover:text-text data-[state=on]:bg-brand data-[state=on]:text-white"
+        class="group flex-1 flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border border-border
+               bg-bg-elevated cursor-pointer min-h-[108px] transition-all duration-150
+               hover:border-border-bright
+               data-[state=on]:border-brand data-[state=on]:bg-brand-tint
+               data-[state=on]:scale-[1.01]
+               data-[state=on]:shadow-[0_0_0_1px_var(--color-brand),0_0_24px_rgb(30_95_255/0.15)]"
       >
-        {{ size.short }}
+        <!-- Vehicle icon — Tabler Icons (MIT), stroke-based, color tracks selection via group -->
+        <!-- SEDAN -->
+        <svg
+          v-if="size.value === 'sedan'"
+          class="h-11 w-11 text-text-muted transition-colors duration-150 group-data-[state=on]:text-brand"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+          <path d="M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+          <path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5" />
+        </svg>
+        <!-- SUV -->
+        <svg
+          v-else-if="size.value === 'suv'"
+          class="h-11 w-11 text-text-muted transition-colors duration-150 group-data-[state=on]:text-brand"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M5 17a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+          <path d="M16 17a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+          <path d="M5 9l2 -4h7.438a2 2 0 0 1 1.94 1.515l.622 2.485h3a2 2 0 0 1 2 2v3" />
+          <path d="M10 9v-4" />
+          <path d="M2 7v4" />
+          <path d="M22.001 14.001a4.992 4.992 0 0 0 -4.001 -2.001a4.992 4.992 0 0 0 -4 2h-3a4.998 4.998 0 0 0 -8.003 .003" />
+          <path d="M5 12v-3h13" />
+        </svg>
+        <!-- TRUCK -->
+        <svg
+          v-else
+          class="h-11 w-11 text-text-muted transition-colors duration-150 group-data-[state=on]:text-brand"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+          <path d="M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+          <path d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" />
+        </svg>
+
+        <span class="text-sm font-semibold text-text leading-none">{{ size.short }}</span>
+        <span class="hidden sm:block text-[11px] text-text-muted leading-tight text-center">{{ size.label }}</span>
       </ToggleGroupItem>
     </ToggleGroupRoot>
 
-    <!-- Instant estimate output -->
-    <div class="surface-raised mt-4 p-4">
-      <p class="text-xs font-medium uppercase tracking-widest text-text-muted">
-        Your estimate · {{ sizeShort }}
-      </p>
-      <dl class="mt-3 flex flex-wrap gap-x-6 gap-y-2">
-        <div v-for="line in estimate" :key="line.name" class="flex items-baseline gap-1.5">
-          <dt class="text-sm text-text-muted">{{ line.name }}</dt>
-          <dd class="text-base font-semibold tabular-nums text-text">{{ line.label }}</dd>
-        </div>
-      </dl>
-      <p class="mt-3 text-xs text-text-muted">
-        Add-ons:
-        <span v-for="(a, i) in ADDONS" :key="a.name">
-          <span class="text-text">{{ a.name }} (${{ a.price }})</span><span v-if="i < ADDONS.length - 1"> · </span>
-        </span>
-      </p>
+    <!-- Instant estimate — 3-column grid -->
+    <p class="mt-5 text-xs font-medium uppercase tracking-widest text-text-muted">
+      Your estimate · {{ sizeShort }}
+    </p>
+    <div class="mt-2 grid grid-cols-3 divide-x divide-border overflow-hidden rounded-2xl border border-border bg-bg-elevated">
+      <div
+        v-for="line in estimate"
+        :key="line.name"
+        class="flex flex-col items-center gap-1 px-3 py-4 sm:px-4"
+      >
+        <span class="text-[11px] uppercase tracking-widest text-text-muted">{{ line.name }}</span>
+        <span class="text-xl font-bold tabular-nums text-text leading-none">{{ line.label }}</span>
+      </div>
     </div>
+    <p class="mt-2 text-xs text-text-muted">
+      Add-ons:
+      <span v-for="(a, i) in ADDONS" :key="a.name">
+        <span class="text-text">{{ a.name }} (${{ a.price }})</span><span v-if="i < ADDONS.length - 1"> · </span>
+      </span>
+    </p>
 
-    <!-- Optional ZIP gate -->
-    <div class="mt-4">
+    <!-- ZIP gate -->
+    <div class="mt-5">
       <label for="est-zip" class="mb-1.5 block text-sm font-medium text-text">
         Confirm we serve your area
         <span class="ml-1 text-xs font-normal text-text-muted">(optional)</span>
@@ -167,7 +197,7 @@ function applyPrices(size: Size) {
         Please enter a valid 5-digit ZIP code.
       </p>
 
-      <div v-else-if="zipState === 'in'" role="status" class="mt-3 flex flex-wrap items-center gap-3">
+      <output v-else-if="zipState === 'in'" class="mt-3 flex flex-wrap items-center gap-3">
         <span class="inline-flex items-center gap-1.5 text-sm font-medium text-success">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="20 6 9 17 4 12" />
@@ -177,12 +207,12 @@ function applyPrices(size: Size) {
         <a :href="bookHref" class="btn-metal inline-flex min-h-11 cursor-pointer items-center rounded-full px-5 text-sm font-medium">
           Book this detail
         </a>
-      </div>
+      </output>
 
-      <p v-else-if="zipState === 'out'" role="status" class="mt-3 text-sm text-text-muted">
+      <output v-else-if="zipState === 'out'" class="mt-3 block text-sm text-text-muted">
         We're not in <strong class="text-text">{{ zip }}</strong> yet, but we're expanding fast across DFW —
         <a href="#quote" class="text-brand underline-offset-4 hover:underline">request a quote</a> and we'll reach out.
-      </p>
+      </output>
     </div>
   </div>
 </template>

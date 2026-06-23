@@ -4,7 +4,6 @@
  * Reka UI DialogRoot → DialogContent gives focus trap + Esc-to-close + scroll-lock for free.
  * Styled as a full-height sheet sliding from the right.
  * On mount: hides the static hamburger fallback (#nav-hamburger-static, #mobile-nav).
- * The hamburger trigger is rendered by this island; it replaces the static button.
  */
 import { ref, onMounted } from 'vue';
 import {
@@ -32,8 +31,13 @@ function close() {
   isOpen.value = false;
 }
 
+function closeAndNavigate(href: string) {
+  isOpen.value = false;
+  // One rAF lets Reka remove scroll-lock before the browser scrolls.
+  requestAnimationFrame(() => { globalThis.location.href = href; });
+}
+
 onMounted(() => {
-  // Hide the static fallback hamburger and panel — this island takes over
   document.getElementById('nav-hamburger-static')?.remove();
   document.getElementById('mobile-nav')?.remove();
 });
@@ -86,7 +90,6 @@ onMounted(() => {
             : 'slideOutRight var(--dur-base) var(--ease-in) forwards',
         }"
       >
-        <!-- Visually hidden title for screen readers -->
         <DialogTitle class="sr-only">Navigation menu</DialogTitle>
 
         <!-- Header row -->
@@ -112,13 +115,13 @@ onMounted(() => {
             :key="link.href"
             :href="link.href"
             class="rounded-lg px-4 py-3 text-sm font-medium text-text-muted transition-colors hover:bg-bg hover:text-text"
-            @click="close"
+            @click.prevent="closeAndNavigate(link.href)"
           >
             {{ link.label }}
           </a>
         </nav>
 
-        <!-- Book CTA at the bottom -->
+        <!-- Book CTA -->
         <div class="mt-auto border-t border-border p-4">
           <a
             href="#book"
