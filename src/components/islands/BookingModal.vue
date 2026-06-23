@@ -154,7 +154,7 @@ onBeforeUnmount(() => {
     <DialogPortal>
       <DialogOverlay class="dialog-overlay fixed inset-0 z-[1000] bg-black/60 backdrop-blur-sm" />
       <DialogContent
-        class="dialog-content surface-raised fixed left-1/2 top-1/2 z-[1000] flex max-h-[90dvh] w-[92vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl focus:outline-none"
+        class="dialog-content surface-raised fixed top-1/2 left-1/2 z-[1000] flex max-h-[90dvh] w-[92vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl focus:outline-none"
         aria-describedby="booking-modal-desc"
       >
         <header class="flex items-center justify-between gap-4 border-b border-border px-5 py-4">
@@ -168,7 +168,17 @@ onBeforeUnmount(() => {
             class="inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border text-text-muted transition-colors hover:border-border-bright hover:text-text"
             aria-label="Close booking dialog"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
@@ -182,7 +192,15 @@ onBeforeUnmount(() => {
             class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-bg text-text-muted"
             aria-hidden="true"
           >
-            <svg class="animate-spin text-brand" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+              class="animate-spin text-brand"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
               <path d="M21 12a9 9 0 1 1-6.22-8.56" />
             </svg>
             <p class="text-sm">Loading the scheduler…</p>

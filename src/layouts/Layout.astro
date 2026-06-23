@@ -18,7 +18,6 @@ interface Props {
 const { title, description, ogImage, noindex = false } = Astro.props;
 // Callers pass the complete <title> string; fall back to brand + tagline when omitted.
 const pageTitle = title ?? `${SITE.name} — ${SITE.tagline}`;
-
 ---
 
 <!doctype html>
@@ -28,7 +27,13 @@ const pageTitle = title ?? `${SITE.name} — ${SITE.tagline}`;
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <!-- Font preload — must come before any render-blocking resources.
          crossorigin is required even for same-origin fonts (browser fetch spec). -->
-    <link rel="preload" as="font" href="/fonts/outfit-variable.woff2" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      as="font"
+      href="/fonts/outfit-variable.woff2"
+      type="font/woff2"
+      crossorigin
+    />
     <!-- Preconnect to third-party origins used on interaction (reduces latency on first use). -->
     <link rel="preconnect" href="https://api.web3forms.com" />
     <link rel="preconnect" href="https://cal.com" />
@@ -51,7 +56,7 @@ const pageTitle = title ?? `${SITE.name} — ${SITE.tagline}`;
   <body class="min-h-svh pb-[72px] md:pb-0">
     <a
       href="#main"
-      class="sr-only rounded-md bg-text px-4 py-2 font-medium text-bg focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50"
+      class="sr-only rounded-md bg-text px-4 py-2 font-medium text-bg focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50"
     >
       Skip to content
     </a>
@@ -72,10 +77,34 @@ const pageTitle = title ?? `${SITE.name} — ${SITE.tagline}`;
       for clicks that land before the island hydrates).
     -->
     <script>
+      import { warmUpCalEmbed } from '@/lib/cal';
+
       type BookingWindow = Window & {
         __bookingInterceptorBound?: boolean;
         __pendingBooking?: { package?: string; size?: string };
+        __calWarmupBound?: boolean;
       };
+
+      function setupCalWarmup() {
+        const w = window as unknown as BookingWindow;
+        if (w.__calWarmupBound) return;
+        w.__calWarmupBound = true;
+
+        let warmed = false;
+        const maybeWarm = (e: Event) => {
+          if (warmed) return;
+          const anchor = (e.target as HTMLElement | null)?.closest?.('a[href^="#book"]');
+          if (!anchor) return;
+          warmed = true;
+          warmUpCalEmbed();
+        };
+
+        const opts: AddEventListenerOptions = { passive: true, capture: true };
+        document.addEventListener('pointerover', maybeWarm, opts);
+        document.addEventListener('touchstart', maybeWarm, opts);
+        document.addEventListener('focusin', maybeWarm, opts);
+      }
+
       function setupBookingInterceptor() {
         const w = window as unknown as BookingWindow;
         if (w.__bookingInterceptorBound) return;
@@ -87,6 +116,7 @@ const pageTitle = title ?? `${SITE.name} — ${SITE.tagline}`;
             const target = e.target as HTMLElement | null;
             const anchor = target?.closest?.('a[href^="#book"]') as HTMLAnchorElement | null;
             if (!anchor) return;
+            warmUpCalEmbed();
             e.preventDefault();
             e.stopImmediatePropagation(); // stop ClientRouter from hash-navigating
             const query = (anchor.getAttribute('href') ?? '').split('?')[1] ?? '';
@@ -101,7 +131,11 @@ const pageTitle = title ?? `${SITE.name} — ${SITE.tagline}`;
           true, // capture phase
         );
       }
-      document.addEventListener('astro:page-load', setupBookingInterceptor);
+      document.addEventListener('astro:page-load', () => {
+        setupCalWarmup();
+        setupBookingInterceptor();
+      });
+      setupCalWarmup();
       setupBookingInterceptor();
     </script>
   </body>

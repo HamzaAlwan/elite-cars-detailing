@@ -127,10 +127,8 @@ const hasHeroImage = HERO_IMAGE_SRC.length > 0;
         data-reveal-index="5"
         class="relative hidden lg:flex lg:items-center lg:justify-center"
       >
+        <!-- OWNER: real hero photo — preload in Layout <head> once path is known (Phase 9). -->
         {hasHeroImage ? (
-          <!-- OWNER: real hero photo — preloaded as the LCP element (§2.5, §4.2) -->
-          <!-- Add <link rel="preload" as="image" href={HERO_IMAGE_SRC} fetchpriority="high"> -->
-          <!-- in Layout.astro <head> once the real image path is known (Phase 9). -->
           <img
             src={HERO_IMAGE_SRC}
             alt="A freshly detailed luxury car — showroom finish delivered to your driveway"
@@ -142,8 +140,8 @@ const hasHeroImage = HERO_IMAGE_SRC.length > 0;
             class="w-full max-w-lg rounded-2xl object-cover shadow-2xl"
           />
         ) : (
-          <!-- Placeholder: brand car silhouette until real photo arrives -->
           <div class="relative flex w-full max-w-lg items-center justify-center">
+            <!-- Placeholder: brand car silhouette until real photo arrives -->
             <!-- Glow behind silhouette -->
             <div
               class="absolute inset-0 rounded-full"

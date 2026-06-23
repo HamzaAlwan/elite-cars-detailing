@@ -25,7 +25,10 @@ const zipState = ref<ZipState>('idle');
 
 function checkZip() {
   const v = zip.value.trim();
-  if (!isZipFormat(v)) { zipState.value = 'invalid'; return; }
+  if (!isZipFormat(v)) {
+    zipState.value = 'invalid';
+    return;
+  }
   zipState.value = isCoveredZip(v) ? 'in' : 'out';
 }
 function onZipKeydown(e: KeyboardEvent) {
@@ -65,7 +68,9 @@ function applyPrices(size: Size) {
 
 <template>
   <div>
-    <p class="mb-3 text-sm font-medium text-text-muted">Select your vehicle size for exact pricing:</p>
+    <p class="mb-3 text-sm font-medium text-text-muted">
+      Select your vehicle size for exact pricing:
+    </p>
 
     <!-- Vehicle selector cards -->
     <ToggleGroupRoot
@@ -80,12 +85,7 @@ function applyPrices(size: Size) {
         :key="size.value"
         :value="size.value"
         :aria-label="size.label"
-        class="group flex-1 flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border border-border
-               bg-bg-elevated cursor-pointer min-h-[108px] transition-all duration-150
-               hover:border-border-bright
-               data-[state=on]:border-brand data-[state=on]:bg-brand-tint
-               data-[state=on]:scale-[1.01]
-               data-[state=on]:shadow-[0_0_0_1px_var(--color-brand),0_0_24px_rgb(30_95_255/0.15)]"
+        class="group flex min-h-[108px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-bg-elevated p-4 transition-all duration-150 hover:border-border-bright data-[state=on]:scale-[1.01] data-[state=on]:border-brand data-[state=on]:bg-brand-tint data-[state=on]:shadow-[0_0_0_1px_var(--color-brand),0_0_24px_rgb(30_95_255/0.15)]"
       >
         <!-- Vehicle icon — Tabler Icons (MIT), stroke-based, color tracks selection via group -->
         <!-- SEDAN -->
@@ -121,7 +121,9 @@ function applyPrices(size: Size) {
           <path d="M5 9l2 -4h7.438a2 2 0 0 1 1.94 1.515l.622 2.485h3a2 2 0 0 1 2 2v3" />
           <path d="M10 9v-4" />
           <path d="M2 7v4" />
-          <path d="M22.001 14.001a4.992 4.992 0 0 0 -4.001 -2.001a4.992 4.992 0 0 0 -4 2h-3a4.998 4.998 0 0 0 -8.003 .003" />
+          <path
+            d="M22.001 14.001a4.992 4.992 0 0 0 -4.001 -2.001a4.992 4.992 0 0 0 -4 2h-3a4.998 4.998 0 0 0 -8.003 .003"
+          />
           <path d="M5 12v-3h13" />
         </svg>
         <!-- TRUCK -->
@@ -141,29 +143,34 @@ function applyPrices(size: Size) {
           <path d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" />
         </svg>
 
-        <span class="text-sm font-semibold text-text leading-none">{{ size.short }}</span>
-        <span class="hidden sm:block text-[11px] text-text-muted leading-tight text-center">{{ size.label }}</span>
+        <span class="text-sm leading-none font-semibold text-text">{{ size.short }}</span>
+        <span class="hidden text-center text-[11px] leading-tight text-text-muted sm:block">{{
+          size.label
+        }}</span>
       </ToggleGroupItem>
     </ToggleGroupRoot>
 
     <!-- Instant estimate — 3-column grid -->
-    <p class="mt-5 text-xs font-medium uppercase tracking-widest text-text-muted">
+    <p class="mt-5 text-xs font-medium tracking-widest text-text-muted uppercase">
       Your estimate · {{ sizeShort }}
     </p>
-    <div class="mt-2 grid grid-cols-3 divide-x divide-border overflow-hidden rounded-2xl border border-border bg-bg-elevated">
+    <div
+      class="mt-2 grid grid-cols-3 divide-x divide-border overflow-hidden rounded-2xl border border-border bg-bg-elevated"
+    >
       <div
         v-for="line in estimate"
         :key="line.name"
         class="flex flex-col items-center gap-1 px-3 py-4 sm:px-4"
       >
-        <span class="text-[11px] uppercase tracking-widest text-text-muted">{{ line.name }}</span>
-        <span class="text-xl font-bold tabular-nums text-text leading-none">{{ line.label }}</span>
+        <span class="text-[11px] tracking-widest text-text-muted uppercase">{{ line.name }}</span>
+        <span class="text-xl leading-none font-bold text-text tabular-nums">{{ line.label }}</span>
       </div>
     </div>
     <p class="mt-2 text-xs text-text-muted">
       Add-ons:
       <span v-for="(a, i) in ADDONS" :key="a.name">
-        <span class="text-text">{{ a.name }} (${{ a.price }})</span><span v-if="i < ADDONS.length - 1"> · </span>
+        <span class="text-text">{{ a.name }} (${{ a.price }})</span
+        ><span v-if="i < ADDONS.length - 1"> · </span>
       </span>
     </p>
 
@@ -188,30 +195,54 @@ function applyPrices(size: Size) {
           class="min-h-11 flex-1 rounded-xl border border-border bg-bg-elevated px-4 py-2.5 text-text placeholder:text-text-muted focus:border-brand focus:outline-none"
           @keydown="onZipKeydown"
         />
-        <button type="button" class="btn-metal min-h-11 cursor-pointer rounded-xl px-5 font-medium" @click="checkZip">
+        <button
+          type="button"
+          class="btn-metal min-h-11 cursor-pointer rounded-xl px-5 font-medium"
+          @click="checkZip"
+        >
           Check
         </button>
       </div>
 
-      <p v-if="zipState === 'invalid'" id="est-zip-err" role="alert" class="mt-2 text-sm text-warning">
+      <p
+        v-if="zipState === 'invalid'"
+        id="est-zip-err"
+        role="alert"
+        class="mt-2 text-sm text-warning"
+      >
         Please enter a valid 5-digit ZIP code.
       </p>
 
       <output v-else-if="zipState === 'in'" class="mt-3 flex flex-wrap items-center gap-3">
         <span class="inline-flex items-center gap-1.5 text-sm font-medium text-success">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
             <polyline points="20 6 9 17 4 12" />
           </svg>
           You're in our service zone!
         </span>
-        <a :href="bookHref" class="btn-metal inline-flex min-h-11 cursor-pointer items-center rounded-full px-5 text-sm font-medium">
+        <a
+          :href="bookHref"
+          class="btn-metal inline-flex min-h-11 cursor-pointer items-center rounded-full px-5 text-sm font-medium"
+        >
           Book this detail
         </a>
       </output>
 
       <output v-else-if="zipState === 'out'" class="mt-3 block text-sm text-text-muted">
-        We're not in <strong class="text-text">{{ zip }}</strong> yet, but we're expanding fast across DFW —
-        <a href="#quote" class="text-brand underline-offset-4 hover:underline">request a quote</a> and we'll reach out.
+        We're not in <strong class="text-text">{{ zip }}</strong> yet, but we're expanding fast
+        across DFW —
+        <a href="#quote" class="text-brand underline-offset-4 hover:underline">request a quote</a>
+        and we'll reach out.
       </output>
     </div>
   </div>

@@ -50,3 +50,8 @@ export function getCalApi(): CalApi {
   }
   return w.Cal as CalApi;
 }
+
+/** Inject embed.js once on first intent — safe to call repeatedly. */
+export function warmUpCalEmbed(): void {
+  getCalApi();
+}

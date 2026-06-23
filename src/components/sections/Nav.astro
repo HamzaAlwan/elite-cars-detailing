@@ -1,10 +1,9 @@
 ---
 /**
  * P3-T1 — Sticky glass nav shell.
- * Desktop: logo-compact + anchor links + "Book Now" CTA.
- * Mobile: logo-compact + hamburger mount point (Phase 4 island fills #mobile-nav-mount).
- * Glass nav: solid rgba fallback + @supports blur (-webkit- prefix first, §2.5).
- * z-50 so it layers above all page content.
+ * Desktop: logo + anchor links + Book CTA.
+ * Mobile (JS): Vue MobileNav drawer island.
+ * Mobile (no-JS): plain visible nav links in <noscript>.
  */
 import Button from '@/components/ui/Button.astro';
 import Container from '@/components/ui/Container.astro';
@@ -23,7 +22,6 @@ const links = [
 
 <header class="nav-glass sticky top-0 z-50 border-b border-border" transition:persist>
   <Container class="flex h-16 items-center justify-between gap-4">
-
     <!-- Logo: back-to-top anchor -->
     <a
       href="#"
@@ -43,101 +41,69 @@ const links = [
 
     <!-- Desktop nav links (hidden on mobile) -->
     <nav aria-label="Main navigation" class="hidden items-center gap-5 text-sm lg:flex">
-      {links.map(({ href, label }) => (
-        <a
-          href={href}
-          class="text-text-muted transition-colors duration-[--dur-fast] hover:text-text"
-        >
-          {label}
-        </a>
-      ))}
+      {
+        links.map(({ href, label }) => (
+          <a
+            href={href}
+            class="text-text-muted transition-colors duration-[--dur-fast] hover:text-text"
+          >
+            {label}
+          </a>
+        ))
+      }
     </nav>
 
-    <!-- Right side: Book CTA (always) + hamburger mount (mobile only) -->
+    <!-- Right side: Book CTA + Vue mobile nav (JS only) -->
     <div class="flex shrink-0 items-center gap-3">
       <Button href="#book" class="hidden sm:inline-flex">{CTA.book}</Button>
-      <!-- Mobile nav island (client:idle) — takes over from static fallback on hydration -->
       <div class="lg:hidden">
-        <MobileNav client:idle />
+        <!-- client:only — Teleport + Transition cannot SSR-hydrate safely with Astro View Transitions -->
+        <MobileNav client:only="vue">
+          <button
+            slot="fallback"
+            type="button"
+            class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-bg-elevated/80 text-text"
+            aria-hidden="true"
+            tabindex="-1"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <line x1="4" y1="7" x2="20" y2="7"></line>
+              <line x1="4" y1="12" x2="20" y2="12"></line>
+              <line x1="4" y1="17" x2="20" y2="17"></line>
+            </svg>
+          </button>
+        </MobileNav>
       </div>
-      <!-- Static fallback hamburger (removed by MobileNav.vue on mount) -->
-      <button
-        id="nav-hamburger-static"
-        aria-label="Navigation menu"
-        aria-expanded="false"
-        aria-controls="mobile-nav"
-        class="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-border text-text transition-colors hover:border-border-bright lg:hidden"
-      >
-        <svg
-          class="menu-icon"
-          data-open="false"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          aria-hidden="true"
-        >
-          <line data-bar="top" x1="4" y1="7" x2="20" y2="7" />
-          <line data-bar="middle" x1="4" y1="12" x2="20" y2="12" />
-          <line data-bar="bottom" x1="4" y1="17" x2="20" y2="17" />
-        </svg>
-      </button>
     </div>
   </Container>
 
-  <!-- Mobile slide-over panel (static skeleton; Phase 4 island takes over) -->
-  <nav
-    id="mobile-nav"
-    aria-label="Mobile navigation"
-    class="hidden border-t border-border lg:hidden"
-  >
-    <Container class="flex flex-col gap-1 py-4">
-      {links.map(({ href, label }) => (
-        <a
-          href={href}
-          class="rounded-lg px-3 py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-bg-elevated hover:text-text"
-        >
-          {label}
-        </a>
-      ))}
-      <div class="mt-3 pt-3 border-t border-border">
-        <Button href="#book" class="w-full">{CTA.book}</Button>
-      </div>
-    </Container>
-  </nav>
+  <!-- No-JS: plain mobile nav links (no fake hamburger — nothing can toggle without JS) -->
+  <noscript>
+    <nav aria-label="Mobile navigation" class="border-t border-border lg:hidden">
+      <Container class="flex flex-col gap-1 py-4">
+        {
+          links.map(({ href, label }) => (
+            <a
+              href={href}
+              class="min-h-11 rounded-lg px-3 py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-bg-elevated hover:text-text"
+            >
+              {label}
+            </a>
+          ))
+        }
+        <div class="mt-3 border-t border-border pt-3">
+          <Button href="#book" class="w-full">{CTA.book}</Button>
+        </div>
+      </Container>
+    </nav>
+  </noscript>
 </header>
-
-<script>
-  const btn = document.getElementById('nav-hamburger-static');
-  const panel = document.getElementById('mobile-nav');
-  const icon = btn?.querySelector('.menu-icon');
-
-  btn?.addEventListener('click', () => {
-    const isOpen = btn.getAttribute('aria-expanded') === 'true';
-    btn.setAttribute('aria-expanded', String(!isOpen));
-    icon?.setAttribute('data-open', String(!isOpen));
-    panel?.classList.toggle('hidden');
-  });
-
-  // Close on anchor link click (single-page nav)
-  panel?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      btn?.setAttribute('aria-expanded', 'false');
-      icon?.setAttribute('data-open', 'false');
-      panel.classList.add('hidden');
-    });
-  });
-
-  // Close on Esc key — return focus to trigger (§4.1 spec)
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && btn?.getAttribute('aria-expanded') === 'true') {
-      btn.setAttribute('aria-expanded', 'false');
-      icon?.setAttribute('data-open', 'false');
-      panel?.classList.add('hidden');
-      btn.focus();
-    }
-  });
-</script>

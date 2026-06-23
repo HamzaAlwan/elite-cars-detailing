@@ -34,7 +34,9 @@ function check() {
     state.value = 'in-area';
     // Trigger icon-draw animation after next tick
     drawn.value = false;
-    setTimeout(() => { drawn.value = true; }, 50);
+    setTimeout(() => {
+      drawn.value = true;
+    }, 50);
   } else {
     state.value = 'out-of-area';
     drawn.value = false;
@@ -90,7 +92,7 @@ function submitEmail() {
     <div v-if="isInArea" role="status" class="flex items-start gap-3">
       <!-- .icon-draw checkmark (stroke-dashoffset animation, §2.5) -->
       <svg
-        :class="['icon-draw text-success shrink-0 mt-0.5', drawn ? 'is-drawn' : '']"
+        :class="['icon-draw mt-0.5 shrink-0 text-success', drawn ? 'is-drawn' : '']"
         width="22"
         height="22"
         viewBox="0 0 24 24"
@@ -107,11 +109,17 @@ function submitEmail() {
         <p class="font-medium text-success">You're in our DFW service zone!</p>
         <p class="mt-1 text-sm text-text-muted">
           We detail in your area.
-          <a href="#book" class="text-brand underline-offset-4 hover:underline">Book your detail now →</a>
+          <a href="#book" class="text-brand underline-offset-4 hover:underline"
+            >Book your detail now →</a
+          >
         </p>
         <button
-          class="mt-2 text-xs text-text-muted underline-offset-4 hover:underline cursor-pointer"
-          @click="state = 'idle'; zip = ''; drawn = false;"
+          class="mt-2 cursor-pointer text-xs text-text-muted underline-offset-4 hover:underline"
+          @click="
+            state = 'idle';
+            zip = '';
+            drawn = false;
+          "
         >
           Check a different ZIP
         </button>
@@ -119,14 +127,21 @@ function submitEmail() {
     </div>
 
     <!-- Out-of-area graceful fallback -->
-    <div v-if="isOutOfArea" role="status" class="rounded-xl border border-border bg-bg-elevated p-4">
+    <div
+      v-if="isOutOfArea"
+      role="status"
+      class="rounded-xl border border-border bg-bg-elevated p-4"
+    >
       <p class="font-medium text-text">We're expanding fast — you're not far off.</p>
       <p class="mt-1 text-sm text-text-muted">
-        ZIP <strong class="text-text">{{ zip }}</strong> isn't in our current zone yet, but we're growing quickly across DFW.
+        ZIP <strong class="text-text">{{ zip }}</strong> isn't in our current zone yet, but we're
+        growing quickly across DFW.
       </p>
 
       <div v-if="!emailSent" class="mt-4">
-        <p class="text-sm font-medium text-text">Drop your email — we'll notify you the day we reach you:</p>
+        <p class="text-sm font-medium text-text">
+          Drop your email — we'll notify you the day we reach you:
+        </p>
         <div class="mt-2 flex gap-2">
           <label for="notify-email" class="sr-only">Your email address</label>
           <input
@@ -154,12 +169,18 @@ function submitEmail() {
 
       <p class="mt-4 text-sm text-text-muted">
         In the meantime, booking is still open for our current service cities above —
-        <a href="#book" class="text-brand underline-offset-4 hover:underline">book if you're flexible</a>.
+        <a href="#book" class="text-brand underline-offset-4 hover:underline"
+          >book if you're flexible</a
+        >.
       </p>
 
       <button
-        class="mt-2 text-xs text-text-muted underline-offset-4 hover:underline cursor-pointer"
-        @click="state = 'idle'; zip = ''; emailSent = false;"
+        class="mt-2 cursor-pointer text-xs text-text-muted underline-offset-4 hover:underline"
+        @click="
+          state = 'idle';
+          zip = '';
+          emailSent = false;
+        "
       >
         Try a different ZIP
       </button>

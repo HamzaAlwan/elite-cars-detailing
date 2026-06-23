@@ -56,10 +56,26 @@ const blueCandidates = [
 ];
 
 const valueProps = [
-  { icon: Droplets, title: '100% Self-Contained', body: 'Onboard water + power — perfect for apartments and offices.' },
-  { icon: ShieldCheck, title: 'Insured & Vetted', body: 'Certified, fully insured, 50-mile Richardson radius.' },
-  { icon: Sparkles, title: 'Paint Protection', body: 'Decontamination, clay bar, multi-year ceramic coatings.' },
-  { icon: Clock, title: 'Weather-Flexible', body: 'Texas weather shifts fast — reschedule in a tap.' },
+  {
+    icon: Droplets,
+    title: '100% Self-Contained',
+    body: 'Onboard water + power — perfect for apartments and offices.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Insured & Vetted',
+    body: 'Certified, fully insured, 50-mile Richardson radius.',
+  },
+  {
+    icon: Sparkles,
+    title: 'Paint Protection',
+    body: 'Decontamination, clay bar, multi-year ceramic coatings.',
+  },
+  {
+    icon: Clock,
+    title: 'Weather-Flexible',
+    body: 'Texas weather shifts fast — reschedule in a tap.',
+  },
 ];
 
 const toc = [
@@ -77,9 +93,13 @@ const toc = [
   <nav class="nav-glass sticky top-0 z-40 border-b border-border">
     <Container class="flex flex-wrap items-center gap-x-5 gap-y-1 py-3 text-sm">
       <span class="font-semibold tracking-tight">/preview</span>
-      {toc.map(([href, label]) => (
-        <a href={href} class="text-text-muted hover:text-text">{label}</a>
-      ))}
+      {
+        toc.map(([href, label]) => (
+          <a href={href} class="text-text-muted hover:text-text">
+            {label}
+          </a>
+        ))
+      }
     </Container>
   </nav>
 
@@ -88,8 +108,8 @@ const toc = [
       <Badge>Phase 2.5 · approval gate</Badge>
       <h1 class="mt-4">Design preview</h1>
       <p class="mt-3 max-w-2xl text-text-muted">
-        The design system made visible — foundations, components, assembled sections, and
-        variants to choose from. Review on a phone; pick a metallic intensity + blue below.
+        The design system made visible — foundations, components, assembled sections, and variants
+        to choose from. Review on a phone; pick a metallic intensity + blue below.
       </p>
     </Container>
   </Section>
@@ -101,25 +121,29 @@ const toc = [
 
       <h3 class="mt-8">Color tokens</h3>
       <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-        {colorTokens.map((t) => (
-          <div class="overflow-hidden rounded-xl border border-border">
-            <div class={`h-16 ${t.cls}`}></div>
-            <div class="bg-bg-elevated p-3">
-              <p class="font-medium">{t.name}</p>
-              <p class="text-sm text-text-muted">{t.hex}</p>
+        {
+          colorTokens.map((t) => (
+            <div class="overflow-hidden rounded-xl border border-border">
+              <div class={`h-16 ${t.cls}`} />
+              <div class="bg-bg-elevated p-3">
+                <p class="font-medium">{t.name}</p>
+                <p class="text-sm text-text-muted">{t.hex}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        }
       </div>
 
       <h3 class="mt-12">Typography — Outfit</h3>
       <div class="mt-4 space-y-3">
-        {typeScale.map((t) => (
-          <div class="flex flex-col gap-1 border-b border-border pb-3 sm:flex-row sm:items-baseline sm:justify-between">
-            <span class={t.cls}>Showroom shine, delivered</span>
-            <span class="text-sm text-text-muted">{t.label}</span>
-          </div>
-        ))}
+        {
+          typeScale.map((t) => (
+            <div class="flex flex-col gap-1 border-b border-border pb-3 sm:flex-row sm:items-baseline sm:justify-between">
+              <span class={t.cls}>Showroom shine, delivered</span>
+              <span class="text-sm text-text-muted">{t.label}</span>
+            </div>
+          ))
+        }
       </div>
 
       <h3 class="mt-12">Elevation & radius</h3>
@@ -135,11 +159,16 @@ const toc = [
         <Clock size={28} /><MapPin size={28} /><CheckCircle2 size={28} />
       </div>
       <ul class="mt-6 grid grid-cols-1 gap-x-8 gap-y-1 text-sm text-text-muted sm:grid-cols-2">
-        {motionTokens.map(([tok, use]) => (
-          <li class="flex justify-between border-b border-border py-1">
-            <code class="text-text">{tok}</code><span>{use}</span>
-          </li>
-        ))}
+        {
+          motionTokens.map(([tok, use]) => (
+            <li class="flex justify-between border-b border-border py-1">
+              <>
+                <code class="text-text">{tok}</code>
+                <span>{use}</span>
+              </>
+            </li>
+          ))
+        }
       </ul>
     </Container>
   </Section>
@@ -165,23 +194,39 @@ const toc = [
           <p class="mt-2 text-sm text-text-muted">Layered elevation + subtle bevel. Matte.</p>
         </Card>
         <Card>
-          <div class="flex items-center gap-2"><Sparkles size={18} class="text-brand" /><span class="font-semibold">With icon</span></div>
+          <div class="flex items-center gap-2">
+            <Sparkles size={18} class="text-brand" /><span class="font-semibold">With icon</span>
+          </div>
           <p class="mt-2 text-sm text-text-muted">Cards carry most content blocks.</p>
         </Card>
       </div>
 
       <h3 class="mt-10">Forms</h3>
       <div class="mt-4 grid max-w-md gap-3">
-        <input type="text" placeholder="Your name" class="rounded-xl border border-border bg-bg-elevated px-4 py-3 text-text placeholder:text-text-muted" />
-        <input type="tel" placeholder="ZIP code" class="rounded-xl border border-border bg-bg-elevated px-4 py-3 text-text placeholder:text-text-muted" />
-        <p class="flex items-center gap-2 text-sm text-success"><CheckCircle2 size={16} /> You're in our DFW service zone</p>
+        <input
+          type="text"
+          placeholder="Your name"
+          class="rounded-xl border border-border bg-bg-elevated px-4 py-3 text-text placeholder:text-text-muted"
+        />
+        <input
+          type="tel"
+          placeholder="ZIP code"
+          class="rounded-xl border border-border bg-bg-elevated px-4 py-3 text-text placeholder:text-text-muted"
+        />
+        <p class="flex items-center gap-2 text-sm text-success">
+          <CheckCircle2 size={16} /> You're in our DFW service zone
+        </p>
         <p class="text-sm text-warning">Please enter a valid 5-digit ZIP.</p>
       </div>
 
       <h3 class="mt-10">Disclosure (FAQ)</h3>
       <details class="mt-4 rounded-xl border border-border bg-bg-elevated p-4">
-        <summary class="cursor-pointer font-medium">Do you need access to my water or power?</summary>
-        <p class="mt-2 text-sm text-text-muted">No — our rigs are fully self-contained with onboard water and a generator.</p>
+        <summary class="cursor-pointer font-medium"
+          >Do you need access to my water or power?</summary
+        >
+        <p class="mt-2 text-sm text-text-muted">
+          No — our rigs are fully self-contained with onboard water and a generator.
+        </p>
       </details>
 
       <h3 class="mt-10">Feedback</h3>
@@ -199,11 +244,21 @@ const toc = [
   <!-- ============================ SECTIONS ============================ -->
   <Section id="sections" class="!py-12">
     <Container>
-      <h2>Sections <span class="text-base font-normal text-text-muted">(assembled mockups · placeholder data)</span></h2>
+      <h2>
+        Sections <span class="text-base font-normal text-text-muted"
+          >(assembled mockups · placeholder data)</span
+        >
+      </h2>
 
       <!-- Hero mock -->
-      <div class="relative mt-8 overflow-hidden rounded-2xl border border-border bg-bg-elevated p-8 md:p-12">
-        <div class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full" style="background: radial-gradient(closest-side, rgba(30,95,255,.28), transparent);"></div>
+      <div
+        class="relative mt-8 overflow-hidden rounded-2xl border border-border bg-bg-elevated p-8 md:p-12"
+      >
+        <div
+          class="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full"
+          style="background: radial-gradient(closest-side, rgba(30,95,255,.28), transparent);"
+        >
+        </div>
         <div class="relative max-w-xl">
           <h2>Showroom Shine. Delivered to Your Driveway.</h2>
           <p class="mt-4 text-text-muted">{SITE.description}</p>
@@ -211,37 +266,51 @@ const toc = [
             <Button href="#">{CTA.book}</Button>
             <Button href="#" variant="ghost">{CTA.quote}</Button>
           </div>
-          <p class="mt-5 text-sm text-text-muted">100% self-contained · Same-day slots · Insured & vetted</p>
+          <p class="mt-5 text-sm text-text-muted">
+            100% self-contained · Same-day slots · Insured & vetted
+          </p>
         </div>
       </div>
 
       <!-- Value props -->
       <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {valueProps.map((v) => {
-          const Icon = v.icon;
-          return (
-            <Card class="icon-hover-trigger">
-              <Icon size={28} class="icon-hover text-brand" />
-              <h4 class="mt-4 font-semibold">{v.title}</h4>
-              <p class="mt-2 text-sm text-text-muted">{v.body}</p>
-            </Card>
-          );
-        })}
+        {
+          valueProps.map((v) => {
+            const Icon = v.icon;
+            return (
+              <Card class="icon-hover-trigger">
+                <Icon size={28} class="icon-hover text-brand" />
+                <h4 class="mt-4 font-semibold">{v.title}</h4>
+                <p class="mt-2 text-sm text-text-muted">{v.body}</p>
+              </Card>
+            );
+          })
+        }
       </div>
 
       <!-- Pricing tier (Most Popular) -->
       <div class="mt-6 grid gap-4 md:grid-cols-2">
         <Card>
           <h4 class="font-semibold">The Standard Reset</h4>
-          <p class="mt-1 text-2xl font-bold">$125<span class="text-base font-normal text-text-muted"> · Sedan</span></p>
-          <p class="mt-2 text-sm text-text-muted">Hand wash, gloss protection, interior deep vacuum.</p>
+          <p class="mt-1 text-2xl font-bold">
+            $125<span class="text-base font-normal text-text-muted"> · Sedan</span>
+          </p>
+          <p class="mt-2 text-sm text-text-muted">
+            Hand wash, gloss protection, interior deep vacuum.
+          </p>
           <Button href="#" variant="ghost" class="mt-5 w-full">Book This Package</Button>
         </Card>
         <Card class="relative ring-1 ring-brand">
-          <span class="absolute -top-3 left-6"><Badge class="btn-metal border-0"><Sparkles size={14} /> Most Popular</Badge></span>
+          <span class="absolute -top-3 left-6"
+            ><Badge class="btn-metal border-0"><Sparkles size={14} /> Most Popular</Badge></span
+          >
           <h4 class="font-semibold">The Elite Signature</h4>
-          <p class="mt-1 text-2xl font-bold">$225<span class="text-base font-normal text-text-muted"> · Sedan</span></p>
-          <p class="mt-2 text-sm text-text-muted">Clay bar, iron decon, interior steam, leather condition.</p>
+          <p class="mt-1 text-2xl font-bold">
+            $225<span class="text-base font-normal text-text-muted"> · Sedan</span>
+          </p>
+          <p class="mt-2 text-sm text-text-muted">
+            Clay bar, iron decon, interior steam, leather condition.
+          </p>
           <Button href="#" class="mt-5 w-full">Book This Package</Button>
         </Card>
       </div>
@@ -266,10 +335,14 @@ const toc = [
   <!-- ============================ VARIATIONS ============================ -->
   <Section id="variations" class="!py-12">
     <Container>
-      <h2>Variations <span class="text-base font-normal text-text-muted">(pick a direction)</span></h2>
+      <h2>
+        Variations <span class="text-base font-normal text-text-muted">(pick a direction)</span>
+      </h2>
 
       <h3 class="mt-8">Metallic intensity</h3>
-      <p class="mt-1 text-sm text-text-muted">Matte chosen (B) — A/C shown for reference. Anodized, never chrome.</p>
+      <p class="mt-1 text-sm text-text-muted">
+        Matte chosen (B) — A/C shown for reference. Anodized, never chrome.
+      </p>
       <div class="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-3">
         <div>
           <button class="demo-cta demo-flat">{CTA.book}</button>
@@ -287,14 +360,18 @@ const toc = [
 
       <h3 class="mt-12">Premium-blue candidates</h3>
       <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {blueCandidates.map((b) => (
-          <div class="rounded-xl border border-border bg-bg-elevated p-4">
-            <div class="h-12 rounded-lg" style={`background:${b.hex}`}></div>
-            <button class="demo-cta mt-3" style={`background:${b.hex};color:#fff`}>{CTA.book}</button>
-            <p class="mt-3 text-sm font-medium">{b.label}</p>
-            <p class="text-sm text-text-muted">{b.hex}</p>
-          </div>
-        ))}
+        {
+          blueCandidates.map((b) => (
+            <div class="rounded-xl border border-border bg-bg-elevated p-4">
+              <div class="h-12 rounded-lg" style={`background:${b.hex}`} />
+              <button class="demo-cta mt-3" style={`background:${b.hex};color:#fff`}>
+                {CTA.book}
+              </button>
+              <p class="mt-3 text-sm font-medium">{b.label}</p>
+              <p class="text-sm text-text-muted">{b.hex}</p>
+            </div>
+          ))
+        }
       </div>
     </Container>
   </Section>
@@ -310,14 +387,30 @@ const toc = [
       <div class="mt-4 flex flex-wrap items-center gap-3">
         <Button href="#">Hover / focus me</Button>
         <button class="btn-metal demo-cta opacity-50" disabled>Disabled</button>
-        <span class="text-sm text-text-muted">(matte CTA — subtle lift on desktop hover; tap = press)</span>
+        <span class="text-sm text-text-muted"
+          >(matte CTA — subtle lift on desktop hover; tap = press)</span
+        >
       </div>
 
       <h3 class="mt-10">Animated icons (no library)</h3>
       <div class="mt-4 flex flex-wrap items-center gap-8">
         <div class="flex flex-col items-center gap-2">
-          <button data-menu-toggle aria-label="Toggle menu" class="rounded-lg border border-border p-2 text-text">
-            <svg class="menu-icon" data-open="false" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <button
+            data-menu-toggle
+            aria-label="Toggle menu"
+            class="rounded-lg border border-border p-2 text-text"
+          >
+            <svg
+              class="menu-icon"
+              data-open="false"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
               <line data-bar="top" x1="4" y1="7" x2="20" y2="7"></line>
               <line data-bar="middle" x1="4" y1="12" x2="20" y2="12"></line>
               <line data-bar="bottom" x1="4" y1="17" x2="20" y2="17"></line>
@@ -326,19 +419,41 @@ const toc = [
           <span class="text-sm text-text-muted">Hamburger ↔ X (tap)</span>
         </div>
         <div class="flex flex-col items-center gap-2">
-          <svg class="icon-draw text-success" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            class="icon-draw text-success"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <path pathLength="1" d="M20 6 9 17l-5-5"></path>
           </svg>
-          <button data-check-replay class="text-sm text-brand underline-offset-4 hover:underline">Replay check</button>
+          <button data-check-replay class="text-sm text-brand underline-offset-4 hover:underline"
+            >Replay check</button
+          >
         </div>
       </div>
 
       <h3 class="mt-10">Scroll-reveal & reduced-motion</h3>
-      <p class="mt-1 text-sm text-text-muted">Cards fade + rise on scroll (staggered). Enable “Reduce Motion” → they show instantly.</p>
+      <p class="mt-1 text-sm text-text-muted">
+        Cards fade + rise on scroll (staggered). Enable “Reduce Motion” → they show instantly.
+      </p>
       <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {[0, 1, 2, 3, 4, 5].map((i) => (
-          <div data-reveal data-reveal-index={i} class="surface-raised p-6 text-sm text-text-muted">Reveal #{i + 1}</div>
-        ))}
+        {
+          [0, 1, 2, 3, 4, 5].map((i) => (
+            <div
+              data-reveal
+              data-reveal-index={i}
+              class="surface-raised p-6 text-sm text-text-muted"
+            >
+              Reveal #{i + 1}
+            </div>
+          ))
+        }
       </div>
 
       <h3 class="mt-10">Loading / empty / error</h3>
@@ -348,8 +463,12 @@ const toc = [
           <div class="mt-3 h-4 w-1/2 animate-pulse rounded bg-border"></div>
           <p class="mt-3 text-sm text-text-muted">Loading…</p>
         </div>
-        <div class="rounded-xl border border-dashed border-border p-4 text-sm text-text-muted">Nothing here yet — empty state.</div>
-        <div class="rounded-xl border border-warning/40 bg-warning/10 p-4 text-sm text-warning">Something went wrong — try again or call us.</div>
+        <div class="rounded-xl border border-dashed border-border p-4 text-sm text-text-muted">
+          Nothing here yet — empty state.
+        </div>
+        <div class="rounded-xl border border-warning/40 bg-warning/10 p-4 text-sm text-warning">
+          Something went wrong — try again or call us.
+        </div>
       </div>
     </Container>
   </Section>
@@ -361,8 +480,8 @@ const toc = [
     <Container>
       <h2>Car Selector — Pick a Variant</h2>
       <p class="mt-2 max-w-xl text-text-muted">
-        Three animation styles for the Sedan / SUV / Truck selector in the Pricing section.
-        Try each on mobile and desktop, then pick your favourite.
+        Three animation styles for the Sedan / SUV / Truck selector in the Pricing section. Try each
+        on mobile and desktop, then pick your favourite.
       </p>
       <div class="mt-10 max-w-sm">
         <VehicleSelectorPreview client:visible />
@@ -390,8 +509,15 @@ const toc = [
   .demo-glossy {
     background-image:
       linear-gradient(180deg, rgb(255 255 255 / 0.4), rgb(255 255 255 / 0) 42%),
-      linear-gradient(180deg, var(--color-brand-bright), var(--color-brand-strong) 52%, var(--color-brand-deep));
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55), 0 8px 22px rgb(19 50 143 / 0.55);
+      linear-gradient(
+        180deg,
+        var(--color-brand-bright),
+        var(--color-brand-strong) 52%,
+        var(--color-brand-deep)
+      );
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.55),
+      0 8px 22px rgb(19 50 143 / 0.55);
   }
 </style>
 

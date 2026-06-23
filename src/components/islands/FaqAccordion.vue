@@ -48,7 +48,7 @@ import { FAQ_ITEMS } from '@/data/faq';
         </AccordionTrigger>
       </AccordionHeader>
       <AccordionContent class="faq-content">
-        <p class="px-5 pb-4 pt-1 text-sm leading-relaxed text-text-muted">{{ item.a }}</p>
+        <p class="px-5 pt-1 pb-4 text-sm leading-relaxed text-text-muted">{{ item.a }}</p>
       </AccordionContent>
     </AccordionItem>
   </AccordionRoot>

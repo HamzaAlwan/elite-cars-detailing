@@ -36,21 +36,24 @@ const props = [
   <Container>
     <h2 data-reveal data-reveal-index="0">Why Choose Elite?</h2>
     <p data-reveal data-reveal-index="1" class="mt-3 max-w-2xl text-text-muted">
-      Premium mobile detailing, fully self-contained — no hookups, no hassle, just a showroom finish wherever you are.
+      Premium mobile detailing, fully self-contained — no hookups, no hassle, just a showroom finish
+      wherever you are.
     </p>
 
     <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-      {props.map((p, i) => (
-        <div
-          data-reveal
-          data-reveal-index={i + 2}
-          class="surface-raised card-hover icon-hover-trigger p-6"
-        >
-          <div class="text-brand" set:html={p.icon} />
-          <h3 class="mt-4 font-semibold text-text">{p.title}</h3>
-          <p class="mt-2 text-sm leading-relaxed text-text-muted">{p.body}</p>
-        </div>
-      ))}
+      {
+        props.map((p, i) => (
+          <div
+            data-reveal
+            data-reveal-index={i + 2}
+            class="surface-raised card-hover icon-hover-trigger p-6"
+          >
+            <div class="text-brand" set:html={p.icon} />
+            <h3 class="mt-4 font-semibold text-text">{p.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-text-muted">{p.body}</p>
+          </div>
+        ))
+      }
     </div>
   </Container>
 </Section>

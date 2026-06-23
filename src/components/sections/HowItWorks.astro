@@ -39,22 +39,20 @@ const steps = [
     </p>
 
     <ol class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-3" role="list">
-      {steps.map((step, i) => (
-        <li
-          data-reveal
-          data-reveal-index={i + 2}
-          class="surface-raised flex flex-col gap-4 p-6"
-        >
-          <div class="flex items-start gap-3">
-            <span class="shrink-0 text-xl font-bold tabular-nums text-brand">{step.number}</span>
-            <div class="text-brand" set:html={step.icon} />
-          </div>
-          <div>
-            <h3 class="font-semibold text-text">{step.title}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-text-muted">{step.body}</p>
-          </div>
-        </li>
-      ))}
+      {
+        steps.map((step, i) => (
+          <li data-reveal data-reveal-index={i + 2} class="surface-raised flex flex-col gap-4 p-6">
+            <div class="flex items-start gap-3">
+              <span class="shrink-0 text-xl font-bold text-brand tabular-nums">{step.number}</span>
+              <div class="text-brand" set:html={step.icon} />
+            </div>
+            <div>
+              <h3 class="font-semibold text-text">{step.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-text-muted">{step.body}</p>
+            </div>
+          </li>
+        ))
+      }
     </ol>
 
     <!-- Trailing CTA — catches users convinced by the process explanation -->
