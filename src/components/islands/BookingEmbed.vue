@@ -1,42 +1,27 @@
 <script setup lang="ts">
 /**
  * P6-T2 — Cal.com lazy embed island (client:visible).
- * Load-on-click facade: shows a "Schedule online" button; only loads Cal.com's heavy
- * embed.js when the user clicks — avoids LCP penalty and iOS auto-scroll-on-load (§2.5).
- *
- * OWNER ACTION: Replace CAL_LINK with your real Cal.com booking link once the account
- * is created and the "Mobile Detail" event type is configured (P6-T1).
- * Example: "elitemobiledetailing/mobile-detail"
+ * Load-on-click facade: iframe src is blank until the user clicks, so Cal.com's
+ * heavy page only loads on demand. Uses the iframe embed URL (simpler and more
+ * reliable than the JS embed API in Vite/Astro environments).
  */
 import { ref } from 'vue';
 
-// Replace with real Cal.com username/event-type slug after P6-T1 setup
-const CAL_LINK = '{{CAL_LINK}}'; // e.g. 'elitemobiledetailing/mobile-detail'
+const CAL_LINK = 'hamza-yffrki/mobile-detail';
 const isReady = CAL_LINK !== '{{CAL_LINK}}';
+
+const CAL_URL = `https://cal.com/${CAL_LINK}?embed=true&layout=month_view&theme=dark`;
 
 const loaded = ref(false);
 
-async function loadCal() {
-  if (loaded.value) return;
+function loadCal() {
   loaded.value = true;
-
-  // Dynamically load Cal.com embed snippet
-  const { getCalApi } = await import('@calcom/embed-snippet');
-  const cal = await getCalApi({
-    namespace: 'mobile-detail',
-  });
-  cal('ui', {
-    theme: 'dark',
-    styles: { branding: { brandColor: '#1E5FFF' } },
-    hideEventTypeDetails: false,
-  });
-  cal('preload', { calLink: CAL_LINK });
 }
 </script>
 
 <template>
   <div>
-    <!-- Shown when Cal.com is configured (post P6-T1) -->
+    <!-- Shown when Cal.com is configured -->
     <div v-if="isReady">
       <button
         v-if="!loaded"
@@ -52,18 +37,18 @@ async function loadCal() {
         Schedule online — pick a day &amp; time
       </button>
 
-      <!-- Cal.com embed renders here after click -->
-      <div
+      <!-- Cal.com iframe — only loads when user clicks the button above -->
+      <iframe
         v-if="loaded"
-        :data-cal-link="CAL_LINK"
-        data-cal-namespace="mobile-detail"
-        data-cal-config='{"layout":"month_view"}'
-        class="mt-4 overflow-hidden rounded-2xl border border-border"
-        style="min-height: 600px;"
-      ></div>
+        :src="CAL_URL"
+        class="mt-4 w-full overflow-hidden rounded-2xl border border-border"
+        style="min-height: 700px; border: 0; overscroll-behavior: contain;"
+        loading="lazy"
+        title="Book your mobile car detail"
+      ></iframe>
     </div>
 
-    <!-- Placeholder shown until owner configures Cal.com (P6-T1) -->
+    <!-- Placeholder shown until CAL_LINK is configured -->
     <div v-else class="rounded-2xl border border-dashed border-border bg-bg-elevated p-10 text-center">
       <p class="font-medium text-text">Online booking coming soon</p>
       <p class="mt-2 text-sm text-text-muted">

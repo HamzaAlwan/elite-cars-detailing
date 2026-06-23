@@ -18,5 +18,10 @@ export default defineConfig({
   vite: {
     // Tailwind v4 is wired via the Vite plugin (NOT @astrojs/tailwind, which is v3).
     plugins: [tailwindcss()],
+    // Pre-bundle heavy islands deps at server start so Vite doesn't lazily discover
+    // them on first page load and trigger a mid-session browser reload.
+    optimizeDeps: {
+      include: ['motion', 'reka-ui'],
+    },
   },
 });

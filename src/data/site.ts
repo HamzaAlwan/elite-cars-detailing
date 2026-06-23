@@ -13,9 +13,9 @@ export const SITE = {
 } as const;
 
 export const CONTACT = {
-  phoneE164: '{{PHONE_E164}}', // e.g. +19725551234 — a local DFW call-tracking number (P9-T2)
-  phoneDisplay: '{{LOCAL_PHONE_DISPLAY}}', // e.g. (972) 555-1234
-  email: '{{EMAIL}}',
+  phoneE164: '+962788839964', // replace with US number before launch (P9-T2)
+  phoneDisplay: '+962 78-883-9964', // replace with formatted US number before launch (P9-T2)
+  email: 'hello@elitemobiledetailing.com',
   hours: 'Mon–Sat · 8:00 AM – 7:00 PM',
 } as const;
 
