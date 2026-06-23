@@ -21,7 +21,14 @@ export default defineConfig({
     // Pre-bundle heavy islands deps at server start so Vite doesn't lazily discover
     // them on first page load and trigger a mid-session browser reload.
     optimizeDeps: {
-      include: ['motion', 'reka-ui'],
+      include: [
+        'motion',
+        'reka-ui',
+        'astro/virtual-modules/transitions-events.js',
+        'astro/virtual-modules/transitions-router.js',
+        'astro/virtual-modules/transitions-swap-functions.js',
+        'astro/virtual-modules/transitions-types.js',
+      ],
     },
   },
 });

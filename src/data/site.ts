@@ -58,3 +58,6 @@ export const CTA = {
 
 /** Web3Forms public access key — an email alias, safe to commit (P0-T9 / P6-T3). */
 export const WEB3FORMS_ACCESS_KEY = '{{WEB3FORMS_ACCESS_KEY}}';
+
+/** Cal.com booking link (`username/event-type`). Single source for the booking modal. */
+export const CAL_LINK = 'hamza-yffrki/mobile-detail';

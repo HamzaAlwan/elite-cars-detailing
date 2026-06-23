@@ -17,11 +17,12 @@ const credentials = [
   { label: '50-Mile Service Radius' },
 ];
 
-const products = [
+// Real brands we use. Drop an official SVG into public/logos/ and set `logo` to render it as a
+// real logo; until then a styled wordmark ships. (CQUARTZ folded into CarPro — it's a CarPro line.)
+const products: { name: string; note: string; logo?: string }[] = [
   { name: "Meguiar's", note: 'Wash & clay' },
-  { name: 'CarPro', note: 'Iron decon' },
+  { name: 'CarPro', note: 'Decon & ceramic' },
   { name: 'Gyeon', note: 'Ceramic coatings' },
-  { name: 'Carpro CQUARTZ', note: 'Paint protection' },
 ];
 ---
 
@@ -60,17 +61,28 @@ const products = [
       ))}
     </ul>
 
-    <!-- Product brands -->
+    <!-- Product brands — monochrome→color logo strip (Phase 6) -->
     <div data-reveal data-reveal-index="4" class="mt-10">
       <p class="text-sm font-medium uppercase tracking-widest text-text-muted">Professional Products We Use</p>
-      <div class="mt-4 flex flex-wrap gap-4">
+      <ul class="mt-4 flex flex-wrap gap-3">
         {products.map((p) => (
-          <div class="rounded-xl border border-border bg-bg-elevated px-5 py-3 text-center">
-            <p class="font-semibold text-text">{p.name}</p>
-            <p class="mt-0.5 text-xs text-text-muted">{p.note}</p>
-          </div>
+          <li class="logo-tile card-hover flex min-h-16 min-w-[140px] flex-1 flex-col items-center justify-center gap-1 rounded-xl border border-border bg-bg-elevated px-6 py-4 text-center sm:flex-none">
+            {p.logo ? (
+              <img
+                src={p.logo}
+                alt={`${p.name} logo`}
+                width="120"
+                height="32"
+                loading="lazy"
+                class="logo-mono h-8 w-auto object-contain"
+              />
+            ) : (
+              <span class="logo-mono text-lg font-bold tracking-tight text-text">{p.name}</span>
+            )}
+            <span class="text-xs text-text-muted">{p.note}</span>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
 
     <!--

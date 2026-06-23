@@ -7,6 +7,7 @@
  *   Add only once real Google reviews exist — self-hosted self-reviews don't earn stars.
  */
 import { SITE, CONTACT, LOCATION, SERVICE_AREA_CITIES } from './site';
+import { FAQ_ITEMS } from './faq';
 
 const SERVICES = [
   {
@@ -29,29 +30,6 @@ const SERVICES = [
       'Multi-year ceramic coating (3-year and 9-year options). Full decontamination prep included.',
     priceRange: '$650–$1,995',
     url: `${SITE.url}/#pricing`,
-  },
-];
-
-const FAQ_ITEMS = [
-  {
-    q: 'Do you need access to my water or power?',
-    a: 'No — our rigs are fully self-contained with onboard water tanks and a generator. We can detail anywhere, including apartment complexes and office lots with no utility access.',
-  },
-  {
-    q: 'How long does a detail take?',
-    a: 'The Standard Reset takes 2–3 hours. The Elite Signature runs 4–5 hours. Ceramic coatings require a full day (8+ hours) including prep, coating, and cure time.',
-  },
-  {
-    q: 'What if the weather is bad?',
-    a: "Texas weather shifts fast. If conditions aren't right on your scheduled day, we'll contact you to reschedule at no fee — your booking stays secure.",
-  },
-  {
-    q: 'How do I pay?',
-    a: "We accept card, contactless, and Apple Pay on completion. Cash is also welcome. No payment is required until you've inspected the result and are satisfied.",
-  },
-  {
-    q: 'Do you serve my area?',
-    a: `We cover a 50-mile radius from Richardson, TX — including ${SERVICE_AREA_CITIES.join(', ')}.`,
   },
 ];
 

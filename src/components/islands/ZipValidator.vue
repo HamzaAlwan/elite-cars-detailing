@@ -9,52 +9,7 @@
  * Reduced-motion: .icon-draw animation is skipped; checkmark shows instantly.
  */
 import { ref, computed } from 'vue';
-import { prefersReducedMotion } from '@/lib/motion';
-
-// DFW ZIP codes within ~50 miles of Richardson, TX 75080
-// Covers: Richardson, Dallas, Plano, Frisco, McKinney, Allen, Garland, Carrollton, Irving + surroundings
-const COVERED_ZIPS = new Set([
-  // Richardson
-  '75080','75081','75082','75083',
-  // Plano
-  '75023','75024','75025','75026','75074','75075','75093','75094',
-  // Allen
-  '75002','75013',
-  // McKinney
-  '75069','75070','75071','75072',
-  // Frisco
-  '75033','75034','75035','75036',
-  // Garland
-  '75040','75041','75042','75043','75044','75045','75046','75047','75048',
-  // Carrollton
-  '75006','75007','75010','75011',
-  // Irving
-  '75014','75015','75016','75017','75018','75019','75038','75039','75060','75061','75062','75063',
-  // Dallas (core + north)
-  '75201','75202','75203','75204','75205','75206','75207','75208','75209','75210',
-  '75211','75212','75214','75215','75216','75217','75218','75219','75220','75221',
-  '75222','75223','75224','75225','75226','75227','75228','75229','75230','75231',
-  '75232','75233','75234','75235','75236','75237','75238','75240','75241','75242',
-  '75243','75244','75246','75247','75248','75249','75251','75252','75253','75254',
-  // Lewisville / Flower Mound
-  '75022','75028','75056','75057','75067','75068',
-  // The Colony
-  '75056',
-  // Addison / Farmers Branch
-  '75001','75244',
-  // Rowlett / Sachse / Wylie
-  '75088','75089','75098',
-  // Prosper / Celina
-  '75078','76227',
-  // Murphy / Lavon
-  '75094',
-  // Grand Prairie
-  '75050','75051','75052','75053','75054',
-  // Mesquite
-  '75149','75150',
-  // Duncanville / DeSoto / Cedar Hill
-  '75116','75115','75104',
-]);
+import { isCoveredZip, isZipFormat } from '@/lib/validation';
 
 type State = 'idle' | 'in-area' | 'out-of-area' | 'invalid';
 
@@ -70,12 +25,12 @@ const isInvalid = computed(() => state.value === 'invalid');
 
 function check() {
   const val = zip.value.trim();
-  if (!/^\d{5}$/.test(val)) {
+  if (!isZipFormat(val)) {
     state.value = 'invalid';
     drawn.value = false;
     return;
   }
-  if (COVERED_ZIPS.has(val)) {
+  if (isCoveredZip(val)) {
     state.value = 'in-area';
     // Trigger icon-draw animation after next tick
     drawn.value = false;

@@ -236,6 +236,76 @@
     to { stroke-dashoffset: 0; }
   }
 
+  /* FAQ accordion (Reka) — animate height via Reka's content-height CSS var (Phase 3).
+     reduced-motion is handled globally (animation-duration shortened), so the panel still
+     opens/closes — just instantly. */
+  .faq-content {
+    overflow: hidden;
+  }
+  .faq-content[data-state="open"] {
+    animation: faq-open var(--dur-base) var(--ease-standard);
+  }
+  .faq-content[data-state="closed"] {
+    animation: faq-close var(--dur-base) var(--ease-standard);
+  }
+  @keyframes faq-open {
+    from { height: 0; opacity: 0; }
+    to { height: var(--reka-accordion-content-height); opacity: 1; }
+  }
+  @keyframes faq-close {
+    from { height: var(--reka-accordion-content-height); opacity: 1; }
+    to { height: 0; opacity: 0; }
+  }
+
+  /* Booking modal (Reka Dialog) — brand-matched chrome + restrained enter animation (Phase 4).
+     Reka unmounts on close, so only an enter tween is needed. reduced-motion shortened globally. */
+  .dialog-overlay[data-state="open"] {
+    animation: dialog-fade-in var(--dur-fast) var(--ease-out);
+  }
+  .dialog-content[data-state="open"] {
+    animation: dialog-pop-in var(--dur-base) var(--ease-emphasized);
+  }
+  @keyframes dialog-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes dialog-pop-in {
+    from { opacity: 0; transform: translate(-50%, -48%) scale(0.97); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+
+  /* Card hover lift (Phase 5) — pointer devices only. transform + drop-shadow only, so it composes
+     with each card's own box-shadow (surface-raised bevel, surface-featured brand ring) and never
+     shifts layout. drop-shadow (not box-shadow) avoids clobbering those base shadows. */
+  @media (hover: hover) and (pointer: fine) {
+    .card-hover {
+      transition:
+        transform var(--dur-base) var(--ease-standard),
+        filter var(--dur-base) var(--ease-standard);
+    }
+    .card-hover:hover {
+      transform: translateY(-3px);
+      filter: drop-shadow(0 10px 22px rgb(0 0 0 / 0.45));
+    }
+  }
+
+  /* Product logo strip (Phase 6). Monochrome→color is a HOVER-ONLY enhancement: only pointer
+     devices dim the logo by default, so touch / reduced-motion users always see it full & legible
+     (skill `hover-vs-tap`). Works for both <img> logos (grayscale) and text wordmarks (opacity). */
+  @media (hover: hover) and (pointer: fine) {
+    .logo-mono {
+      filter: grayscale(1);
+      opacity: 0.65;
+      transition:
+        filter var(--dur-base) var(--ease-standard),
+        opacity var(--dur-base) var(--ease-standard);
+    }
+    .logo-tile:hover .logo-mono {
+      filter: grayscale(0);
+      opacity: 1;
+    }
+  }
+
   /* "Most Popular" / featured badge — sapphire fill, matte. No hover lift (not a button). */
   .badge-featured {
     background-color: var(--color-brand-strong);

@@ -9,8 +9,15 @@
  * OWNER ACTION: Replace WEB3FORMS_ACCESS_KEY in src/data/site.ts with your real key
  * from web3forms.com before launch (P9-T2).
  */
-import { ref, reactive } from 'vue';
+import { ref, reactive, nextTick } from 'vue';
 import { WEB3FORMS_ACCESS_KEY, CONTACT } from '@/data/site';
+import {
+  validateName as checkName,
+  validatePhone as checkPhone,
+  validateEmail as checkEmail,
+  formatUsPhone,
+  quoteSchema,
+} from '@/lib/validation';
 
 const hasPhone = CONTACT.phoneE164 !== '{{PHONE_E164}}';
 
@@ -31,23 +38,43 @@ const fields = reactive({
 const errors = reactive({
   name: '',
   phone: '',
+  email: '',
 });
 
-function validateName() {
-  errors.name = fields.name.trim().length < 2 ? 'Please enter your name.' : '';
+function onNameBlur() {
+  errors.name = checkName(fields.name);
 }
 
-function validatePhone() {
-  const digits = fields.phone.replace(/\D/g, '');
-  errors.phone = digits.length < 10 ? 'Please enter a valid phone number.' : '';
+function onPhoneBlur() {
+  // Auto-format on blur so the field reads (XXX) XXX-XXXX, then validate.
+  if (fields.phone.trim()) fields.phone = formatUsPhone(fields.phone);
+  errors.phone = checkPhone(fields.phone);
 }
 
-const isValid = () => !errors.name && !errors.phone && fields.name.trim() && fields.phone.trim();
+function onEmailBlur() {
+  errors.email = checkEmail(fields.email);
+}
+
+async function focusFirstError() {
+  await nextTick();
+  const order: Array<keyof typeof errors> = ['name', 'phone', 'email'];
+  const first = order.find((k) => errors[k]);
+  if (first) document.getElementById(`q-${first}`)?.focus();
+}
 
 async function submit() {
-  validateName();
-  validatePhone();
-  if (!isValid()) return;
+  const result = quoteSchema.safeParse({ ...fields });
+  if (!result.success) {
+    errors.name = '';
+    errors.phone = '';
+    errors.email = '';
+    for (const issue of result.error.issues) {
+      const key = issue.path[0];
+      if (key === 'name' || key === 'phone' || key === 'email') errors[key] = issue.message;
+    }
+    focusFirstError();
+    return;
+  }
 
   status.value = 'loading';
   try {
@@ -94,10 +121,10 @@ async function submit() {
   <!-- Form -->
   <form
     v-else
-    @submit.prevent="submit"
     novalidate
     class="space-y-4"
     aria-label="Quote request form"
+    @submit.prevent="submit"
   >
     <!-- Honeypot — spam protection -->
     <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" aria-hidden="true" />
@@ -117,7 +144,7 @@ async function submit() {
         :aria-describedby="errors.name ? 'q-name-err' : undefined"
         placeholder="e.g. Alex Johnson"
         class="min-h-11 w-full rounded-xl border border-border bg-bg-elevated px-4 py-3 text-text placeholder:text-text-muted focus:border-brand focus:outline-none"
-        @blur="validateName"
+        @blur="onNameBlur"
       />
       <p v-if="errors.name" id="q-name-err" role="alert" class="mt-1.5 text-xs text-warning">{{ errors.name }}</p>
     </div>
@@ -138,7 +165,7 @@ async function submit() {
         :aria-describedby="errors.phone ? 'q-phone-err' : undefined"
         placeholder="(972) 555-1234"
         class="min-h-11 w-full rounded-xl border border-border bg-bg-elevated px-4 py-3 text-text placeholder:text-text-muted focus:border-brand focus:outline-none"
-        @blur="validatePhone"
+        @blur="onPhoneBlur"
       />
       <p v-if="errors.phone" id="q-phone-err" role="alert" class="mt-1.5 text-xs text-warning">{{ errors.phone }}</p>
     </div>
@@ -154,9 +181,13 @@ async function submit() {
         type="email"
         inputmode="email"
         autocomplete="email"
+        :aria-invalid="!!errors.email"
+        :aria-describedby="errors.email ? 'q-email-err' : undefined"
         placeholder="you@example.com"
         class="min-h-11 w-full rounded-xl border border-border bg-bg-elevated px-4 py-3 text-text placeholder:text-text-muted focus:border-brand focus:outline-none"
+        @blur="onEmailBlur"
       />
+      <p v-if="errors.email" id="q-email-err" role="alert" class="mt-1.5 text-xs text-warning">{{ errors.email }}</p>
     </div>
 
     <!-- Vehicle -->

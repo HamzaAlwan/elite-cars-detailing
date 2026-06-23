@@ -12,12 +12,13 @@ import Container from '@/components/ui/Container.astro';
 import Section from '@/components/ui/Section.astro';
 import PricingEstimator from '@/components/islands/PricingEstimator.vue';
 import { CTA } from '@/data/site';
+import { PRICING } from '@/data/pricing';
 
 const tiers = [
   {
     id: 'standard-reset',
     name: 'The Standard Reset',
-    price: '$125',
+    price: `$${PRICING['standard-reset'].sedan}`,
     vehicle: 'Sedan',
     description: 'Hand wash, gloss protection, tire dressing, interior deep vacuum, dashboard wipe-down.',
     cta: CTA.book,
@@ -28,7 +29,7 @@ const tiers = [
   {
     id: 'elite-signature',
     name: 'The Elite Signature',
-    price: '$225',
+    price: `$${PRICING['elite-signature'].sedan}`,
     vehicle: 'Sedan',
     description: 'Full exterior wash, clay bar, iron decontamination, interior steam sanitization, leather clean & condition, protective wax.',
     cta: CTA.book,
@@ -68,7 +69,7 @@ const tiers = [
           data-reveal
           data-reveal-index={i + 3}
           class:list={[
-            'relative flex flex-col p-6',
+            'card-hover relative flex flex-col p-6',
             tier.featured ? 'surface-featured' : 'surface-raised',
           ]}
         >

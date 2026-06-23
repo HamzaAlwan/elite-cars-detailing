@@ -3,6 +3,7 @@ import '@/styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import { SITE } from '@/data/site';
 import Seo from '@/components/Seo.astro';
+import BookingModal from '@/components/islands/BookingModal.vue';
 
 interface Props {
   /** Page <title>; falls back to "Name — Tagline". */
@@ -31,6 +32,7 @@ const pageTitle = title ?? `${SITE.name} — ${SITE.tagline}`;
     <!-- Preconnect to third-party origins used on interaction (reduces latency on first use). -->
     <link rel="preconnect" href="https://api.web3forms.com" />
     <link rel="preconnect" href="https://cal.com" />
+    <link rel="preconnect" href="https://app.cal.com" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
@@ -58,5 +60,49 @@ const pageTitle = title ?? `${SITE.name} — ${SITE.tagline}`;
       <slot />
     </main>
     <slot name="footer" />
+    <!-- Global booking modal — opens from any `#book` CTA (Phase 4). client:load so its
+         `booking:open` listener is ready ASAP (booking is the primary conversion path). -->
+    <BookingModal client:load />
+
+    <!--
+      Global Book-CTA interceptor. Runs eagerly and in the CAPTURE phase so it beats Astro
+      ClientRouter's (View Transitions) bubble-phase click handler — otherwise `#book` links
+      hash-navigate instead of opening the modal. Re-bound on astro:page-load; bind-once guarded.
+      Hands the chosen package/size to BookingModal via a `booking:open` event (+ a pending stash
+      for clicks that land before the island hydrates).
+    -->
+    <script>
+      type BookingWindow = Window & {
+        __bookingInterceptorBound?: boolean;
+        __pendingBooking?: { package?: string; size?: string };
+      };
+      function setupBookingInterceptor() {
+        const w = window as unknown as BookingWindow;
+        if (w.__bookingInterceptorBound) return;
+        w.__bookingInterceptorBound = true;
+        document.addEventListener(
+          'click',
+          (e) => {
+            if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            const target = e.target as HTMLElement | null;
+            const anchor = target?.closest?.('a[href^="#book"]') as HTMLAnchorElement | null;
+            if (!anchor) return;
+            e.preventDefault();
+            e.stopImmediatePropagation(); // stop ClientRouter from hash-navigating
+            const query = (anchor.getAttribute('href') ?? '').split('?')[1] ?? '';
+            const params = new URLSearchParams(query);
+            const detail = {
+              package: params.get('package') ?? undefined,
+              size: params.get('size') ?? undefined,
+            };
+            w.__pendingBooking = detail;
+            window.dispatchEvent(new CustomEvent('booking:open', { detail }));
+          },
+          true, // capture phase
+        );
+      }
+      document.addEventListener('astro:page-load', setupBookingInterceptor);
+      setupBookingInterceptor();
+    </script>
   </body>
 </html>

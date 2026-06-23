@@ -44,7 +44,7 @@ const props = [
         <div
           data-reveal
           data-reveal-index={i + 2}
-          class="surface-raised icon-hover-trigger p-6"
+          class="surface-raised card-hover icon-hover-trigger p-6"
         >
           <div class="text-brand" set:html={p.icon} />
           <h3 class="mt-4 font-semibold text-text">{p.title}</h3>
@@ -54,3 +54,27 @@ const props = [
     </div>
   </Container>
 </Section>
+
+<script>
+  // Phase 5 — Motion One micro-animation: a subtle scale-in on each value-prop icon as its card
+  // enters view. transform-only (no hidden state), gated on reduced-motion. One element per card.
+  import { animate, inView } from 'motion';
+  import { prefersReducedMotion } from '@/lib/motion';
+
+  if (!prefersReducedMotion()) {
+    inView(
+      '#value .icon-hover-trigger',
+      (el) => {
+        const icon = el.querySelector('svg');
+        if (icon) {
+          animate(
+            icon,
+            { transform: ['scale(0.7)', 'scale(1)'] },
+            { duration: 0.45, ease: [0.05, 0.7, 0.1, 1] },
+          );
+        }
+      },
+      { amount: 0.6 },
+    );
+  }
+</script>
