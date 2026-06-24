@@ -9,6 +9,7 @@
  */
 import Container from '@/components/ui/Container.astro';
 import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
 
 const credentials = [
   { label: 'Certified Technicians' },
@@ -28,11 +29,12 @@ const products: { name: string; note: string; logo?: string }[] = [
 
 <Section id="social-proof">
   <Container>
-    <h2 data-reveal data-reveal-index="0">Built on Real Results</h2>
-    <p data-reveal data-reveal-index="1" class="mt-3 max-w-2xl text-text-muted">
-      No shortcuts, no fabricated reviews — just certified work, premium products, and a guarantee
-      that backs every job.
-    </p>
+    <SectionHeader
+      eyebrow="Confidence"
+      title="Built on Process, Not Hype"
+      description="No inflated claims. We focus on repeatable quality standards, insured technicians, and products trusted by professional detailers."
+      descriptionWidth="md"
+    />
 
     <!-- Guarantee callout -->
     <div

@@ -9,23 +9,25 @@ import { CTA } from '@/data/site';
 interface NavLink {
   href: string;
   label: string;
+  description: string;
 }
 
 const DRAWER_ID = 'mobile-nav-drawer';
 const DESKTOP_MQ = '(min-width: 1024px)';
 
 const links: NavLink[] = [
-  { href: '#value', label: 'Services' },
-  { href: '#pricing', label: 'Pricing' },
-  { href: '#work', label: 'Our Work' },
-  { href: '#service-area', label: 'Service Area' },
-  { href: '#how-it-works', label: 'How It Works' },
-  { href: '#faq', label: 'FAQ' },
+  { href: '#value', label: 'Services', description: 'What is included in each detail' },
+  { href: '#pricing', label: 'Pricing', description: 'Select size and compare packages' },
+  { href: '#how-it-works', label: 'How It Works', description: 'From booking to handoff in 3 steps' },
+  { href: '#work', label: 'Our Work', description: 'Transformation gallery and results' },
+  { href: '#service-area', label: 'Service Area', description: 'Cities and ZIP availability' },
+  { href: '#faq', label: 'FAQ', description: 'Common questions before booking' },
 ];
 
 const isOpen = ref(false);
 /** Gate Teleport until client mount — avoids SSR/hydration mismatch with Astro islands. */
 const isMounted = ref(false);
+const activeHash = ref('#value');
 const triggerRef = ref<HTMLButtonElement | null>(null);
 const drawerRef = ref<HTMLElement | null>(null);
 const closeRef = ref<HTMLButtonElement | null>(null);
@@ -33,6 +35,7 @@ const closeRef = ref<HTMLButtonElement | null>(null);
 let savedScrollY = 0;
 let previousFocus: HTMLElement | null = null;
 let desktopMq: MediaQueryList | null = null;
+let sectionObserver: IntersectionObserver | null = null;
 let htmlOverflow = '';
 
 function lockBodyScroll(): void {
@@ -108,6 +111,7 @@ function toggleMenu(): void {
 }
 
 async function closeAndNavigate(href: string): Promise<void> {
+  activeHash.value = href;
   closeMenu();
   await nextTick();
   requestAnimationFrame(() => {
@@ -119,6 +123,54 @@ async function closeAndNavigate(href: string): Promise<void> {
 
 function onBookingOpen(): void {
   closeMenu();
+}
+
+function getNormalizedHash(hash: string): string {
+  if (!hash) return '#value';
+  return hash.startsWith('#') ? hash : `#${hash}`;
+}
+
+function updateActiveHash(): void {
+  activeHash.value = getNormalizedHash(globalThis.location.hash);
+}
+
+function setupSectionObserver(): void {
+  if (!('IntersectionObserver' in globalThis)) return;
+  const sections = links
+    .map((link) => document.querySelector<HTMLElement>(link.href))
+    .filter((el): el is HTMLElement => el instanceof HTMLElement);
+  if (sections.length === 0) return;
+
+  const sectionRatios = new Map<string, number>();
+  for (const section of sections) {
+    sectionRatios.set(section.id, 0);
+  }
+
+  sectionObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        const id = (entry.target as HTMLElement).id;
+        if (!id) continue;
+        sectionRatios.set(id, entry.isIntersecting ? entry.intersectionRatio : 0);
+      }
+      let bestId = '';
+      let bestRatio = 0;
+      for (const [id, ratio] of sectionRatios.entries()) {
+        if (ratio > bestRatio) {
+          bestRatio = ratio;
+          bestId = id;
+        }
+      }
+      if (!bestId) return;
+      activeHash.value = `#${bestId}`;
+    },
+    {
+      threshold: [0.2, 0.45, 0.7],
+      rootMargin: '-20% 0px -55% 0px',
+    },
+  );
+
+  sections.forEach((section) => sectionObserver?.observe(section));
 }
 
 function trapFocus(event: KeyboardEvent): void {
@@ -169,14 +221,20 @@ watch(isOpen, async (open) => {
 
 onMounted(() => {
   isMounted.value = true;
+  updateActiveHash();
+  setupSectionObserver();
   globalThis.addEventListener('booking:open', onBookingOpen);
+  globalThis.addEventListener('hashchange', updateActiveHash);
   desktopMq = globalThis.matchMedia(DESKTOP_MQ);
   desktopMq.addEventListener('change', onBreakpointChange);
 });
 
 onBeforeUnmount(() => {
   globalThis.removeEventListener('booking:open', onBookingOpen);
+  globalThis.removeEventListener('hashchange', updateActiveHash);
   desktopMq?.removeEventListener('change', onBreakpointChange);
+  sectionObserver?.disconnect();
+  sectionObserver = null;
   document.removeEventListener('keydown', onKeydown);
   if (isOpen.value) unlockBodyScroll();
 });
@@ -223,15 +281,16 @@ onBeforeUnmount(() => {
       </Transition>
 
       <Transition name="mobile-nav-drawer">
-        <aside
+        <dialog
           v-if="isOpen"
           :id="DRAWER_ID"
           ref="drawerRef"
-          role="dialog"
+          open
           aria-modal="true"
           aria-label="Navigation menu"
-          class="mobile-nav-drawer surface-raised fixed inset-y-0 right-0 z-[90] flex h-svh w-[min(22rem,calc(100vw-1rem))] flex-col border-l border-border shadow-2xl outline-none"
+          class="mobile-nav-drawer surface-raised fixed inset-y-0 right-0 z-[90] m-0 flex h-svh w-[min(22rem,calc(100vw-1rem))] flex-col border-l border-border p-0 shadow-2xl outline-none"
           style="padding-bottom: max(1rem, env(safe-area-inset-bottom))"
+          @cancel.prevent="closeMenu"
           @keydown="trapFocus"
         >
           <header
@@ -271,13 +330,21 @@ onBeforeUnmount(() => {
               v-for="(link, index) in links"
               :key="link.href"
               :href="link.href"
-              class="group flex min-h-11 items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-text-muted transition-[background-color,color,transform] duration-[--dur-fast] ease-[--ease-standard] hover:bg-bg hover:text-text active:scale-[0.99]"
+              class="group flex min-h-11 items-start justify-between rounded-xl px-4 py-3 text-sm font-medium transition-[background-color,color,transform,border-color] duration-[--dur-fast] ease-[--ease-standard] active:scale-[0.99]"
+              :class="
+                activeHash === link.href
+                  ? 'border border-brand/50 bg-brand-tint text-text'
+                  : 'border border-transparent text-text-muted hover:bg-bg hover:text-text'
+              "
               :style="{ transitionDelay: `${index * 30}ms` }"
               @click.prevent="closeAndNavigate(link.href)"
             >
-              <span>{{ link.label }}</span>
+              <span class="flex min-w-0 flex-col items-start gap-0.5">
+                <span>{{ link.label }}</span>
+                <span class="text-xs font-normal text-text-muted">{{ link.description }}</span>
+              </span>
               <svg
-                class="size-4 text-text-muted opacity-0 transition-opacity duration-[--dur-fast] group-hover:opacity-100"
+                class="mt-0.5 size-4 text-text-muted opacity-70 transition-opacity duration-[--dur-fast] group-hover:opacity-100"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -300,7 +367,7 @@ onBeforeUnmount(() => {
             </a>
             <p class="mt-3 text-center text-xs text-text-muted">No card required upfront.</p>
           </footer>
-        </aside>
+        </dialog>
       </Transition>
     </Teleport>
   </div>

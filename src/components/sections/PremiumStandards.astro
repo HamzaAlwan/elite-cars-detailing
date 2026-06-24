@@ -1,0 +1,122 @@
+---
+import Container from '@/components/ui/Container.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+
+interface ServicePromise {
+  label: string;
+  detail: string;
+}
+
+const servicePromises: ServicePromise[] = [
+  {
+    label: 'Arrival window',
+    detail: 'Clear ETA updates before we arrive, so your day stays predictable.',
+  },
+  {
+    label: 'Paint-safe workflow',
+    detail: 'Tool and towel discipline designed to minimize swirl risk on every vehicle.',
+  },
+  {
+    label: 'Final walkthrough',
+    detail: 'We review the finish with you before payment and handle any touch-ups immediately.',
+  },
+  {
+    label: 'Weather flexibility',
+    detail: 'Easy rescheduling when Texas weather shifts unexpectedly.',
+  },
+];
+
+const qualityPillars = ['Owner-operated care', 'Insured professionals', 'Satisfaction-first policy'];
+
+const rightFitList = [
+  'Drivers who care about long-term paint condition',
+  'Busy households and professionals who want on-site convenience',
+  'Owners preparing for sale, lease return, or special events',
+];
+
+const notIdealList = [
+  'Express gas-station style wash expectations',
+  'Last-minute requests with no scheduling flexibility',
+  'Vehicles requiring bodywork rather than detailing',
+];
+---
+
+<Section id="premium-standards">
+  <Container>
+    <SectionHeader
+      eyebrow="Standards"
+      title="What Premium Means at Your Driveway"
+      description="Our service standard centers on disciplined process, clear communication, and finish consistency so the experience feels as premium as the result."
+      descriptionWidth="lg"
+    />
+
+    <ul data-reveal data-reveal-index="2" class="mt-5 flex flex-wrap gap-2.5">
+      {
+        qualityPillars.map((pillar) => (
+          <li class="inline-flex min-h-9 items-center rounded-full border border-border bg-bg-elevated px-3.5 text-xs font-medium text-text-muted">
+            {pillar}
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-8 grid gap-5 lg:grid-cols-2">
+      <article data-reveal data-reveal-index="3" class="surface-raised p-6 md:p-7">
+        <h3 class="font-semibold text-text">Service Promises</h3>
+        <ul class="mt-4 space-y-2.5">
+          {
+            servicePromises.map((item) => (
+              <li class="rounded-xl border border-border bg-bg px-4 py-3.5">
+                <p class="flex items-center gap-2 text-sm font-semibold text-text">
+                  <span class="inline-flex h-1.5 w-1.5 rounded-full bg-brand"></span>
+                  {item.label}
+                </p>
+                <p class="mt-1.5 pl-3.5 text-sm text-text-muted">{item.detail}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </article>
+
+      <article
+        data-reveal
+        data-reveal-index="4"
+        class="surface-raised flex h-full flex-col p-6 md:p-7"
+      >
+        <h3 class="font-semibold text-text">Is This Service a Great Fit?</h3>
+        <p class="mt-1.5 text-sm text-text-muted">
+          We focus on owners who value long-term finish quality and a predictable, premium process.
+        </p>
+        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+          <section class="rounded-xl border border-border bg-bg px-4 py-3.5">
+            <h4 class="font-semibold text-text">Great Fit</h4>
+            <ul class="mt-2 space-y-2 text-sm text-text-muted">
+              {rightFitList.map((item) => <li>• {item}</li>)}
+            </ul>
+          </section>
+          <section class="rounded-xl border border-border bg-bg px-4 py-3.5">
+            <h4 class="font-semibold text-text">Not Ideal For</h4>
+            <ul class="mt-2 space-y-2 text-sm text-text-muted">
+              {notIdealList.map((item) => <li>• {item}</li>)}
+            </ul>
+          </section>
+        </div>
+        <div class="mt-5 flex flex-wrap gap-2.5">
+          <a
+            href="#pricing"
+            class="btn-subtle inline-flex min-h-10 items-center justify-center rounded-full px-4 text-xs font-medium"
+          >
+            Compare packages
+          </a>
+          <a
+            href="#quote"
+            class="btn-subtle inline-flex min-h-10 items-center justify-center rounded-full px-4 text-xs font-medium"
+          >
+            Ask for guidance
+          </a>
+        </div>
+      </article>
+    </div>
+  </Container>
+</Section>

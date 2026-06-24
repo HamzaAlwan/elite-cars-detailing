@@ -9,8 +9,9 @@
  * OWNER ACTION: Replace WEB3FORMS_ACCESS_KEY in src/data/site.ts with your real key
  * from web3forms.com before launch (P9-T2).
  */
-import { ref, reactive, nextTick } from 'vue';
+import { ref, reactive, nextTick, computed } from 'vue';
 import { WEB3FORMS_ACCESS_KEY, CONTACT, CTA } from '@/data/site';
+import { hasConfiguredPhone } from '@/lib/contact';
 import {
   validateName as checkName,
   validatePhone as checkPhone,
@@ -19,12 +20,13 @@ import {
   quoteSchema,
 } from '@/lib/validation';
 
-const hasPhone = CONTACT.phoneE164 !== '{{PHONE_E164}}';
+const hasPhone = hasConfiguredPhone(CONTACT.phoneE164);
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
 const status = ref<Status>('idle');
 const errorMessage = ref('');
+const isAdditionalDetailsOpen = ref(false);
 
 const fields = reactive({
   name: '',
@@ -61,6 +63,13 @@ async function focusFirstError() {
   const first = order.find((k) => errors[k]);
   if (first) document.getElementById(`q-${first}`)?.focus();
 }
+
+const liveStatusMessage = computed((): string => {
+  if (status.value === 'loading') return 'Sending your quote request.';
+  if (status.value === 'success') return 'Quote request sent successfully.';
+  if (status.value === 'error') return `Quote request failed. ${errorMessage.value}`;
+  return '';
+});
 
 async function submit() {
   const result = quoteSchema.safeParse({ ...fields });
@@ -113,7 +122,6 @@ async function submit() {
     <div
       v-if="status === 'success'"
       key="success"
-      role="status"
       class="surface-raised p-6 text-center md:p-8"
     >
       <svg
@@ -151,6 +159,10 @@ async function submit() {
       aria-label="Quote request form"
       @submit.prevent="submit"
     >
+      <p class="sr-only" aria-live="polite">
+        {{ liveStatusMessage }}
+      </p>
+
       <!-- Honeypot — spam protection -->
       <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" aria-hidden="true" />
 
@@ -224,48 +236,80 @@ async function submit() {
       </div>
 
       <!-- Vehicle -->
-      <div>
-        <label for="q-vehicle" class="mb-1.5 block text-sm font-medium text-text">
-          Vehicle <span class="ml-1 text-xs font-normal text-text-muted">(year, make, model)</span>
-        </label>
-        <input
-          id="q-vehicle"
-          v-model="fields.vehicle"
-          type="text"
-          autocomplete="off"
-          placeholder="e.g. 2022 BMW X5"
-          class="form-input"
-        />
+      <div class="rounded-xl border border-border bg-bg-elevated px-4 py-3">
+        <button
+          type="button"
+          class="flex min-h-11 w-full cursor-pointer items-center justify-between text-left text-sm font-medium text-text"
+          :aria-expanded="isAdditionalDetailsOpen"
+          aria-controls="q-optional-details"
+          @click="isAdditionalDetailsOpen = !isAdditionalDetailsOpen"
+        >
+          <span>Add more details for a faster quote (optional)</span>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            class="transition-transform duration-150"
+            :class="{ 'rotate-180': isAdditionalDetailsOpen }"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
       </div>
 
-      <!-- Service interest -->
-      <div>
-        <label for="q-service" class="mb-1.5 block text-sm font-medium text-text">
-          Service interested in
-        </label>
-        <select id="q-service" v-model="fields.service" class="form-input">
-          <option value="" disabled>Select a package…</option>
-          <option value="standard-reset">The Standard Reset</option>
-          <option value="elite-signature">The Elite Signature</option>
-          <option value="ceramic-upgrade">Ceramic Showroom Upgrade</option>
-          <option value="not-sure">Not sure — need a recommendation</option>
-        </select>
-      </div>
+      <Transition name="quote-form">
+        <div v-if="isAdditionalDetailsOpen" id="q-optional-details" class="space-y-4">
+          <!-- Vehicle -->
+          <div>
+            <label for="q-vehicle" class="mb-1.5 block text-sm font-medium text-text">
+              Vehicle <span class="ml-1 text-xs font-normal text-text-muted">(year, make, model)</span>
+            </label>
+            <input
+              id="q-vehicle"
+              v-model="fields.vehicle"
+              type="text"
+              autocomplete="off"
+              placeholder="e.g. 2022 BMW X5"
+              class="form-input"
+            />
+          </div>
 
-      <!-- Notes -->
-      <div>
-        <label for="q-notes" class="mb-1.5 block text-sm font-medium text-text">
-          Anything else we should know?
-          <span class="ml-1 text-xs font-normal text-text-muted">(optional)</span>
-        </label>
-        <textarea
-          id="q-notes"
-          v-model="fields.notes"
-          rows="3"
-          placeholder="Pet hair, specific concerns, preferred timing, address…"
-          class="form-input"
-        ></textarea>
-      </div>
+          <!-- Service interest -->
+          <div>
+            <label for="q-service" class="mb-1.5 block text-sm font-medium text-text">
+              Service interested in
+            </label>
+            <select id="q-service" v-model="fields.service" class="form-input">
+              <option value="" disabled>Select a package…</option>
+              <option value="standard-reset">The Standard Reset</option>
+              <option value="elite-signature">The Elite Signature</option>
+              <option value="ceramic-upgrade">Ceramic Showroom Upgrade</option>
+              <option value="not-sure">Not sure — need a recommendation</option>
+            </select>
+          </div>
+
+          <!-- Notes -->
+          <div>
+            <label for="q-notes" class="mb-1.5 block text-sm font-medium text-text">
+              Anything else we should know?
+              <span class="ml-1 text-xs font-normal text-text-muted">(optional)</span>
+            </label>
+            <textarea
+              id="q-notes"
+              v-model="fields.notes"
+              rows="3"
+              placeholder="Pet hair, specific concerns, preferred timing, address…"
+              class="form-input"
+            ></textarea>
+          </div>
+        </div>
+      </Transition>
 
       <!-- Error feedback -->
       <div

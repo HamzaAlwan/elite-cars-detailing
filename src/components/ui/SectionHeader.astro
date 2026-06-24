@@ -1,0 +1,61 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  eyebrow?: string;
+  align?: 'left' | 'center';
+  descriptionWidth?: 'sm' | 'md' | 'lg';
+  class?: string;
+  revealIndexTitle?: number;
+  revealIndexDescription?: number;
+}
+
+const {
+  title,
+  description = '',
+  eyebrow = '',
+  align = 'left',
+  descriptionWidth = 'lg',
+  class: className = '',
+  revealIndexTitle = 0,
+  revealIndexDescription = 1,
+} = Astro.props;
+
+const widthClasses = {
+  sm: 'max-w-xl',
+  md: 'max-w-2xl',
+  lg: 'max-w-3xl',
+} as const;
+---
+
+<header
+  class:list={[
+    'section-header',
+    align === 'center' ? 'mx-auto text-center' : '',
+    className,
+  ]}
+>
+  {
+    eyebrow && (
+      <p
+        data-reveal
+        data-reveal-index={Math.max(revealIndexTitle - 1, 0)}
+        class="section-eyebrow"
+      >
+        {eyebrow}
+      </p>
+    )
+  }
+  <h2 data-reveal data-reveal-index={revealIndexTitle}>{title}</h2>
+  {
+    description && (
+      <p
+        data-reveal
+        data-reveal-index={revealIndexDescription}
+        class:list={['section-description mt-3 text-text-muted', widthClasses[descriptionWidth]]}
+      >
+        {description}
+      </p>
+    )
+  }
+</header>

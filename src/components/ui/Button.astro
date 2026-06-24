@@ -6,7 +6,7 @@
  */
 interface Props {
   href?: string;
-  variant?: 'primary' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'subtle';
   type?: 'button' | 'submit';
   class?: string;
 }
@@ -16,7 +16,9 @@ const base =
   'inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full px-6 font-medium tracking-tight';
 const variants = {
   primary: 'btn-metal',
+  secondary: 'btn-secondary',
   ghost: 'border border-border text-text transition-colors hover:border-border-bright',
+  subtle: 'btn-subtle',
 } as const;
 const classes = [base, variants[variant], className];
 ---

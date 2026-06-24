@@ -6,17 +6,19 @@
  */
 import Container from '@/components/ui/Container.astro';
 import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
 import ZipValidator from '@/components/islands/ZipValidator.vue';
 import { SERVICE_AREA_CITIES } from '@/data/site';
 ---
 
 <Section id="service-area">
   <Container>
-    <h2 data-reveal data-reveal-index="0">Serving Richardson &amp; the DFW Metro</h2>
-    <p data-reveal data-reveal-index="1" class="mt-3 max-w-2xl text-text-muted">
-      We cover a 50-mile radius from our Richardson, TX base — from Frisco down to Irving, and
-      everywhere between.
-    </p>
+    <SectionHeader
+      eyebrow="Service Area"
+      title="Serving Richardson & the DFW Metro"
+      description="We serve a 50-mile radius from Richardson, including Frisco, Plano, Dallas, Irving, and surrounding DFW communities."
+      descriptionWidth="md"
+    />
 
     <!-- City pill chips -->
     <ul

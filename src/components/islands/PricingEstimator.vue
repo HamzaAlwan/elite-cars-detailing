@@ -35,7 +35,7 @@ function onZipKeydown(e: KeyboardEvent) {
   if (e.key === 'Enter') checkZip();
 }
 
-const bookHref = computed(() => `#book?size=${selected.value}`);
+const bookHref = computed((): string => `#book?size=${selected.value}`);
 
 onMounted(() => {
   const saved = sessionStorage.getItem(SESSION_KEY) as Size | null;
@@ -85,63 +85,63 @@ function applyPrices(size: Size) {
         :key="size.value"
         :value="size.value"
         :aria-label="size.label"
-        class="group flex min-h-[108px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-bg-elevated p-4 transition-all duration-150 hover:border-border-bright data-[state=on]:scale-[1.01] data-[state=on]:border-brand data-[state=on]:bg-brand-tint data-[state=on]:shadow-[0_0_0_1px_var(--color-brand),0_0_24px_rgb(30_95_255/0.15)]"
+        class="vehicle-option group relative flex min-h-[112px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-bg-elevated p-4 transition-[transform,border-color,background-color,box-shadow] duration-200 ease-[--ease-standard] hover:border-border-bright data-[state=on]:-translate-y-0.5 data-[state=on]:border-brand data-[state=on]:bg-[linear-gradient(180deg,rgba(30,95,255,0.16),rgba(30,95,255,0.08))] data-[state=on]:shadow-[0_0_0_1px_var(--color-brand),0_0_28px_rgb(30_95_255/0.24)]"
       >
+        <div
+          class="vehicle-icon-wrap inline-flex h-12 w-12 items-center justify-center rounded-full border border-border/70 bg-bg text-text-muted transition-[border-color,background-color,color,box-shadow] duration-200 ease-[--ease-standard] group-data-[state=on]:border-brand/60 group-data-[state=on]:bg-brand-tint group-data-[state=on]:text-brand group-data-[state=on]:shadow-[0_0_0_1px_rgb(30_95_255/0.35)]"
+        >
         <!-- Vehicle icon — Tabler Icons (MIT), stroke-based, color tracks selection via group -->
         <!-- SEDAN -->
         <svg
           v-if="size.value === 'sedan'"
-          class="h-11 w-11 text-text-muted transition-colors duration-150 group-data-[state=on]:text-brand"
+          class="vehicle-icon h-[2.625rem] w-[2.625rem] transition-colors duration-150"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="1.5"
+          stroke-width="1.8"
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
         >
-          <path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-          <path d="M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-          <path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5" />
+          <path d="M4 16.5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+          <path d="M16 16.5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+          <path d="M4 16.5h-1.25v-5.25l1.75 -4.5h9l3.8 4.5h1.2a1.8 1.8 0 0 1 1.8 1.8v3.45h-1.7m-3.6 0h-6.5m-4.45 -5.25h13.5" />
         </svg>
         <!-- SUV -->
         <svg
           v-else-if="size.value === 'suv'"
-          class="h-11 w-11 text-text-muted transition-colors duration-150 group-data-[state=on]:text-brand"
+          class="vehicle-icon h-[2.625rem] w-[2.625rem] transition-colors duration-150"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="1.5"
+          stroke-width="1.8"
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
         >
-          <path d="M5 17a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-          <path d="M16 17a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-          <path d="M5 9l2 -4h7.438a2 2 0 0 1 1.94 1.515l.622 2.485h3a2 2 0 0 1 2 2v3" />
-          <path d="M10 9v-4" />
-          <path d="M2 7v4" />
-          <path
-            d="M22.001 14.001a4.992 4.992 0 0 0 -4.001 -2.001a4.992 4.992 0 0 0 -4 2h-3a4.998 4.998 0 0 0 -8.003 .003"
-          />
-          <path d="M5 12v-3h13" />
+          <path d="M4 16.5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+          <path d="M16 16.5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+          <path d="M3 16.5v-4.8a2 2 0 0 1 2 -2h1.2l1.6 -3h6.6a2.3 2.3 0 0 1 2.15 1.5l.7 1.9h2.15a2 2 0 0 1 2 2v4.4" />
+          <path d="M9.5 9.7v-3" />
+          <path d="M5.5 12h12.2" />
         </svg>
         <!-- TRUCK -->
         <svg
           v-else
-          class="h-11 w-11 text-text-muted transition-colors duration-150 group-data-[state=on]:text-brand"
+          class="vehicle-icon h-[2.625rem] w-[2.625rem] transition-colors duration-150"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="1.5"
+          stroke-width="1.8"
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
         >
-          <path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-          <path d="M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-          <path d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" />
+          <path d="M4.5 16.5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+          <path d="M15.5 16.5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+          <path d="M3 16.5v-9.8a1 1 0 0 1 1 -1h8.5v10.8m-4 0h7.2m3.3 0h2v-5.8h-8v-5h4.3l3.7 5.1" />
         </svg>
+        </div>
 
         <span class="text-sm leading-none font-semibold text-text">{{ size.short }}</span>
         <span class="hidden text-center text-[11px] leading-tight text-text-muted sm:block">{{
@@ -245,5 +245,43 @@ function applyPrices(size: Size) {
         and we'll reach out.
       </output>
     </div>
+
   </div>
 </template>
+
+<style scoped>
+.vehicle-option[data-state='on'] .vehicle-icon {
+  animation: vehicle-icon-pop 300ms cubic-bezier(0.18, 0.75, 0.28, 1);
+}
+
+.vehicle-option[data-state='on'] .vehicle-icon-wrap {
+  animation: vehicle-glow-pop 320ms cubic-bezier(0.18, 0.75, 0.28, 1);
+}
+
+@keyframes vehicle-icon-pop {
+  0% {
+    transform: scale(0.82) translateY(1px);
+    opacity: 0.8;
+  }
+  60% {
+    transform: scale(1.1) translateY(-1px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes vehicle-glow-pop {
+  0% {
+    box-shadow: 0 0 0 0 rgb(30 95 255 / 0);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgb(30 95 255 / 0.16);
+  }
+  100% {
+    box-shadow: 0 0 0 1px rgb(30 95 255 / 0.35);
+  }
+}
+</style>

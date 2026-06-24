@@ -7,6 +7,7 @@
 import Button from '@/components/ui/Button.astro';
 import Container from '@/components/ui/Container.astro';
 import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
 import { CTA } from '@/data/site';
 
 const steps = [
@@ -33,10 +34,12 @@ const steps = [
 
 <Section id="how-it-works">
   <Container>
-    <h2 data-reveal data-reveal-index="0">How It Works</h2>
-    <p data-reveal data-reveal-index="1" class="mt-3 max-w-2xl text-text-muted">
-      Three steps from booking to a showroom finish — simpler than a drive to the car wash.
-    </p>
+    <SectionHeader
+      eyebrow="Process"
+      title="How Your Detail Day Works"
+      description="Three streamlined steps from booking to final handoff, designed to fit cleanly into busy workdays."
+      descriptionWidth="md"
+    />
 
     <ol class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-3" role="list">
       {
@@ -56,8 +59,9 @@ const steps = [
     </ol>
 
     <!-- Trailing CTA — catches users convinced by the process explanation -->
-    <div data-reveal data-reveal-index="5" class="mt-8 flex justify-center">
-      <Button href="#book" variant="ghost">{CTA.book}</Button>
+    <div data-reveal data-reveal-index="5" class="mt-8 flex justify-center gap-3">
+      <Button href="#book">{CTA.book}</Button>
+      <Button href="#quote" variant="subtle">Need help choosing?</Button>
     </div>
   </Container>
 </Section>

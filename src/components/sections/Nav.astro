@@ -13,20 +13,20 @@ import { CTA } from '@/data/site';
 const links = [
   { href: '#value', label: 'Services' },
   { href: '#pricing', label: 'Pricing' },
+  { href: '#how-it-works', label: 'How It Works' },
   { href: '#work', label: 'Our Work' },
   { href: '#service-area', label: 'Service Area' },
-  { href: '#how-it-works', label: 'How It Works' },
   { href: '#faq', label: 'FAQ' },
 ];
 ---
 
 <header class="nav-glass sticky top-0 z-50 border-b border-border" transition:persist>
-  <Container class="flex h-16 items-center justify-between gap-4">
+  <Container class="flex h-16 items-center justify-between gap-5">
     <!-- Logo: back-to-top anchor -->
     <a
       href="#"
       aria-label="Elite Mobile Car Detailing — back to top"
-      class="shrink-0 focus-visible:outline-brand"
+      class="shrink-0 rounded-md focus-visible:outline-brand"
     >
       <img
         src="/logo-no-text.png"
@@ -40,12 +40,18 @@ const links = [
     </a>
 
     <!-- Desktop nav links (hidden on mobile) -->
-    <nav aria-label="Main navigation" class="hidden items-center gap-5 text-sm lg:flex">
+    <nav
+      id="desktop-main-nav"
+      aria-label="Main navigation"
+      class="hidden items-center gap-6 text-sm lg:flex"
+    >
       {
         links.map(({ href, label }) => (
           <a
             href={href}
-            class="text-text-muted transition-colors duration-[--dur-fast] hover:text-text"
+            class="nav-link"
+            data-desktop-nav-link
+            data-nav-target={href}
           >
             {label}
           </a>
@@ -55,7 +61,7 @@ const links = [
 
     <!-- Right side: Book CTA + Vue mobile nav (JS only) -->
     <div class="flex shrink-0 items-center gap-3">
-      <Button href="#book" class="hidden sm:inline-flex">{CTA.book}</Button>
+      <Button href="#book" class="hidden sm:inline-flex lg:min-h-10 lg:px-5 lg:text-sm">{CTA.book}</Button>
       <div class="lg:hidden">
         <!-- client:only — Teleport + Transition cannot SSR-hydrate safely with Astro View Transitions -->
         <MobileNav client:only="vue">
@@ -107,3 +113,77 @@ const links = [
     </nav>
   </noscript>
 </header>
+
+<script>
+  interface NavWindow extends Window {
+    __desktopNavBound?: boolean;
+  }
+
+  function getDesktopLinks(): HTMLAnchorElement[] {
+    return Array.from(
+      document.querySelectorAll<HTMLAnchorElement>('[data-desktop-nav-link][data-nav-target]'),
+    );
+  }
+
+  function setActiveDesktopLink(targetHash: string): void {
+    const links = getDesktopLinks();
+    for (const link of links) {
+      const href = link.getAttribute('data-nav-target') ?? '';
+      const isActive = href === targetHash;
+      link.classList.toggle('is-active', isActive);
+      if (isActive) {
+        link.setAttribute('aria-current', 'true');
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    }
+  }
+
+  function bindDesktopNav(): void {
+    const w = window as NavWindow;
+    if (w.__desktopNavBound) return;
+    w.__desktopNavBound = true;
+
+    const links = getDesktopLinks();
+    const sections = links
+      .map((link) => link.getAttribute('data-nav-target') ?? '')
+      .map((hash) => document.querySelector<HTMLElement>(hash))
+      .filter((section): section is HTMLElement => section instanceof HTMLElement);
+
+    if (!('IntersectionObserver' in window) || sections.length === 0) {
+      const initialHash = location.hash || '#value';
+      setActiveDesktopLink(initialHash);
+      return;
+    }
+
+    const ratios = new Map<string, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const id = (entry.target as HTMLElement).id;
+          if (!id) continue;
+          ratios.set(id, entry.isIntersecting ? entry.intersectionRatio : 0);
+        }
+
+        let bestId = '';
+        let bestRatio = 0;
+        for (const [id, ratio] of ratios.entries()) {
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            bestId = id;
+          }
+        }
+        if (!bestId) return;
+        const targetId = bestId;
+        setActiveDesktopLink(`#${targetId}`);
+      },
+      { threshold: [0.25, 0.45, 0.7], rootMargin: '-20% 0px -55% 0px' },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    setActiveDesktopLink(location.hash || '#value');
+  }
+
+  document.addEventListener('astro:page-load', bindDesktopNav);
+  bindDesktopNav();
+</script>

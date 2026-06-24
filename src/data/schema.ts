@@ -8,6 +8,7 @@
  */
 import { SITE, CONTACT, LOCATION, SERVICE_AREA_CITIES } from './site';
 import { FAQ_ITEMS } from './faq';
+import { hasConfiguredEmail, hasConfiguredPhone } from '@/lib/contact';
 
 const SERVICES = [
   {
@@ -34,7 +35,8 @@ const SERVICES = [
 ];
 
 export function buildLocalBusinessSchema() {
-  const hasPhone = CONTACT.phoneE164 !== '{{PHONE_E164}}';
+  const hasPhone = hasConfiguredPhone(CONTACT.phoneE164);
+  const hasEmail = hasConfiguredEmail(CONTACT.email);
   const hasGeo = LOCATION.lat !== 0;
 
   return {
@@ -45,7 +47,7 @@ export function buildLocalBusinessSchema() {
     slogan: SITE.tagline,
     url: SITE.url,
     ...(hasPhone && { telephone: CONTACT.phoneE164 }),
-    ...(CONTACT.email !== '{{EMAIL}}' && { email: CONTACT.email }),
+    ...(hasEmail && { email: CONTACT.email }),
     priceRange: '$125–$1,995',
     currenciesAccepted: 'USD',
     paymentAccepted: 'Credit Card, Cash, Apple Pay, Contactless',

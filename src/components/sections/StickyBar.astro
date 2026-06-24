@@ -7,6 +7,7 @@
  * Body gets matching bottom padding (added via class on <body> in Layout.astro).
  */
 import { CTA, CONTACT } from '@/data/site';
+import { hasConfiguredPhone } from '@/lib/contact';
 ---
 
 <div
@@ -16,13 +17,14 @@ import { CTA, CONTACT } from '@/data/site';
 >
   <div class="flex gap-3 px-4 pt-3">
     <a
+      id="sticky-primary-cta"
       href="#book"
       class="btn-metal flex flex-1 cursor-pointer items-center justify-center rounded-full py-3 text-sm font-medium"
     >
       {CTA.book}
     </a>
     {
-      CONTACT.phoneE164 !== '{{PHONE_E164}}' ? (
+      hasConfiguredPhone(CONTACT.phoneE164) ? (
         <a
           href={`tel:${CONTACT.phoneE164}`}
           aria-label={`Call us at ${CONTACT.phoneDisplay}`}
@@ -54,3 +56,64 @@ import { CTA, CONTACT } from '@/data/site';
     }
   </div>
 </div>
+
+<script>
+  type StickyMode = 'default' | 'choose';
+
+  interface StickyWindow extends Window {
+    __stickyBarBound?: boolean;
+  }
+
+  function getStickyElements(): { primary: HTMLAnchorElement | null; pricing: HTMLElement | null } {
+    return {
+      primary: document.getElementById('sticky-primary-cta') as HTMLAnchorElement | null,
+      pricing: document.getElementById('pricing'),
+    };
+  }
+
+  function updatePrimaryCta(mode: StickyMode): void {
+    const { primary } = getStickyElements();
+    if (!primary) return;
+    if (mode === 'choose') {
+      primary.href = '#pricing';
+      primary.textContent = 'Choose Package';
+      return;
+    }
+    primary.href = '#book';
+    primary.textContent = 'Book Your Detail';
+  }
+
+  function bindStickyBehavior(): void {
+    const w = window as StickyWindow;
+    if (w.__stickyBarBound) return;
+    w.__stickyBarBound = true;
+
+    const { pricing } = getStickyElements();
+    if (!pricing || !('IntersectionObserver' in window)) return;
+
+    let currentMode: StickyMode = 'default';
+    const setMode = (mode: StickyMode): void => {
+      if (mode === currentMode) return;
+      currentMode = mode;
+      updatePrimaryCta(mode);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          setMode(entry.isIntersecting ? 'choose' : 'default');
+        }
+      },
+      {
+        threshold: [0.3, 0.55],
+        rootMargin: '-12% 0px -58% 0px',
+      },
+    );
+
+    observer.observe(pricing);
+    updatePrimaryCta('default');
+  }
+
+  document.addEventListener('astro:page-load', bindStickyBehavior);
+  bindStickyBehavior();
+</script>
