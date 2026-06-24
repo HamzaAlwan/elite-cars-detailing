@@ -69,3 +69,23 @@ internal (noindex, sitemap-excluded) and is removed before launch.
 ### Global reveal wired in `index.astro`
 
 Single `initReveal()` call in `index.astro` covers all `[data-reveal]` elements across every section. Per-section calls removed.
+
+---
+
+## Astro v6/v7 Upgrade (2026-06-24)
+
+### Applied
+
+- **`compressHTML: 'jsx'`** — explicitly pinned in `astro.config.mjs`. This is Astro 7's default; pinning documents the intent and guards against future default changes. Whitespace audit confirmed no regressions: all adjacent inline elements use CSS flex `gap` for spacing, not HTML whitespace.
+- **CSP (`security.csp`)** — enabled in `astro.config.mjs`. Astro auto-hashes all bundled scripts/styles and emits a `<meta http-equiv="content-security-policy">` on every page. Directives cover all known external origins (`api.web3forms.com`, `cal.com`, `app.cal.com`). **Must verify booking flow in `astro preview` before first deployment.**
+
+### Skipped
+
+- **Astro Fonts API** — current setup (single self-hosted variable woff2, manual `@font-face` + preload) is already optimal. The Fonts API would replicate what is already hand-tuned. Revisit only if additional font families are added.
+
+### Deferred — gated on moving to `output: 'server'` or `'hybrid'`
+
+- **Route caching** (`cache` + `routeRules`) — stable in v7. No-op on a fully static site. Enable when dynamic routes or on-demand APIs are introduced.
+- **Advanced routing** (`src/fetch.ts` entrypoint) — stable in v7. Enables full control over the request pipeline (middleware ordering, Hono integration). Enable when SSR/edge is needed. Note: `src/fetch.ts` is now a reserved filename — do not create it for unrelated purposes.
+- **Custom logger** (`logger: logHandlers.json()`) — stable in v7. Useful for log aggregation (Loki, CloudWatch) in SSR deployments. No value in static mode.
+- **Background dev server** (`astro dev --background`) — available now, minor QoL for AI-assisted dev workflows.

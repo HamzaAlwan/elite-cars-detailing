@@ -9,15 +9,7 @@ import Button from '@/components/ui/Button.astro';
 import Container from '@/components/ui/Container.astro';
 import MobileNav from '@/components/islands/MobileNav.vue';
 import { CTA } from '@/data/site';
-
-const links = [
-  { href: '#value', label: 'Services' },
-  { href: '#pricing', label: 'Pricing' },
-  { href: '#how-it-works', label: 'How It Works' },
-  { href: '#work', label: 'Our Work' },
-  { href: '#service-area', label: 'Service Area' },
-  { href: '#faq', label: 'FAQ' },
-];
+import { NAV_LINKS } from '@/lib/nav-scroll-spy';
 ---
 
 <header class="nav-glass sticky top-0 z-50 border-b border-border" transition:persist>
@@ -46,7 +38,7 @@ const links = [
       class="hidden items-center gap-6 text-sm lg:flex"
     >
       {
-        links.map(({ href, label }) => (
+        NAV_LINKS.map(({ href, label }) => (
           <a
             href={href}
             class="nav-link"
@@ -97,7 +89,7 @@ const links = [
     <nav aria-label="Mobile navigation" class="border-t border-border lg:hidden">
       <Container class="flex flex-col gap-1 py-4">
         {
-          links.map(({ href, label }) => (
+          NAV_LINKS.map(({ href, label }) => (
             <a
               href={href}
               class="min-h-11 rounded-lg px-3 py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-bg-elevated hover:text-text"
@@ -115,8 +107,14 @@ const links = [
 </header>
 
 <script>
-  interface NavWindow extends Window {
-    __desktopNavBound?: boolean;
+  import {
+    getCurrentNavHash,
+    NAV_ACTIVE_CHANGE_EVENT,
+    startNavScrollSpy,
+  } from '@/lib/nav-scroll-spy';
+
+  interface DesktopNavWindow extends Window {
+    __desktopNavActiveCleanup?: () => void;
   }
 
   function getDesktopLinks(): HTMLAnchorElement[] {
@@ -140,49 +138,22 @@ const links = [
   }
 
   function bindDesktopNav(): void {
-    const w = window as NavWindow;
-    if (w.__desktopNavBound) return;
-    w.__desktopNavBound = true;
-
-    const links = getDesktopLinks();
-    const sections = links
-      .map((link) => link.getAttribute('data-nav-target') ?? '')
-      .map((hash) => document.querySelector<HTMLElement>(hash))
-      .filter((section): section is HTMLElement => section instanceof HTMLElement);
-
-    if (!('IntersectionObserver' in window) || sections.length === 0) {
-      const initialHash = location.hash || '#value';
-      setActiveDesktopLink(initialHash);
-      return;
-    }
-
-    const ratios = new Map<string, number>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          const id = (entry.target as HTMLElement).id;
-          if (!id) continue;
-          ratios.set(id, entry.isIntersecting ? entry.intersectionRatio : 0);
-        }
-
-        let bestId = '';
-        let bestRatio = 0;
-        for (const [id, ratio] of ratios.entries()) {
-          if (ratio > bestRatio) {
-            bestRatio = ratio;
-            bestId = id;
-          }
-        }
-        if (!bestId) return;
-        const targetId = bestId;
-        setActiveDesktopLink(`#${targetId}`);
-      },
-      { threshold: [0.25, 0.45, 0.7], rootMargin: '-20% 0px -55% 0px' },
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    setActiveDesktopLink(location.hash || '#value');
+    startNavScrollSpy();
+    setActiveDesktopLink(getCurrentNavHash());
   }
+
+  const navWindow = window as DesktopNavWindow;
+  navWindow.__desktopNavActiveCleanup?.();
+
+  const handleNavActiveChange = (event: Event): void => {
+    const activeHash = (event as CustomEvent<{ activeHash: string }>).detail.activeHash;
+    setActiveDesktopLink(activeHash);
+  };
+
+  window.addEventListener(NAV_ACTIVE_CHANGE_EVENT, handleNavActiveChange);
+  navWindow.__desktopNavActiveCleanup = () => {
+    window.removeEventListener(NAV_ACTIVE_CHANGE_EVENT, handleNavActiveChange);
+  };
 
   document.addEventListener('astro:page-load', bindDesktopNav);
   bindDesktopNav();
