@@ -1,8 +1,53 @@
 // @ts-check
+import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import vue from '@astrojs/vue';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+
+const HTML_FILE_EXTENSION = '.html';
+const CAL_STYLE_SRC_DIRECTIVE = "style-src 'self' https://app.cal.com 'unsafe-inline'";
+const STYLE_SRC_DIRECTIVE_PATTERN = /style-src [^;"]+/g;
+
+const rewriteHtmlCspStyleDirectives = async (directoryPath) => {
+  const directoryEntries = await readdir(directoryPath, { withFileTypes: true });
+
+  await Promise.all(
+    directoryEntries.map(async (directoryEntry) => {
+      const entryPath = join(directoryPath, directoryEntry.name);
+
+      if (directoryEntry.isDirectory()) {
+        await rewriteHtmlCspStyleDirectives(entryPath);
+        return;
+      }
+
+      if (!directoryEntry.isFile() || !directoryEntry.name.endsWith(HTML_FILE_EXTENSION)) {
+        return;
+      }
+
+      const html = await readFile(entryPath, 'utf8');
+      const updatedHtml = html.replace(STYLE_SRC_DIRECTIVE_PATTERN, CAL_STYLE_SRC_DIRECTIVE);
+
+      if (updatedHtml === html) {
+        return;
+      }
+
+      await writeFile(entryPath, updatedHtml);
+    }),
+  );
+};
+
+const calCspStyleInlineIntegration = () => ({
+  name: 'cal-csp-style-inline',
+  hooks: {
+    'astro:build:done': async ({ dir }) => {
+      // Astro always appends style hashes, which disables 'unsafe-inline' in modern browsers.
+      await rewriteHtmlCspStyleDirectives(fileURLToPath(dir));
+    },
+  },
+});
 
 // https://astro.build/config
 export default defineConfig({
@@ -19,9 +64,8 @@ export default defineConfig({
     // VERIFY BEFORE DEPLOYING: run `astro preview` and open the booking modal to
     // confirm Cal.com loads without CSP violations in the browser console.
     // Cal.com injects embed.js dynamically (src/lib/cal.ts), which is trusted via
-    // scriptDirective.resources. 'strict-dynamic' lets embed.js load its own children.
-    // If Cal injects inline styles into the parent page, add 'unsafe-hashes' or
-    // specific sha256 hashes to styleDirective to unblock those without unsafe-inline.
+    // scriptDirective.resources. Generated HTML is post-processed below so Cal's
+    // dynamic inline style attributes work without weakening script-src.
     //
     // Build warning "Shiki uses inline styles" is a false positive — this project has
     // no Markdown content and no <Code> component, so Shiki never runs.
@@ -45,24 +89,15 @@ export default defineConfig({
         resources: ["'self'", 'https://app.cal.com'],
       },
       styleDirective: {
-        // 'self' for our own styles. app.cal.com in case the embed injects a stylesheet.
-        // 'unsafe-hashes' enables hash-matching for inline style="" attributes (not blocks).
-        // The six hashes below are the exact sha256 values of Cal.com's overlay inline
-        // styles (template is static, so hashes are stable). If Cal.com's embed changes
-        // and new violations appear, add the hashes from the browser console error here.
-        resources: ["'self'", 'https://app.cal.com', "'unsafe-hashes'"],
-        hashes: [
-          'sha256-fTD9kmjQ3jI14aCHnSGEWLLEzeG+R5PKbJ7gOHqGnxU=',
-          'sha256-oaK6we1Vq8KxDTkxo5kSyj/h4nhMaEOYVnZzjPVG/yM=',
-          'sha256-eoXY6JQfqY/foPA402SRqsajCPS1DRalNn+v69CIWWE=',
-          'sha256-vU5mF8hYKxMXWb8TB8FLtjlIQ3TcJN7OikYIzvVc6lI=',
-          'sha256-FvIYyO2Bd3KAXsBL0Cks4yPia48yssOgxqmY/ersUUU=',
-          'sha256-BgUF1LuFZVD1niRj+0E77ej6GtqgSRx+zB3bXlj8CuE=',
-        ],
+        // 'unsafe-inline' is required because Cal.com's embed.js dynamically generates
+        // inline styles (iframe sizing, modal positioning, animations) with unique content
+        // on every interaction — hashes are not viable for dynamic style values.
+        resources: ["'self'", 'https://app.cal.com', "'unsafe-inline'"],
       },
     },
   },
   integrations: [
+    calCspStyleInlineIntegration(),
     vue(),
     // Exclude the internal /preview design showcase from the sitemap (P2B-T1).
     sitemap({ filter: (page) => !page.includes('/preview') }),
