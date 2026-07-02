@@ -1,11 +1,19 @@
 ---
+import Atmosphere from './Atmosphere.astro';
+
 interface Props {
   id?: string;
   class?: string;
+  /** Renders an ambient aurora layer behind the section's content (cinematic refresh). */
+  atmosphere?: 'hero' | 'brand' | 'subtle';
 }
-const { id, class: className = '' } = Astro.props;
+const { id, class: className = '', atmosphere } = Astro.props;
 ---
 
-<section id={id} class:list={['py-16 md:py-24', className]}>
+<section
+  id={id}
+  class:list={['py-16 md:py-24', atmosphere && 'relative isolate overflow-hidden', className]}
+>
+  {atmosphere && <Atmosphere variant={atmosphere} />}
   <slot />
 </section>

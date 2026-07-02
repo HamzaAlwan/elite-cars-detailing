@@ -1,0 +1,61 @@
+---
+/**
+ * Ambient aurora layer group — cinematic depth behind a section's content.
+ * Decorative only: absolute, aria-hidden, pointer-events-none, -z-10 (parent must be
+ * `relative isolate overflow-hidden`; Section.astro's `atmosphere` prop handles this).
+ * Blob drift is transform-only and goes static under prefers-reduced-motion (.aurora in global.css).
+ *
+ * Variants: 'hero' (richest, 3 blobs) | 'brand' (2 blobs, brand-forward) | 'subtle' (2 dim blobs).
+ */
+interface Props {
+  variant?: 'hero' | 'brand' | 'subtle';
+  class?: string;
+}
+const { variant = 'brand', class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={['pointer-events-none absolute inset-0 -z-10 overflow-hidden', className]}
+  aria-hidden="true"
+>
+  {
+    variant === 'hero' && (
+      <>
+        <div class="aurora" style="--x:72%; --y:12%; --size:46rem; --aurora-dur:16s;" />
+        <div
+          class="aurora aurora--deep hidden md:block"
+          style="--x:6%; --y:85%; --size:38rem; --aurora-dur:22s; animation-delay:-8s;"
+        />
+        <div
+          class="aurora"
+          style="--x:42%; --y:55%; --size:30rem; --aurora-dur:12s; --aurora-color:rgb(19 64 168 / 0.1); animation-delay:-4s;"
+        />
+      </>
+    )
+  }
+  {
+    variant === 'brand' && (
+      <>
+        <div class="aurora" style="--x:80%; --y:20%; --size:40rem; --aurora-dur:18s;" />
+        <div
+          class="aurora aurora--deep hidden md:block"
+          style="--x:10%; --y:78%; --size:34rem; --aurora-dur:24s; animation-delay:-10s;"
+        />
+      </>
+    )
+  }
+  {
+    variant === 'subtle' && (
+      <>
+        <div
+          class="aurora"
+          style="--x:75%; --y:30%; --size:36rem; --aurora-dur:20s; --aurora-color:rgb(30 95 255 / 0.07);"
+        />
+        <div
+          class="aurora aurora--deep hidden md:block"
+          style="--x:15%; --y:75%; --size:30rem; --aurora-dur:26s; animation-delay:-12s;"
+        />
+      </>
+    )
+  }
+</div>

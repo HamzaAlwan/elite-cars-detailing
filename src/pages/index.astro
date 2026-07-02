@@ -57,17 +57,11 @@ const jsonLd = [
   <!-- Hero — single h1 for the page lives here -->
   <Hero />
 
-  <hr class="divider-chrome" />
-
   <!-- Value props -->
   <ValueProps />
 
-  <hr class="divider-chrome" />
-
-  <!-- Pricing -->
+  <!-- Pricing (ambient atmosphere — no hairline divider against the glow) -->
   <Pricing />
-
-  <hr class="divider-chrome" />
 
   <!-- How It Works -->
   <HowItWorks />
@@ -82,20 +76,14 @@ const jsonLd = [
   <!-- Our Work gallery (Phase 5) -->
   <OurWork />
 
-  <hr class="divider-chrome" />
-
-  <!-- Social Proof -->
+  <!-- Social Proof (ambient atmosphere) -->
   <SocialProof />
-
-  <hr class="divider-chrome" />
 
   <!-- Service Area -->
   <ServiceArea />
 
-  <hr class="divider-chrome" />
-
   <!-- Booking — Cal.com embed (P6-T2) -->
-  <Section id="book">
+  <Section id="book" atmosphere="brand">
     <Container>
       <h2 data-reveal data-reveal-index="0">Book Your Detail</h2>
       <p data-reveal data-reveal-index="1" class="mt-3 max-w-2xl text-text-muted">
@@ -103,7 +91,7 @@ const jsonLd = [
         required up front; pay only after you're satisfied.
       </p>
       <p data-reveal data-reveal-index="2" class="mt-2 text-sm text-text-muted">
-        Prefer to talk? Call us at
+        Prefer to talk? Call us at{' '}
         {
           hasConfiguredPhone(CONTACT.phoneE164) ? (
             <a href={`tel:${CONTACT.phoneE164}`} class="text-brand hover:underline">
@@ -118,7 +106,7 @@ const jsonLd = [
         <!-- Opens the global BookingModal (Phase 4). href keeps a no-JS fallback (scrolls here). -->
         <a
           href="#book"
-          class="btn-metal inline-flex min-h-12 cursor-pointer items-center gap-2 rounded-full px-8 text-base font-medium"
+          class="btn-metal btn-glow inline-flex min-h-12 cursor-pointer items-center gap-2 rounded-full px-8 text-base font-medium"
         >
           <svg
             width="18"
@@ -143,7 +131,7 @@ const jsonLd = [
   </Section>
 
   <!-- Quote form — Web3Forms (P6-T3) -->
-  <Section id="quote">
+  <Section id="quote" atmosphere="subtle">
     <Container>
       <div
         data-reveal
@@ -236,8 +224,6 @@ const jsonLd = [
       </div>
     </Container>
   </Section>
-
-  <hr class="divider-chrome" />
 
   <!-- FAQ — animated Reka accordion (Phase 3); content + JSON-LD share src/data/faq.ts -->
   <Section id="faq">

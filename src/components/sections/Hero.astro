@@ -8,8 +8,10 @@
  * Cold-start: no fabricated star rating. Trust strip + guarantee badge instead.
  * Glow: static radial gradient (NOT backdrop-filter — iOS 18 safe §2.5).
  */
+import Atmosphere from '@/components/ui/Atmosphere.astro';
 import Button from '@/components/ui/Button.astro';
 import Container from '@/components/ui/Container.astro';
+import HeroScene from '@/components/sections/HeroScene.astro';
 import { SITE, CTA, CONTACT } from '@/data/site';
 import { hasConfiguredPhone } from '@/lib/contact';
 
@@ -31,14 +33,16 @@ const heroProofChips: HeroProofChip[] = [
 
 <section
   id="hero"
-  class="relative flex min-h-[100svh] items-center overflow-hidden py-24"
+  class="relative isolate flex min-h-[100svh] items-center overflow-hidden py-24"
 >
-  <!-- Decorative sapphire radial glow (background gradient, NOT backdrop-filter — iOS safe §2.5) -->
+  <!-- Cinematic atmosphere: drifting aurora blobs + one static near-black wash (iOS safe §2.5) -->
+  <Atmosphere variant="hero" />
   <div
-    class="pointer-events-none absolute right-0 top-1/4 h-[500px] w-[500px] -translate-y-1/4 translate-x-1/4 rounded-full"
-    style="background: radial-gradient(closest-side, rgba(30,95,255,.22), transparent);"
+    class="pointer-events-none absolute inset-0 -z-10"
+    style="background: linear-gradient(180deg, rgb(13 16 25 / 0.6), transparent 45%), radial-gradient(120% 70% at 75% 20%, var(--color-brand-aurora), transparent 60%);"
     aria-hidden="true"
-  ></div>
+  >
+  </div>
 
   <Container class="relative">
     <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
@@ -55,17 +59,17 @@ const heroProofChips: HeroProofChip[] = [
 
         <!-- Headline — the page's only h1 -->
         <h1
-          data-reveal
+          data-reveal="blur"
           data-reveal-index="1"
-          class="mt-3 text-h1 font-bold tracking-tight text-text"
+          class="mt-3 text-h1 text-text"
         >
-          Showroom Shine.<br />
+          <span class="headline-accent">Showroom Shine.</span><br />
           Delivered to Your Driveway.
         </h1>
 
         <!-- Subheadline -->
         <p
-          data-reveal
+          data-reveal="blur"
           data-reveal-index="2"
           class="mt-6 max-w-2xl text-lg leading-relaxed text-text-muted"
         >
@@ -88,7 +92,7 @@ const heroProofChips: HeroProofChip[] = [
           data-reveal-index="4"
           class="mt-8 flex flex-wrap items-center gap-3.5"
         >
-          <Button href="#book">{CTA.book}</Button>
+          <Button href="#book" class="btn-glow btn-glow--pulse">{CTA.book}</Button>
           <Button href="#quote" variant="secondary">{CTA.quote}</Button>
           <!-- Tap-to-call (mobile-prominent) — hidden until real number is set in site.ts -->
           {hasConfiguredPhone(CONTACT.phoneE164) && (
@@ -156,7 +160,7 @@ const heroProofChips: HeroProofChip[] = [
 
       <!-- Right column: hero image (desktop) / decorative silhouette fallback -->
       <div
-        data-reveal
+        data-reveal="blur"
         data-reveal-index="8"
         class="relative hidden lg:flex lg:items-center lg:justify-center"
       >
@@ -173,43 +177,7 @@ const heroProofChips: HeroProofChip[] = [
             class="w-full max-w-lg rounded-2xl object-cover shadow-2xl"
           />
         ) : (
-          <div class="surface-raised relative w-full max-w-lg overflow-hidden rounded-2xl p-8">
-            <div
-              class="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full"
-              style="background: radial-gradient(closest-side, rgba(30,95,255,.28), transparent);"
-              aria-hidden="true"
-            ></div>
-            <p class="text-xs font-semibold tracking-[0.16em] text-text-muted uppercase">
-              Signature Experience
-            </p>
-            <p class="mt-3 max-w-md text-sm leading-relaxed text-text-muted">
-              We built this service for owners who want premium care without giving up their day.
-              Every visit follows the same quality checklist and final handoff standard.
-            </p>
-            <img
-              src="/logo.png"
-              alt=""
-              aria-hidden="true"
-              width="480"
-              height="165"
-              class="mt-7 w-full opacity-90"
-              loading="eager"
-            />
-            <ul class="mt-6 space-y-2.5 text-sm text-text-muted">
-              <li class="flex items-center gap-2">
-                <span class="inline-flex h-1.5 w-1.5 rounded-full bg-brand"></span>
-                Dedicated process from arrival to walkthrough
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="inline-flex h-1.5 w-1.5 rounded-full bg-brand"></span>
-                Interior and exterior quality checks before handoff
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="inline-flex h-1.5 w-1.5 rounded-full bg-brand"></span>
-                Satisfaction-first touch-up policy
-              </li>
-            </ul>
-          </div>
+          <HeroScene />
         )}
       </div>
 

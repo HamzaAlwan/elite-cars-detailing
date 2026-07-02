@@ -11,7 +11,7 @@ import { hasConfiguredPhone } from '@/lib/contact';
 ---
 
 <div
-  class="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-bg-elevated md:hidden"
+  class="surface-glass fixed inset-x-0 bottom-0 z-50 border-x-0 border-b-0 md:hidden"
   style="padding-bottom: max(12px, env(safe-area-inset-bottom));"
   transition:persist
 >
@@ -21,7 +21,7 @@ import { hasConfiguredPhone } from '@/lib/contact';
       href="#book"
       class="btn-metal flex flex-1 cursor-pointer items-center justify-center rounded-full py-3 text-sm font-medium"
     >
-      {CTA.book}
+      <span data-cta-label>{CTA.book}</span>
     </a>
     {
       hasConfiguredPhone(CONTACT.phoneE164) ? (
@@ -71,16 +71,30 @@ import { hasConfiguredPhone } from '@/lib/contact';
     };
   }
 
+  const LABEL_FADE_MS = 150;
+
   function updatePrimaryCta(mode: StickyMode): void {
     const { primary } = getStickyElements();
     if (!primary) return;
-    if (mode === 'choose') {
-      primary.href = '#pricing';
-      primary.textContent = 'Choose Package';
+    const text = mode === 'choose' ? 'Choose Package' : 'Book Your Detail';
+    primary.href = mode === 'choose' ? '#pricing' : '#book';
+
+    const label = primary.querySelector<HTMLElement>('[data-cta-label]');
+    if (!label) {
+      primary.textContent = text;
       return;
     }
-    primary.href = '#book';
-    primary.textContent = 'Book Your Detail';
+    if (label.textContent === text) return;
+    // Fade out → swap → fade in; instant swap when the user prefers reduced motion.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      label.textContent = text;
+      return;
+    }
+    label.classList.add('is-swapping');
+    window.setTimeout(() => {
+      label.textContent = text;
+      label.classList.remove('is-swapping');
+    }, LABEL_FADE_MS);
   }
 
   function bindStickyBehavior(): void {
@@ -105,8 +119,10 @@ import { hasConfiguredPhone } from '@/lib/contact';
         }
       },
       {
-        threshold: [0.3, 0.55],
-        rootMargin: '-12% 0px -58% 0px',
+        // "Choose" mode while #pricing crosses the viewport's middle band — robust at any
+        // section height (the old margin+threshold combo misfired on short viewports).
+        threshold: 0,
+        rootMargin: '-45% 0px -45% 0px',
       },
     );
 
@@ -117,3 +133,12 @@ import { hasConfiguredPhone } from '@/lib/contact';
   document.addEventListener('astro:page-load', bindStickyBehavior);
   bindStickyBehavior();
 </script>
+
+<style>
+  [data-cta-label] {
+    transition: opacity 150ms var(--ease-in);
+  }
+  [data-cta-label].is-swapping {
+    opacity: 0;
+  }
+</style>

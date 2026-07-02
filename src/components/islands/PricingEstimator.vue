@@ -85,10 +85,10 @@ function applyPrices(size: Size) {
         :key="size.value"
         :value="size.value"
         :aria-label="size.label"
-        class="vehicle-option group relative flex min-h-[112px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-bg-elevated p-4 transition-[transform,border-color,background-color,box-shadow] duration-200 ease-[--ease-standard] hover:border-border-bright data-[state=on]:-translate-y-0.5 data-[state=on]:border-brand data-[state=on]:bg-[linear-gradient(180deg,rgba(30,95,255,0.16),rgba(30,95,255,0.08))] data-[state=on]:shadow-[0_0_0_1px_var(--color-brand),0_0_28px_rgb(30_95_255/0.24)]"
+        class="vehicle-option group relative flex min-h-[112px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-bg-elevated p-4 transition-[transform,border-color,background-color,box-shadow] duration-200 ease-[--ease-standard] hover:border-border-bright data-[state=on]:-translate-y-0.5 data-[state=on]:border-brand"
       >
         <div
-          class="vehicle-icon-wrap inline-flex h-12 w-12 items-center justify-center rounded-full border border-border/70 bg-bg text-text-muted transition-[border-color,background-color,color,box-shadow] duration-200 ease-[--ease-standard] group-data-[state=on]:border-brand/60 group-data-[state=on]:bg-brand-tint group-data-[state=on]:text-brand group-data-[state=on]:shadow-[0_0_0_1px_rgb(30_95_255/0.35)]"
+          class="vehicle-icon-wrap inline-flex h-12 w-12 items-center justify-center rounded-full border border-border/70 bg-bg text-text-muted transition-[border-color,background-color,color,box-shadow] duration-200 ease-[--ease-standard] group-data-[state=on]:border-brand/60 group-data-[state=on]:bg-brand-tint group-data-[state=on]:text-brand"
         >
         <!-- Vehicle icon — Tabler Icons (MIT), stroke-based, color tracks selection via group -->
         <!-- SEDAN -->
@@ -250,11 +250,20 @@ function applyPrices(size: Size) {
 </template>
 
 <style scoped>
+/* Selected-state visuals live here (design tokens) instead of arbitrary-value utilities. */
+.vehicle-option[data-state='on'] {
+  background-image: linear-gradient(180deg, rgb(30 95 255 / 0.16), rgb(30 95 255 / 0.08));
+  box-shadow:
+    0 0 0 1px var(--color-brand),
+    var(--shadow-glow-md);
+}
+
 .vehicle-option[data-state='on'] .vehicle-icon {
   animation: vehicle-icon-pop 300ms cubic-bezier(0.18, 0.75, 0.28, 1);
 }
 
 .vehicle-option[data-state='on'] .vehicle-icon-wrap {
+  box-shadow: 0 0 0 1px var(--color-brand-glow);
   animation: vehicle-glow-pop 320ms cubic-bezier(0.18, 0.75, 0.28, 1);
 }
 
@@ -281,7 +290,7 @@ function applyPrices(size: Size) {
     box-shadow: 0 0 0 6px rgb(30 95 255 / 0.16);
   }
   100% {
-    box-shadow: 0 0 0 1px rgb(30 95 255 / 0.35);
+    box-shadow: 0 0 0 1px var(--color-brand-glow);
   }
 }
 </style>

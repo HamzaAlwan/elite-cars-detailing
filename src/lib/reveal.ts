@@ -18,6 +18,7 @@ const SECTION_PRESETS: Record<string, RevealPreset> = {
   hero: { delayStepMs: 90, maxIndex: 8 },
   pricing: { delayStepMs: 55, maxIndex: 10 },
   faq: { delayStepMs: 50, maxIndex: 8 },
+  work: { delayStepMs: 45, maxIndex: 8 },
 };
 
 function getSectionId(el: HTMLElement): string | null {

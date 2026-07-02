@@ -64,15 +64,12 @@ const notIdealList = [
     <div class="mt-8 grid gap-5 lg:grid-cols-2">
       <article data-reveal data-reveal-index="3" class="surface-raised p-6 md:p-7">
         <h3 class="font-semibold text-text">Service Promises</h3>
-        <ul class="mt-4 space-y-2.5">
+        <ul class="mt-5 space-y-4">
           {
             servicePromises.map((item) => (
-              <li class="rounded-xl border border-border bg-bg px-4 py-3.5">
-                <p class="flex items-center gap-2 text-sm font-semibold text-text">
-                  <span class="inline-flex h-1.5 w-1.5 rounded-full bg-brand"></span>
-                  {item.label}
-                </p>
-                <p class="mt-1.5 pl-3.5 text-sm text-text-muted">{item.detail}</p>
+              <li class="border-l-2 pl-4" style="border-color: var(--color-brand-glow);">
+                <p class="text-sm font-semibold text-text">{item.label}</p>
+                <p class="mt-1 text-sm text-text-muted">{item.detail}</p>
               </li>
             ))
           }
@@ -88,30 +85,70 @@ const notIdealList = [
         <p class="mt-1.5 text-sm text-text-muted">
           We focus on owners who value long-term finish quality and a predictable, premium process.
         </p>
-        <div class="mt-4 grid gap-4 sm:grid-cols-2">
-          <section class="rounded-xl border border-border bg-bg px-4 py-3.5">
+        <div class="mt-5 grid gap-5 sm:grid-cols-2">
+          <section>
             <h4 class="font-semibold text-text">Great Fit</h4>
-            <ul class="mt-2 space-y-2 text-sm text-text-muted">
-              {rightFitList.map((item) => <li>• {item}</li>)}
+            <ul class="mt-2.5 space-y-2.5 text-sm text-text-muted">
+              {
+                rightFitList.map((item) => (
+                  <li class="flex items-start gap-2">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                      class="mt-0.5 shrink-0 text-success"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    {item}
+                  </li>
+                ))
+              }
             </ul>
           </section>
-          <section class="rounded-xl border border-border bg-bg px-4 py-3.5">
+          <section class="border-border sm:border-l sm:pl-5">
             <h4 class="font-semibold text-text">Not Ideal For</h4>
-            <ul class="mt-2 space-y-2 text-sm text-text-muted">
-              {notIdealList.map((item) => <li>• {item}</li>)}
+            <ul class="mt-2.5 space-y-2.5 text-sm text-text-muted">
+              {
+                notIdealList.map((item) => (
+                  <li class="flex items-start gap-2">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                      class="mt-0.5 shrink-0 opacity-60"
+                    >
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    {item}
+                  </li>
+                ))
+              }
             </ul>
           </section>
         </div>
         <div class="mt-5 flex flex-wrap gap-2.5">
           <a
             href="#pricing"
-            class="btn-subtle inline-flex min-h-10 items-center justify-center rounded-full px-4 text-xs font-medium"
+            class="btn-subtle inline-flex min-h-11 items-center justify-center rounded-full px-4 text-xs font-medium"
           >
             Compare packages
           </a>
           <a
             href="#quote"
-            class="btn-subtle inline-flex min-h-10 items-center justify-center rounded-full px-4 text-xs font-medium"
+            class="btn-subtle inline-flex min-h-11 items-center justify-center rounded-full px-4 text-xs font-medium"
           >
             Ask for guidance
           </a>

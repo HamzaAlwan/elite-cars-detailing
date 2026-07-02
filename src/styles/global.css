@@ -57,9 +57,26 @@
   --color-brand-hover: #1a52e6; /* hover (links / ghost border) */
   --color-brand-tint: rgb(30 95 255 / 0.12);
 
+  /* Brand opacity ramp — single source for every rgba(30,95,255,…) in the codebase */
+  --color-brand-glow: rgb(30 95 255 / 0.35);
+  --color-brand-glow-soft: rgb(30 95 255 / 0.18);
+  --color-brand-aurora: rgb(30 95 255 / 0.1); /* ambient blobs: keep in the 0.08–0.12 band */
+  --color-border-hairline: rgb(255 255 255 / 0.08); /* glass-surface hairline edge */
+
   /* Status */
   --color-success: #22c55e;
   --color-warning: #f59e0b;
+
+  /* Radius — cards are 16px everywhere (rounded-card utility) */
+  --radius-card: 1rem;
+
+  /* Shadow scale (generates shadow-card / shadow-glow-* utilities) */
+  --shadow-card:
+    inset 0 1px 0 rgb(255 255 255 / 0.06), inset 0 -1px 0 rgb(0 0 0 / 0.5),
+    0 8px 24px rgb(0 0 0 / 0.45);
+  --shadow-glow-sm: 0 0 16px rgb(30 95 255 / 0.2);
+  --shadow-glow-md: 0 0 28px rgb(30 95 255 / 0.3);
+  --shadow-glow-lg: 0 0 48px rgb(30 95 255 / 0.38);
 
   /* Motion — easing (generates ease-* utilities) */
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -67,6 +84,7 @@
   --ease-in: cubic-bezier(0.3, 0, 1, 1);
   --ease-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1);
   --ease-snappy: cubic-bezier(0.3, 0, 0.2, 1);
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1); /* signature settle — cinematic refresh */
 
   /* Motion — duration (referenced via var()) */
   --dur-instant: 100ms;
@@ -106,8 +124,14 @@
     line-height: 1.1;
     text-wrap: balance;
   }
+  /* Cinematic hierarchy push — display levels go heavier (variable font: no extra bytes). */
+  h1,
+  h2 {
+    font-weight: 800;
+  }
   h1 {
     font-size: var(--text-h1);
+    letter-spacing: -0.03em;
   }
   h2 {
     font-size: var(--text-h2);
@@ -211,11 +235,8 @@
   .surface-raised {
     background-image: linear-gradient(180deg, var(--color-bg-elevated-2), var(--color-bg-elevated));
     border: 1px solid var(--color-border);
-    border-radius: 1rem;
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.06),
-      inset 0 -1px 0 rgb(0 0 0 / 0.5),
-      0 8px 24px rgb(0 0 0 / 0.45);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
   }
 
   /* Shared form field styling — QuoteForm, ZipValidator, etc. */
@@ -234,6 +255,10 @@
   .form-input:focus {
     border-color: var(--color-brand);
     outline: none;
+    /* Soft glow ring — matches the button/link focus treatment (cinematic refresh). */
+    box-shadow:
+      0 0 0 3px var(--color-brand-tint),
+      0 0 18px var(--color-brand-glow-soft);
   }
   select.form-input {
     appearance: none;
@@ -275,7 +300,8 @@
       box-shadow var(--dur-fast) var(--ease-standard);
   }
   .btn-metal:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
+    transition-duration: var(--dur-instant);
   }
   .btn-metal:disabled,
   .btn-metal[aria-disabled='true'] {
@@ -297,7 +323,8 @@
       transform var(--dur-fast) var(--ease-standard);
   }
   .btn-secondary:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
+    transition-duration: var(--dur-instant);
   }
 
   .btn-subtle {
@@ -335,6 +362,66 @@
     height: 1px;
     border: 0;
     background-image: linear-gradient(90deg, transparent, var(--color-border-bright), transparent);
+  }
+
+  /* Gradient headline accent — fallback-first: solid brand-bright (≈6.3:1 on bg ✓ AA) when
+     background-clip:text is unsupported. RULE: no gradient stop darker than #5b8cff; display
+     sizes only, never body text. */
+  .headline-accent {
+    color: var(--color-brand-bright);
+  }
+  @supports (-webkit-background-clip: text) or (background-clip: text) {
+    .headline-accent {
+      background-image: linear-gradient(100deg, #f4f7ff 0%, #c7d7ff 45%, var(--color-brand-bright) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  }
+
+  /* Reusable glass surface (sticky bar, callouts) — same solid-fallback discipline as .nav-glass.
+     NEVER nest inside another blurred surface (§2.5). */
+  .surface-glass {
+    background-color: rgb(13 16 25 / 0.88);
+    border: 1px solid var(--color-border-hairline);
+  }
+  @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    .surface-glass {
+      background-color: rgb(13 16 25 / 0.6);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      transform: translate3d(0, 0, 0); /* stabilize stale-blur-on-scroll */
+    }
+  }
+
+  /* CTA halo — radial glow BEHIND the button (matte CTA stays matte; §"shine budget").
+     Pseudo-element opacity only → compositor-friendly; pulse honors reduced-motion. */
+  .btn-glow {
+    position: relative;
+  }
+  .btn-glow::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(60% 120% at 50% 100%, var(--color-brand-glow), transparent 70%);
+    filter: blur(10px);
+    opacity: 0.8;
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .btn-glow--pulse::after {
+      animation: glow-pulse 4s var(--ease-standard) infinite alternate;
+    }
+  }
+  @keyframes glow-pulse {
+    from {
+      opacity: 0.55;
+    }
+    to {
+      opacity: 0.95;
+    }
   }
 
   /* Glass nav — solid fallback baseline; blur is a progressive enhancement, never nested (§2.5). */
@@ -426,6 +513,21 @@
     }
   }
 
+  /* Hero scene rim-light — same draw-on, but fired by the scroll reveal on its ancestor
+     ([data-reveal] → .is-visible via reveal.ts). Reduced-motion completes instantly (global). */
+  .hero-draw path[pathLength] {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  [data-reveal].is-visible .hero-draw path[pathLength] {
+    animation: icon-draw 1100ms var(--ease-cinematic) 250ms forwards;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-draw path[pathLength] {
+      stroke-dashoffset: 0;
+    }
+  }
+
   /* FAQ accordion (Reka) — animate height via Reka's content-height CSS var (Phase 3).
      reduced-motion is handled globally (animation-duration shortened), so the panel still
      opens/closes — just instantly. */
@@ -497,13 +599,13 @@
   @media (hover: hover) and (pointer: fine) {
     .card-hover {
       transition:
-        transform var(--dur-slow) var(--ease-standard),
-        filter var(--dur-slow) var(--ease-standard);
+        transform var(--dur-slow) var(--ease-cinematic),
+        filter var(--dur-slow) var(--ease-cinematic);
     }
     .card-hover:hover {
       transform: translateY(-4px);
-      filter: drop-shadow(0 0 10px rgb(30 95 255 / 0.3))
-        drop-shadow(0 6px 16px rgb(30 95 255 / 0.12)) drop-shadow(0 6px 14px rgb(0 0 0 / 0.4));
+      filter: drop-shadow(0 0 10px var(--color-brand-glow))
+        drop-shadow(0 6px 16px var(--color-brand-tint)) drop-shadow(0 6px 14px rgb(0 0 0 / 0.4));
     }
   }
 
@@ -524,6 +626,69 @@
     }
   }
 
+  /* Gallery placeholder shimmer — a skewed light band sweeping across the tile (transform-only).
+     Stagger per tile via inline --shimmer-delay. Off entirely under reduced motion. */
+  .tile-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .tile-shimmer::after {
+    content: '';
+    position: absolute;
+    top: -20%;
+    bottom: -20%;
+    left: 0;
+    width: 45%;
+    background: linear-gradient(100deg, transparent, rgb(91 140 255 / 0.07) 50%, transparent);
+    transform: translateX(-160%) skewX(-12deg);
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .tile-shimmer::after {
+      animation: tile-shimmer 3.2s var(--ease-standard) var(--shimmer-delay, 0s) infinite;
+    }
+  }
+  @keyframes tile-shimmer {
+    0% {
+      transform: translateX(-160%) skewX(-12deg);
+    }
+    55%,
+    100% {
+      transform: translateX(400%) skewX(-12deg);
+    }
+  }
+
+  /* Ambient aurora blob (rendered by ui/Atmosphere.astro) — a soft radial glow positioned via
+     --x/--y/--size inline vars. Transform-only drift, no filter:blur on large elements (GPU cost).
+     Reduced-motion: blobs stay STATIC but visible — reduce, don't remove. */
+  .aurora {
+    position: absolute;
+    left: var(--x, 50%);
+    top: var(--y, 50%);
+    width: var(--size, 40rem);
+    height: var(--size, 40rem);
+    margin: calc(var(--size, 40rem) / -2); /* center the blob on --x/--y */
+    border-radius: 50%;
+    background: radial-gradient(closest-side, var(--aurora-color, var(--color-brand-aurora)), transparent 70%);
+    will-change: transform;
+  }
+  .aurora--deep {
+    --aurora-color: rgb(19 64 168 / 0.09);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .aurora {
+      animation: aurora-drift var(--aurora-dur, 14s) ease-in-out infinite alternate;
+    }
+  }
+  @keyframes aurora-drift {
+    from {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+      transform: translate3d(4%, -5%, 0) scale(1.08);
+    }
+  }
+
   /* "Most Popular" / featured badge — sapphire fill, matte. No hover lift (not a button). */
   .badge-featured {
     background-color: var(--color-brand-strong);
@@ -537,7 +702,7 @@
   .surface-featured {
     background-image: linear-gradient(180deg, var(--color-bg-elevated-2), var(--color-bg-elevated));
     border: 1px solid var(--color-brand);
-    border-radius: 1rem;
+    border-radius: var(--radius-card);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.06),
       inset 0 -1px 0 rgb(0 0 0 / 0.5),
@@ -554,11 +719,25 @@
     opacity: 0;
     transform: translateY(16px);
     transition:
-      opacity var(--dur-slow) var(--ease-out),
-      transform var(--dur-slow) var(--ease-out);
+      opacity var(--dur-slow) var(--ease-cinematic),
+      transform var(--dur-slow) var(--ease-cinematic);
+  }
+  /* Opt-in variants (reveal.ts needs no changes — it only toggles .is-visible):
+     "scale" for cards; "blur" is hero-only (filter transitions repaint — keep the count small). */
+  [data-reveal='scale'] {
+    transform: translateY(12px) scale(0.97);
+  }
+  [data-reveal='blur'] {
+    transform: translateY(12px);
+    filter: blur(6px);
+    transition:
+      opacity var(--dur-slower) var(--ease-cinematic),
+      transform var(--dur-slower) var(--ease-cinematic),
+      filter var(--dur-slower) var(--ease-cinematic);
   }
   [data-reveal].is-visible {
     opacity: 1;
     transform: none;
+    filter: none;
   }
 }
