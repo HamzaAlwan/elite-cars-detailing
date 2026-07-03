@@ -18,8 +18,8 @@ const year = new Date().getFullYear();
 const navLinks = [
   { href: '#value', label: 'Services' },
   { href: '#pricing', label: 'Pricing' },
-  { href: '#work', label: 'Our Work' },
   { href: '#how-it-works', label: 'How It Works' },
+  { href: '#work', label: 'Our Work' },
   { href: '#service-area', label: 'Service Area' },
   { href: '#faq', label: 'FAQ' },
   { href: '#book', label: 'Book Now' },
@@ -153,8 +153,7 @@ const navLinks = [
       class="mt-10 flex flex-col items-start justify-between gap-4 border-t border-border pt-6 sm:flex-row sm:items-center"
     >
       <p class="text-xs text-text-muted">
-        &copy; {year}
-        {SITE.name} &middot; Richardson, TX
+        &copy; {year}{' '}{SITE.name} &middot; Richardson, TX
       </p>
       <p class="text-xs text-text-muted">This site uses no tracking cookies.</p>
     </div>

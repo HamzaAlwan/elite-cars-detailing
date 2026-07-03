@@ -89,7 +89,7 @@ function submitEmail() {
     </p>
 
     <!-- In-area success -->
-    <div v-if="isInArea" role="status" class="flex items-start gap-3">
+    <output v-if="isInArea" class="flex items-start gap-3">
       <!-- .icon-draw checkmark (stroke-dashoffset animation, §2.5) -->
       <svg
         :class="['icon-draw mt-0.5 shrink-0 text-success', drawn ? 'is-drawn' : '']"
@@ -124,13 +124,12 @@ function submitEmail() {
           Check a different ZIP
         </button>
       </div>
-    </div>
+    </output>
 
     <!-- Out-of-area graceful fallback -->
-    <div
+    <output
       v-if="isOutOfArea"
-      role="status"
-      class="rounded-xl border border-border bg-bg-elevated p-4"
+      class="block rounded-xl border border-border bg-bg-elevated p-4"
     >
       <p class="font-medium text-text">We're expanding fast — you're not far off.</p>
       <p class="mt-1 text-sm text-text-muted">
@@ -163,8 +162,22 @@ function submitEmail() {
         </div>
       </div>
 
-      <p v-else role="status" class="mt-3 text-sm text-success">
-        ✓ We've got your email — we'll let you know when we arrive in your area.
+      <p v-else class="mt-3 flex items-center gap-1.5 text-sm text-success">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          class="shrink-0"
+        >
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        We've got your email — we'll let you know when we arrive in your area.
       </p>
 
       <p class="mt-4 text-sm text-text-muted">
@@ -184,7 +197,7 @@ function submitEmail() {
       >
         Try a different ZIP
       </button>
-    </div>
+    </output>
 
     <p class="mt-2 text-xs text-text-muted">We'll tell you in seconds — no obligation.</p>
   </div>

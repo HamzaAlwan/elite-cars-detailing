@@ -15,6 +15,7 @@
 import Container from '@/components/ui/Container.astro';
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
+import { SOCIAL } from '@/data/site';
 // BeforeAfterSlider imported below when real photos are added:
 // import BeforeAfterSlider from '@/components/islands/BeforeAfterSlider.vue';
 
@@ -63,8 +64,9 @@ const placeholderCount = 6;
       </div>
     -->
 
-    <!-- Placeholder grid (shown until real photos arrive) — cinematic shimmer tiles -->
-    <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <!-- Placeholder grid (shown until real photos arrive) — cinematic shimmer tiles.
+         2-col on mobile: six full-width placeholder tiles would be ~2700px of scrolling. -->
+    <div class="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
       {
         Array.from({ length: placeholderCount }, (_, i) => (
           <div
@@ -112,9 +114,27 @@ const placeholderCount = 6;
       }
     </div>
 
-    <!-- "Coming soon" note — remove once real photos are added -->
+    <!-- "Coming soon" note — remove once real photos are added.
+         Instagram is only mentioned when a profile URL is configured (no dangling CTA). -->
     <p data-reveal data-reveal-index="8" class="mt-6 text-center text-sm text-text-muted">
-      Photography coming soon — follow us on Instagram for sneak peeks.
+      {
+        SOCIAL.instagram ? (
+          <Fragment>
+            Photography coming soon —{' '}
+            <a
+              href={SOCIAL.instagram}
+              rel="noopener"
+              target="_blank"
+              class="text-brand underline-offset-4 hover:underline"
+            >
+              follow us on Instagram
+            </a>{' '}
+            for sneak peeks.
+          </Fragment>
+        ) : (
+          'Fresh photography from recent details is on its way.'
+        )
+      }
     </p>
   </Container>
 </Section>
