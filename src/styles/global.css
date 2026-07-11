@@ -741,3 +741,25 @@
     filter: none;
   }
 }
+
+/* Hero floating car — soft brand underglow via drop-shadow (follows silhouette; no box glow) */
+.hero-float__img {
+  filter:
+    drop-shadow(0 18px 28px rgb(0 0 0 / 0.55))
+    drop-shadow(0 28px 48px rgb(30 95 255 / 0.38))
+    drop-shadow(0 8px 20px rgb(30 95 255 / 0.28));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-float__car {
+    animation: hero-float 5.5s var(--ease-cinematic) infinite alternate;
+  }
+}
+@keyframes hero-float {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-12px);
+  }
+}
