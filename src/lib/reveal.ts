@@ -10,15 +10,15 @@ interface RevealPreset {
 }
 
 const DEFAULT_PRESET: RevealPreset = {
-  delayStepMs: 70,
+  delayStepMs: 50,
   maxIndex: 11,
 };
 
 const SECTION_PRESETS: Record<string, RevealPreset> = {
-  hero: { delayStepMs: 90, maxIndex: 5 },
-  pricing: { delayStepMs: 55, maxIndex: 10 },
-  faq: { delayStepMs: 50, maxIndex: 8 },
-  work: { delayStepMs: 45, maxIndex: 8 },
+  hero: { delayStepMs: 65, maxIndex: 5 },
+  pricing: { delayStepMs: 40, maxIndex: 10 },
+  faq: { delayStepMs: 35, maxIndex: 8 },
+  work: { delayStepMs: 30, maxIndex: 8 },
 };
 
 function getSectionId(el: HTMLElement): string | null {

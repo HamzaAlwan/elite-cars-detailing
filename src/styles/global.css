@@ -87,11 +87,11 @@
   --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1); /* signature settle — cinematic refresh */
 
   /* Motion — duration (referenced via var()) */
-  --dur-instant: 100ms;
-  --dur-fast: 150ms;
-  --dur-base: 250ms;
-  --dur-slow: 350ms;
-  --dur-slower: 500ms;
+  --dur-instant: 80ms;
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+  --dur-slow: 250ms;
+  --dur-slower: 350ms;
 }
 
 @layer base {
@@ -520,7 +520,7 @@
     stroke-dashoffset: 1;
   }
   [data-reveal].is-visible .hero-draw path[pathLength] {
-    animation: icon-draw 1100ms var(--ease-cinematic) 250ms forwards;
+    animation: icon-draw 750ms var(--ease-cinematic) 180ms forwards;
   }
   @media (prefers-reduced-motion: reduce) {
     .hero-draw path[pathLength] {
